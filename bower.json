@@ -1,0 +1,8 @@
+{
+  "name": "socialdirectory",
+  "version": "1.0.0",
+  "directory": "public/components",
+  "dependencies": {
+    "parsleyjs": "~2.0.3"
+  }
+}

@@ -27,6 +27,7 @@ var connectAssets = require('connect-assets');
 
 var homeController = require('./controllers/home');
 var userController = require('./controllers/user');
+var organizationController = require('./controllers/organization');
 var contactController = require('./controllers/contact');
 
 /**
@@ -70,7 +71,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(compress());
 app.use(connectAssets({
-  paths: [path.join(__dirname, 'public/css'), path.join(__dirname, 'public/js')],
+  paths: [path.join(__dirname, 'public/css'), path.join(__dirname, 'public/js'),path.join(__dirname, 'public/components')],
   helperContext: app.locals
 }));
 app.use(logger('dev'));
@@ -113,7 +114,7 @@ app.use(function(req, res, next) {
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: week }));
 
 /**
- * Main routes.
+ * Main routes. Pages
  */
 
 app.get('/', homeController.index);
@@ -132,6 +133,13 @@ app.get('/account', passportConf.isAuthenticated, userController.getAccount);
 app.post('/account/profile', passportConf.isAuthenticated, userController.postUpdateProfile);
 app.post('/account/password', passportConf.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConf.isAuthenticated, userController.postDeleteAccount);
+app.get('/addorganization',passportConf.isAuthenticated,organizationController.addOrganization);
+/**
+* REST API routes
+*/
+app.get('/organization', organizationController.getOrganization);
+app.post('/organization', organizationController.postOrganization);
+
 
 /**
  * 500 Error Handler.

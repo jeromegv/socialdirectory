@@ -13,6 +13,9 @@
       ul.nav.navbar-nav
         li(class=title=='Home'?'active':undefined)
           a(href='/') Home
+        if user
+          li(class=title=='Add Organization'?'active':undefined)
+            a(href='/addorganization') Add Organization
         li(class=title=='Contact'?'active':undefined)
           a(href='/contact') Contact
       ul.nav.navbar-nav.navbar-right
