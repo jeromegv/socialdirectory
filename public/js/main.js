@@ -4,7 +4,7 @@ $(document).ready(function() {
       successClass: 'success',
       errorClass: 'error',
       classHandler: function(el) {
-        return el.$element.closest('.control-group');
+        return el.$element.closest(".form-group");
       },
       errorsWrapper: '<span class=\"help-inline\"></span>',
       errorTemplate: '<span></span>'
