@@ -138,7 +138,7 @@ app.get('/addorganization',passportConf.isAuthenticated,organizationController.a
 * REST API routes
 */
 app.get('/organization', organizationController.getOrganization);
-app.post('/organization', organizationController.postOrganization);
+app.post('/organization', passportConf.isAuthenticated,organizationController.postOrganization);
 
 
 /**
