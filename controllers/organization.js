@@ -2,14 +2,18 @@ var secrets = require('../config/secrets');
 var Organization = require('../models/Organization');
 
 /**
- * GET /organization
+ * GET /api/organization
  * List of all organizations
  */
 
 exports.getOrganization = function(req, res) {
-  res.render('organization/list', {
-    title: 'List of Organizations'
-  });
+    Organization.find(function(err, organizations) {
+      if (!err){
+        return res.jsonp(organizations);
+      } else {
+        return res.send(err);
+      }
+    });
 };
 
 /**
@@ -23,17 +27,16 @@ exports.addOrganization = function(req, res) {
   });
 };
 
-
 /**
- * POST /organization
+ * POST /addorganization
  * Add a new organization
  */
 
 exports.postOrganization = function(req, res) {
-  console.log(req);
 
   req.assert('name', 'Name cannot be blank').notEmpty();
   req.assert('email', 'Email is not valid').notEmpty().isEmail();
+
   if (req.body.website!=''){
     req.assert('website','URL is not valid').isURL();
   }
@@ -52,6 +55,7 @@ exports.postOrganization = function(req, res) {
   if (req.body.resourceUrl!=''){
     req.assert('resourceUrl','URL is not valid').isURL();
   }
+
   if (req.body.yearFounded!=''){
     req.assert('yearFounded', 'Year Founded is not valid').isInt();
   }
@@ -60,6 +64,16 @@ exports.postOrganization = function(req, res) {
   if (errors) {
     req.flash('errors', errors);
     return res.redirect('/addorganization');
+  }
+
+  //make sure every url reference is saved with full HTTP or HTTPS
+  function saveUrl(entry){
+    if (entry!=''){
+      if (!/^(f|ht)tps?:\/\//i.test(entry)) {
+        entry= "http://" + entry;
+      }
+    }
+    return entry;
   }
 
   var organization = new Organization({
@@ -71,11 +85,11 @@ exports.postOrganization = function(req, res) {
         , longitude: req.body.longitude
         },
     phoneNumber: req.body.phoneNumber,
-    website: req.body.website,
-    twitter: req.body.twitter,
-    facebook: req.body.facebook,
-    tumblr: req.body.tumblr,
-    logo: req.body.logo,
+    website: saveUrl(req.body.website),
+    twitter: saveUrl(req.body.twitter),
+    facebook: saveUrl(req.body.facebook),
+    tumblr: saveUrl(req.body.tumblr),
+    logo: saveUrl(req.body.logo),
     parentOrganization: req.body.parentOrganization,
     yearFounded: req.body.yearFounded,
     descriptionService: req.body.descriptionService,
@@ -85,7 +99,7 @@ exports.postOrganization = function(req, res) {
     organizationalStructure: req.body.organizationalStructure,
     privateNote: req.body.privateNote,
     active: req.body.active,
-    additionalResources: [ {resourceUrl: req.body.resourceUrl, resourceName: req.body.resourceName } ],
+    additionalResources: [ {resourceUrl: saveUrl(req.body.resourceUrl), resourceName: req.body.resourceName } ],
     createdBy: req.user._id
   });
 

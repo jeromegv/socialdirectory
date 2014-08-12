@@ -4,7 +4,7 @@ block content
   .page-header
     h3 Add New Organization
 
-  form.form-horizontal(role='form', method='POST', novalidate="novalidate",id='addorganization',action='/organization')
+  form.form-horizontal(role='form', method='POST', novalidate="novalidate",id='addorganization')
     input(type='hidden', name='_csrf', value=_csrf)
     .form-group
       label(class='col-sm-2 control-label', for='name') Organization Name

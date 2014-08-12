@@ -116,7 +116,6 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: week }));
 /**
  * Main routes. Pages
  */
-
 app.get('/', homeController.index);
 app.get('/login', userController.getLogin);
 app.post('/login', userController.postLogin);
@@ -134,11 +133,12 @@ app.post('/account/profile', passportConf.isAuthenticated, userController.postUp
 app.post('/account/password', passportConf.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConf.isAuthenticated, userController.postDeleteAccount);
 app.get('/addorganization',passportConf.isAuthenticated,organizationController.addOrganization);
+app.post('/addorganization', passportConf.isAuthenticated,organizationController.postOrganization);
+
 /**
 * REST API routes
 */
-app.get('/organization', organizationController.getOrganization);
-app.post('/organization', passportConf.isAuthenticated,organizationController.postOrganization);
+app.get('/api/organization', organizationController.getOrganization);
 
 
 /**
