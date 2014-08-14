@@ -4,7 +4,7 @@ block content
   .page-header
     h3 Add New Organization
 
-  form.form-horizontal(role='form', method='POST', novalidate="novalidate",id='addorganization')
+  form.form-horizontal(role='form', method='POST', novalidate="novalidate",id='addOrganization')
     input(type='hidden', name='_csrf', value=_csrf)
     .form-group
       label(class='col-sm-2 control-label', for='name') Organization Name
@@ -76,7 +76,7 @@ block content
       label(class='col-sm-2 control-label', for='organizationalStructure') Organizational Structure
       .col-sm-4
         select.form-control(name='organizationalStructure', id='organizationalStructure')
-            option(selected disabled hidden) Choose an Organizational Structure
+            option(selected hidden value='') Choose an Organizational Structure
             option(value='for profit') For-Profit
             option(value='non profit') Non-Profit
             option(value='cooperative') Cooperative

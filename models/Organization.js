@@ -23,6 +23,7 @@ var organizationSchema = new mongoose.Schema({
   organizationalStructure: {type: String, default: ''},
   privateNote: {type: String, default: ''},
   active: {type: Boolean, default: false},
+  lastUpdated: {type: Date, default: Date.now},
   additionalResources: [ {resourceUrl: {type: String }, resourceName: {type: String} } ]
 });
 

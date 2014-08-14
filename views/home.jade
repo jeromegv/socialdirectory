@@ -4,24 +4,24 @@ block content
   h1 List of Social Enterprises
   hr
   .row
+    .col-sm-3
+      h4 Organization Name
+    .col-sm-3 
+      h4 Website
+    .col-sm-2 
+      h4 Primary Business Sector
+    .col-sm-2 
+      h4 Social Purpose Category
+    .col-sm-2 
+      h4 Created Time
+  for organization in organizations
     .row
+      .col-sm-3
+        a(href='organization/'+organization._id)= organization.name
+      .col-sm-3
+          a(href=organization.website,target="_blank")= organization.website
+      .col-sm-2= organization.primaryBusinessSector
+      .col-sm-2= organization.socialPurposeCategory
       .col-sm-2
-        h4 Organization Name
-      .col-sm-2 
-        h4 Website
-      .col-sm-2 
-        h4 Primary Business Sector
-      .col-sm-2 
-        h4 Social Purpose Category
-      .col-sm-2 
-        h4 Created Date
-    for organization in organizations
-      .row
-        .col-sm-2= organization.name
-        .col-sm-2
-            a(href=organization.website)= organization.website
-        .col-sm-2= organization.primaryBusinessSector
-        .col-sm-2= organization.socialPurposeCategory
-        .col-sm-2
-          - var org = String(organization._id); org = parseInt(org.substr(0, 8),16)*1000
-          =moment(org).format("YYYY-MM-DD HH:mm")
+        - var org = String(organization._id); org = parseInt(org.substr(0, 8),16)*1000
+        =moment(org).format("YYYY-MM-DD HH:mm")

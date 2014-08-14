@@ -100,6 +100,7 @@ app.use(function(req, res, next) {
 app.use(function(req, res, next) {
   // Make user object available in templates.
   res.locals.user = req.user;
+  res.locals.host = 'http://localhost:'+app.get('port');
   next();
 });
 app.use(function(req, res, next) {
@@ -132,20 +133,24 @@ app.get('/account', passportConf.isAuthenticated, userController.getAccount);
 app.post('/account/profile', passportConf.isAuthenticated, userController.postUpdateProfile);
 app.post('/account/password', passportConf.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConf.isAuthenticated, userController.postDeleteAccount);
-app.get('/addorganization',passportConf.isAuthenticated,organizationController.addOrganization);
-app.post('/addorganization', passportConf.isAuthenticated,organizationController.postOrganization);
+app.get('/organization',passportConf.isAuthenticated,organizationController.addOrganization);
+app.post('/organization', passportConf.isAuthenticated,organizationController.postOrganization);
+app.get('/organization/:id',passportConf.isAuthenticated,organizationController.updateOrganization);
+app.put('/organization/:id', passportConf.isAuthenticated,organizationController.putOrganization);
 
 /**
-* REST API routes
+* Public REST API routes
 */
 app.get('/api/organization', organizationController.getOrganization);
+app.get('/api/organization/:id', organizationController.getOrganizationId);
 
 
 /**
  * 500 Error Handler.
  */
-
-app.use(errorHandler());
+if (process.env.NODE_ENV === 'development') {
+  app.use(errorHandler());
+}
 
 /**
  * Start Express server.
