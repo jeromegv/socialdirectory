@@ -97,9 +97,6 @@ exports.postOrganization = function(req, res,next) {
   if (req.body.logo!=''){
     req.assert('logo','URL is not valid').isURL();
   }
-  if (req.body.resourceUrl!=''){
-    req.assert('resourceUrl','URL is not valid').isURL();
-  }
 
   if (req.body.yearFounded!=''){
     req.assert('yearFounded', 'Year Founded is not valid').isInt();
@@ -108,6 +105,11 @@ exports.postOrganization = function(req, res,next) {
 
   if (errors) {
     req.flash('errors', errors);
+    return res.redirect('/organization');
+  }
+
+  if (req.body.resourceName.length != req.body.resourceUrl.length){
+    req.flash('errors', { msg: 'You must fill both Resource name and URL for each Additional Resources' });
     return res.redirect('/organization');
   }
 
@@ -134,9 +136,14 @@ exports.postOrganization = function(req, res,next) {
     organizationalStructure: req.body.organizationalStructure,
     privateNote: req.body.privateNote,
     active: req.body.active,
-    additionalResources: [ {resourceUrl: saveUrl(req.body.resourceUrl), resourceName: req.body.resourceName } ],
     createdBy: req.user._id
   });
+
+  var additionalResources = new Array();
+  req.body.resourceName.forEach(function(entry,index) {
+      additionalResources[index]={resourceName:entry,resourceUrl:saveUrl(req.body.resourceUrl[index])};
+  });
+  organization.additionalResources = additionalResources;
 
   Organization.findOne({ name: req.body.name }, function(err, existingOrganization) {
     if (existingOrganization) {
@@ -155,7 +162,7 @@ exports.postOrganization = function(req, res,next) {
 
 
 exports.putOrganization = function(req, res,next) {
-  var organization = {
+    var organization = {
     name: req.body.name,
     email: req.body.email,
     Location: {
@@ -178,10 +185,15 @@ exports.putOrganization = function(req, res,next) {
     organizationalStructure: req.body.organizationalStructure,
     privateNote: req.body.privateNote,
     active: req.body.active,
-    lastUpdated: Date.now();
-    //TODO fix
-    //additionalResources: [ {resourceUrl: saveUrl(req.body.resourceUrl), resourceName: req.body.resourceName } ]
-  };
+    lastUpdated: Date.now()
+  };    
+  //todo add validation make sure we have both name and url for everything
+  var additionalResources = new Array();
+  req.body.resourceName.forEach(function(entry,index) {
+      additionalResources[index]={resourceName:entry,resourceUrl:saveUrl(req.body.resourceUrl[index])};
+  });
+  organization.additionalResources = additionalResources;
+
   Organization.update({ _id: req.params.id }, organization, {safe:true, multi:false}, function(err, result){
     if (err) {
         console.log(err);

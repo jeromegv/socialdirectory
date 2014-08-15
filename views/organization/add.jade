@@ -87,14 +87,17 @@ block content
         textarea.form-control(type='text', name='privateNote', id='privateNote', rows='3', placeholder='Private Note that will not be readable on website')
     .form-group
         label(class='col-sm-2 control-label', for='resourceName') Additional Resources
-        div(class='col-sm-3')
-            input.form-control(type='text', name='resourceName', id='resourceName',placeholder='Resource Name (Could be Article Name)')
-        div(class='col-sm-4')
-            input.form-control(type='text', name='resourceUrl', id='resourceUrl',placeholder='URL',data-parsley-type="url")
-        div(class='col-sm-1')
-            a(class="btn btn-primary",id="addbutton")
-                span(class="ion-plus-round") 
-                |Add
+        .col-sm-8(id="duplicate")
+            .row
+                div(class='col-sm-6')
+                    input.form-control(type='text', name='resourceName[]', id='resourceName',placeholder='Resource Name (Could be Article Name)')
+                div(class='col-sm-5')
+                    input.form-control(type='text', name='resourceUrl[]', id='resourceUrl',placeholder='URL',data-parsley-type="url")
+                div(class='col-sm-1')
+                    a(class="btn btn-primary",id="addButton")
+                        span(class="ion-plus-round") 
+                        |Add
+
     .form-group
         label(class='col-sm-2 control-label', for='active') Publish it on the website
         div(class='col-sm-8 btn-group',data-toggle='buttons')

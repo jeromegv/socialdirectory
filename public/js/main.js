@@ -23,6 +23,11 @@ $(document).ready(function() {
 	    return false;
 	});
 
+	$("#addButton").click(function(){
+		var row = '<div class="row"><div class="col-sm-6"><input type="text" name="resourceName[]" id="resourceName" placeholder="Resource Name (Could be Article Name)" class="form-control"></div><div class="col-sm-5"><input type="text" name="resourceUrl[]" id="resourceUrl" placeholder="URL" data-parsley-type="url" class="form-control"></div></div>'
+		$("#duplicate").append(row);
+	});
+
 	$(function() {
 	  $('#address').autoGeocoder({disableDefaultUI:false});
 	});
