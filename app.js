@@ -77,7 +77,14 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator());
-app.use(methodOverride());
+app.use(methodOverride(function(req, res){
+  if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+    // look in urlencoded POST bodies and delete it
+    var method = req.body._method
+    delete req.body._method
+    return method
+  }
+}));
 app.use(cookieParser());
 app.use(session({
   resave: true,
@@ -134,6 +141,7 @@ app.get('/organization',passportConf.isAuthenticated,organizationController.addO
 app.post('/organization', passportConf.isAuthenticated,organizationController.postOrganization);
 app.get('/organization/:id',passportConf.isAuthenticated,organizationController.updateOrganization);
 app.put('/organization/:id', passportConf.isAuthenticated,organizationController.putOrganization);
+app.delete('/organization/:id', passportConf.isAuthenticated,organizationController.deleteOrganization);
 
 /**
 * Public REST API routes

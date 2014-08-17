@@ -105,12 +105,12 @@ exports.postOrganization = function(req, res,next) {
 
   if (errors) {
     req.flash('errors', errors);
-    return res.redirect('/organization');
+    return res.redirect('back');
   }
 
   if (req.body.resourceName.length != req.body.resourceUrl.length){
     req.flash('errors', { msg: 'You must fill both Resource name and URL for each Additional Resources' });
-    return res.redirect('/organization');
+    return res.redirect('back');
   }
 
   var organization = new Organization({
@@ -161,7 +161,45 @@ exports.postOrganization = function(req, res,next) {
 };
 
 
+/**
+ * PUT /organization/:id
+ * Update an organization
+ */
 exports.putOrganization = function(req, res,next) {
+    req.assert('name', 'Name cannot be blank').notEmpty();
+    req.assert('email', 'Email is not valid').notEmpty().isEmail();
+
+    if (req.body.website!=''){
+      req.assert('website','URL is not valid').isURL();
+    }
+    if (req.body.twitter!=''){
+      req.assert('twitter','URL is not valid').isURL();
+    }
+    if (req.body.facebook!=''){
+      req.assert('facebook','URL is not valid').isURL();
+    }
+    if (req.body.tumblr!=''){
+      req.assert('tumblr','URL is not valid').isURL();
+    }
+    if (req.body.logo!=''){
+      req.assert('logo','URL is not valid').isURL();
+    }
+
+    if (req.body.yearFounded!=''){
+      req.assert('yearFounded', 'Year Founded is not valid').isInt();
+    }
+    var errors = req.validationErrors();
+
+    if (errors) {
+      req.flash('errors', errors);
+      return res.redirect('back');
+    }
+
+    if (req.body.resourceName.length != req.body.resourceUrl.length){
+      req.flash('errors', { msg: 'You must fill both Resource name and URL for each Additional Resources' });
+      return res.redirect('back');
+    }
+
     var organization = {
     name: req.body.name,
     email: req.body.email,
@@ -187,7 +225,6 @@ exports.putOrganization = function(req, res,next) {
     active: req.body.active,
     lastUpdated: Date.now()
   };    
-  //todo add validation make sure we have both name and url for everything
   var additionalResources = new Array();
   req.body.resourceName.forEach(function(entry,index) {
       additionalResources[index]={resourceName:entry,resourceUrl:saveUrl(req.body.resourceUrl[index])};
@@ -200,7 +237,7 @@ exports.putOrganization = function(req, res,next) {
         return next(err);
     } else {
       if (result===1){
-        return res.send({msg:'success'});
+        return res.redirect('/');
       } else {
         console.log('No records were updated');
         return next(new Error('No records were updated'));
@@ -209,3 +246,20 @@ exports.putOrganization = function(req, res,next) {
     
   });
 };
+
+/**
+ * DELETE /organization/:id
+ * Update an organization
+ */
+exports.deleteOrganization = function (req,res,next){
+  Organization.remove({
+      _id:req.params.id
+    }, function(err, org) {
+      if (err){
+        console.log(err);
+        return next(err);
+      } else {
+        return res.redirect('/');
+      }
+    });
+}

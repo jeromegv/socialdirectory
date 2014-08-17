@@ -4,8 +4,9 @@ block content
   .page-header
     h3 Update Organization
 
-  form.form-horizontal(role='form', novalidate="novalidate",id='updateOrganization')
+  form.form-horizontal(role='form',  method='POST', novalidate="novalidate",id='updateOrganization')
     input(type='hidden', name='_csrf', value=_csrf)
+    input(type='hidden', name='_method', value='PUT')
     .form-group
       label(class='col-sm-2 control-label', for='name') Organization Name
       .col-sm-4
