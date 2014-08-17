@@ -259,7 +259,7 @@ exports.deleteOrganization = function (req,res,next){
         console.log(err);
         return next(err);
       } else {
-        return res.redirect('/');
+        return res.send('');
       }
     });
 }

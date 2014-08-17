@@ -133,5 +133,11 @@ block content
 
 
     .form-group
-      .col-sm-offset-2.col-sm-8
-        input.btn.btn-primary(type='submit')
+      .col-sm-offset-2.col-sm-3
+        button.btn.btn-primary(type='submit')
+          span.ion-checkmark-circled
+          | Update Organization
+      .col-sm-3
+        button.btn.btn-danger(type='button',id='delete')
+          span.ion-close-circled
+          | Delete
