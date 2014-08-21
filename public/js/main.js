@@ -19,6 +19,12 @@ $(document).ready(function() {
 	  errorTemplate: '<span></span>'
 	});
 	$("#delete").click(function(){
+		var confirm = window.confirm("Are you sure you want to delete permanently this organization?");
+		
+		if (confirm===false){
+			return;
+		}
+
 		var CSRF_HEADER = 'X-CSRF-Token';
 
 		var setCSRFToken = function(securityToken) {
