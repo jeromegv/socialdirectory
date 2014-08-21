@@ -196,8 +196,10 @@ exports.postOrganization = function(req, res,next) {
 
   var socialMedia = new Array();
   req.body.socialMediaUrl.forEach(function(entry,index) {
-      var parsedUrl = urlNode.parse(req.body.socialMediaUrl[index]).hostname;      
-      socialMedia[index]={socialMediaName:getSocialMediaName(parsedUrl),socialMediaUrl:saveUrl(req.body.socialMediaUrl[index])};
+      if (req.body.socialMediaUrl[index]!=''){
+        var parsedUrl = urlNode.parse(req.body.socialMediaUrl[index]).hostname;
+        socialMedia[index]={socialMediaName:getSocialMediaName(parsedUrl),socialMediaUrl:saveUrl(req.body.socialMediaUrl[index])};
+      }
   });
   organization.socialMedia = socialMedia;
 
@@ -278,8 +280,10 @@ exports.putOrganization = function(req, res,next) {
 
   var socialMedia = new Array();
   req.body.socialMediaUrl.forEach(function(entry,index) {
-      var parsedUrl = urlNode.parse(req.body.socialMediaUrl[index]).hostname;      
-      socialMedia[index]={socialMediaName:getSocialMediaName(parsedUrl),socialMediaUrl:saveUrl(req.body.socialMediaUrl[index])};
+      if (req.body.socialMediaUrl[index]!=''){
+        var parsedUrl = urlNode.parse(req.body.socialMediaUrl[index]).hostname;      
+        socialMedia[index]={socialMediaName:getSocialMediaName(parsedUrl),socialMediaUrl:saveUrl(req.body.socialMediaUrl[index])};
+      }
   });
   organization.socialMedia = socialMedia;
 
