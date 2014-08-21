@@ -47,9 +47,13 @@ $(document).ready(function() {
 	    return false;
 	});
 
-	$("#addButton").click(function(){
+	$("#addButtonSocialMedia").click(function(){
+		var row = '<div class="row"><div class="col-sm-8"><input type="text" name="socialMediaUrl[]" id="socialMediaUrl" placeholder="Just enter the full URL of the social media profile" class="form-control" data-parsley-type="url"></div></div>'
+		$("#duplicateSocialMedia").append(row);
+	});
+	$("#addButtonResource").click(function(){
 		var row = '<div class="row"><div class="col-sm-6"><input type="text" name="resourceName[]" id="resourceName" placeholder="Resource Name (Could be Article Name)" class="form-control"></div><div class="col-sm-5"><input type="text" name="resourceUrl[]" id="resourceUrl" placeholder="URL" data-parsley-type="url" class="form-control"></div></div>'
-		$("#duplicate").append(row);
+		$("#duplicateResource").append(row);
 	});
 
 	$(function() {

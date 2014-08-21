@@ -49,6 +49,16 @@ block content
       .col-sm-4
         input.form-control(type='text', name='logo', id='logo', placeholder='URL to their logo', data-parsley-type="url")
     .form-group
+        label(class='col-sm-2 control-label', for='socialMediaUrl') Social Media Profile URL
+        .col-sm-8(id="duplicateSocialMedia")
+            .row
+                div(class='col-sm-8')
+                    input.form-control(type='text', name='socialMediaUrl[]', id='socialMediaUrl',placeholder='Just enter the full URL of the social media profile',data-parsley-type="url")
+                div(class='col-sm-1')
+                    a(class="btn btn-primary",id="addButtonSocialMedia")
+                        span(class="ion-plus-round") 
+                        |Add
+    .form-group
       label(class='col-sm-2 control-label', for='parentOrganization') Parent Organization
       .col-sm-4
         input.form-control(type='text', name='parentOrganization', id='parentOrganization', placeholder='Parent Organization (Optional)')
@@ -87,14 +97,14 @@ block content
         textarea.form-control(type='text', name='privateNote', id='privateNote', rows='4', placeholder='Private Note that will not be readable on website')
     .form-group
         label(class='col-sm-2 control-label', for='resourceName') Additional Resources
-        .col-sm-8(id="duplicate")
+        .col-sm-8(id="duplicateResource")
             .row
                 div(class='col-sm-6')
                     input.form-control(type='text', name='resourceName[]', id='resourceName',placeholder='Resource Name (Could be Article Name)')
                 div(class='col-sm-5')
                     input.form-control(type='text', name='resourceUrl[]', id='resourceUrl',placeholder='URL',data-parsley-type="url")
                 div(class='col-sm-1')
-                    a(class="btn btn-primary",id="addButton")
+                    a(class="btn btn-primary",id="addButtonResource")
                         span(class="ion-plus-round") 
                         |Add
 

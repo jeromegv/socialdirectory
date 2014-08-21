@@ -24,6 +24,7 @@ var organizationSchema = new mongoose.Schema({
   privateNote: {type: String, default: ''},
   active: {type: Boolean, default: false},
   lastUpdated: {type: Date, default: Date.now},
+  socialMedia: [ {socialMediaUrl: {type: String }, socialMediaName: {type: String} } ],
   additionalResources: [ {resourceUrl: {type: String }, resourceName: {type: String} } ]
 });
 
