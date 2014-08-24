@@ -141,7 +141,9 @@ exports.updateOrganization = function(req, res) {
 
 exports.postOrganization = function(req, res,next) {
   req.assert('name', 'Name cannot be blank').notEmpty();
-  req.assert('email', 'Email is not valid').notEmpty().isEmail();
+  if (req.body.email!=''){
+    req.assert('email', 'Email is not valid').notEmpty().isEmail();
+  }
 
   if (req.body.website!=''){
     req.assert('website','URL is not valid').isURL();
@@ -225,7 +227,9 @@ exports.postOrganization = function(req, res,next) {
  */
 exports.putOrganization = function(req, res,next) {
     req.assert('name', 'Name cannot be blank').notEmpty();
-    req.assert('email', 'Email is not valid').notEmpty().isEmail();
+    if (req.body.email!=''){
+      req.assert('email', 'Email is not valid').notEmpty().isEmail();
+    }
 
     if (req.body.website!=''){
       req.assert('website','URL is not valid').isURL();
