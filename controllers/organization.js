@@ -127,7 +127,7 @@ exports.updateOrganization = function(req, res) {
   request(options, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       res.render('organization/update', {
-        title: 'Update Organization',
+        title: 'Update '+body.name,
         organization: body
       });
     }
