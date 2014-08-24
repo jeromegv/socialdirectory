@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 var organizationSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
-  email: { type: String, lowercase: true,required: true },
+  email: { type: String, lowercase: true },
   Location: {
         address: { type: String, default: '' }
       , latitude: { type: Number, default: ''  }
