@@ -25,4 +25,8 @@ block content
             td.hidden-sm.hidden-xs
               - var org = String(organization._id); org = parseInt(org.substr(0, 8),16)*1000
               =moment(org).format("YYYY-MM-DD HH:mm")
-            td.hidden-xs= organization.active
+            td.hidden-xs
+              if(organization.active)
+                i.icon.ion-eye(style="font-size:16px")
+              else
+                i.icon.ion-eye-disabled(style="font-size:16px")
