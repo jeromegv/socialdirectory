@@ -2,6 +2,8 @@ var secrets = require('../config/secrets');
 var Organization = require('../models/Organization');
 var request = require('request');
 var urlNode = require('url');
+var util = require('util');
+var moment = require('moment');
 
 //make sure every url reference is saved with full HTTP or HTTPS
 function saveUrl(entry){
@@ -186,7 +188,7 @@ exports.postOrganization = function(req, res,next) {
     socialPurposeCategory: req.body.socialPurposeCategory,
     organizationalStructure: req.body.organizationalStructure,
     privateNote: req.body.privateNote,
-    active: req.body.active,
+    active: req.sanitize('active').toBoolean(),
     createdBy: req.user._id
   });
 
@@ -254,7 +256,7 @@ exports.putOrganization = function(req, res,next) {
       return res.redirect('back');
     }
 
-    var organization = {
+  var organization = {
     name: req.body.name,
     email: req.body.email,
     Location: {
@@ -273,7 +275,7 @@ exports.putOrganization = function(req, res,next) {
     socialPurposeCategory: req.body.socialPurposeCategory,
     organizationalStructure: req.body.organizationalStructure,
     privateNote: req.body.privateNote,
-    active: req.body.active,
+    active: req.sanitize('active').toBoolean(),
     lastUpdated: Date.now()
   };    
   var additionalResources = new Array();
@@ -290,13 +292,61 @@ exports.putOrganization = function(req, res,next) {
       }
   });
   organization.socialMedia = socialMedia;
-
+//we lose createdBy if we dont do findbyidupdate
   Organization.update({ _id: req.params.id }, organization, {safe:true, multi:false}, function(err, result){
     if (err) {
         console.log(err);
         return next(err);
     } else {
       if (result===1){
+        //was able to update mongo, now update azure
+        var organizationAzure = [{
+          "@search.action": "upload",
+          orgId:req.params.id,
+          name: req.body.name,
+          email: req.body.email,
+          locationAddress:req.body.address,
+          "location": { 
+            "type": "Point", 
+            "coordinates": [req.sanitize('longitude').toFloat(), req.sanitize('latitude').toFloat()]
+          },
+          phoneNumber: req.body.phoneNumber,
+          website: saveUrl(req.body.website),
+          parentOrganization: req.body.parentOrganization,
+          descriptionService: req.body.descriptionService,
+          primaryBusinessSector: req.body.primaryBusinessSector,
+          descriptionCause: req.body.descriptionCause,
+          socialPurposeCategory: req.body.socialPurposeCategory,
+          organizationalStructure: req.body.organizationalStructure,
+          active: req.sanitize('active').toBoolean(),
+          //need to derive date created from ID 
+          dateCreated: moment.utc(parseInt(req.params.id.substr(0, 8),16)*1000).toISOString(),
+          lastUpdated: moment.utc(Date.now()).toISOString()
+        }];
+        if (req.body.yearFounded!=''){
+          organizationAzure.yearFounded=req.body.yearFounded;
+        }
+        var options = {
+          url: 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'/docs/index?api-version='+secrets.azureSearch.apiVersion,
+          json: true,
+          method: 'POST',
+          headers: {
+            'host': secrets.azureSearch.url,
+            'api-key': secrets.azureSearch.apiKey,
+            'Content-Type': 'application/json'
+          },
+          body: {"value":organizationAzure}
+        };
+        console.log(util.inspect(options.body,{  depth: null }));
+        request(options, function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            //console.log('organization '+ req.body.name + ' created, success');
+          } else {
+            if (error){console.log(error);}
+            console.log('organization '+ req.body.name + ' failed to be created on Azure Search. http status code was: '+response.statusCode);
+          }
+        });
+
         return res.redirect('/');
       } else {
         console.log('No records were updated');

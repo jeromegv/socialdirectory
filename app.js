@@ -21,6 +21,8 @@ var passport = require('passport');
 var expressValidator = require('express-validator');
 var connectAssets = require('connect-assets');
 
+//Configure azure search, setup index if does not exist yet
+var azureSearch = require('./config/azuresearch');
 /**
  * Controllers (route handlers).
  */

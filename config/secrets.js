@@ -20,6 +20,13 @@ module.exports = {
 
   db: process.env.MONGODB|| 'mongodb://localhost:27017/test',
 
+  azureSearch: {
+    url: '',
+    apiKey: '',
+    indexName: 'social',
+    apiVersion: '2014-07-31-Preview'
+  },
+
   sessionSecret: process.env.SESSION_SECRET || 'Your Session Secret goes here'
 
 };
