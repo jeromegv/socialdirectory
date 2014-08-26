@@ -22,9 +22,9 @@ block content
     .form-group
         label(class='col-sm-2 control-label', for='longitude') Longitude/Latitude
         div(class='col-sm-2')
-            input.form-control(type='text', name='longitude', id='longitude',value=organization.Location.longitude)
+            input.form-control(type='text', name='longitude', id='longitude',value=organization.Location.longitude,data-parsley-type="number")
         div(class='col-sm-2')
-            input.form-control(type='text', name='latitude', id='latitude',value=organization.Location.latitude)
+            input.form-control(type='text', name='latitude', id='latitude',value=organization.Location.latitude,data-parsley-type="number")
     .form-group
       label(class='col-sm-2 control-label', for='phoneNumber') Phone Number
       .col-sm-2
