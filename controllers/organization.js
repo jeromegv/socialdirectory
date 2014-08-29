@@ -193,9 +193,12 @@ exports.postOrganization = function(req, res,next) {
   });
 
   var additionalResources = new Array();
+  var additionalResourcesName = new Array();
   req.body.resourceName.forEach(function(entry,index) {
       additionalResources[index]={resourceName:entry,resourceUrl:saveUrl(req.body.resourceUrl[index])};
+      additionalResourcesName[index]=entry;
   });
+
   organization.additionalResources = additionalResources;
 
   var socialMedia = new Array();
@@ -234,7 +237,8 @@ exports.postOrganization = function(req, res,next) {
           active: organization.active,
           //need to derive date created from ID 
           dateCreated: moment.utc(parseInt(organization._id.toString().substr(0, 8),16)*1000).toISOString(),
-          lastUpdated: moment.utc(Date.now()).toISOString()
+          lastUpdated: moment.utc(Date.now()).toISOString(),
+          additionalResourcesNameList: additionalResourcesName
         }];
         if (req.body.yearFounded!=''){
           organizationAzure.yearFounded=req.body.yearFounded;
@@ -334,8 +338,10 @@ exports.putOrganization = function(req, res,next) {
     lastUpdated: Date.now()
   };    
   var additionalResources = new Array();
+  var additionalResourcesName = new Array();
   req.body.resourceName.forEach(function(entry,index) {
       additionalResources[index]={resourceName:entry,resourceUrl:saveUrl(req.body.resourceUrl[index])};
+      additionalResourcesName[index]=entry;
   });
   organization.additionalResources = additionalResources;
 
@@ -372,7 +378,9 @@ exports.putOrganization = function(req, res,next) {
           active: req.sanitize('active').toBoolean(),
           //need to derive date created from ID 
           dateCreated: moment.utc(parseInt(req.params.id.substr(0, 8),16)*1000).toISOString(),
-          lastUpdated: moment.utc(Date.now()).toISOString()
+          lastUpdated: moment.utc(Date.now()).toISOString(),
+          additionalResourcesNameList:additionalResourcesName
+
         }];
         if (req.body.yearFounded!=''){
           organizationAzure.yearFounded=req.body.yearFounded;
