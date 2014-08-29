@@ -16,6 +16,11 @@
         if user
           li(class=title=='Add Organization'?'active':undefined)
             a(href='/organization') Add Organization
+      form(class="navbar-form navbar-left" role="search" action="/")
+        .form-group
+          input(type="text",class="form-control",placeholder="Search",name="search",id="search")
+        button(class="btn btn-default",type="submit")
+          span.icon.ion-search
       ul.nav.navbar-nav.navbar-right
         if !user
           li(class=title=='Login'?'active':undefined)

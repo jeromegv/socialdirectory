@@ -1,0 +1,32 @@
+extends layout
+
+block content
+  h1 List of Social Enterprises
+  hr
+  .table-responsive
+    table.table.table-striped.table-hover
+      thead
+        tr
+          th Organization Name
+          th Website
+          th.hidden-xs Primary Business Sector
+          th.hidden-xs Social Purpose Category
+          th.hidden-sm.hidden-xs Created Time
+          th.hidden-xs Active
+      tbody
+        for organization in organizations
+          tr
+            td
+              a(href='organization/'+organization.orgId)= organization.name
+            td
+                a(href=organization.website,target="_blank")= organization.website
+            td.hidden-xs= organization.primaryBusinessSector
+            td.hidden-xs= organization.socialPurposeCategory
+            td.hidden-sm.hidden-xs
+              - var org = String(organization.orgId); org = parseInt(org.substr(0, 8),16)*1000
+              =moment(org).format("YYYY-MM-DD HH:mm")
+            td.hidden-xs
+              if(organization.active)
+                i.icon.ion-eye(style="font-size:16px")
+              else
+                i.icon.ion-eye-disabled(style="font-size:16px")

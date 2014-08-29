@@ -17,7 +17,7 @@ request(options, function (error, response, body) {
 		//console.log('index '+secrets.azureSearch.indexName+' already created on Azure Search, success');
 	} else {
 		//if 404, service is well configured but index needs to be created
-		if (response.statusCode == 404){
+		if (response && response.statusCode == 404){
 			console.log('index '+secrets.azureSearch.indexName+' does not exist yet on Azure Search, creating it now');
 			options.url= 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'?api-version='+secrets.azureSearch.apiVersion;
 			options.method= 'PUT';
@@ -55,9 +55,11 @@ request(options, function (error, response, body) {
 					console.log('index '+secrets.azureSearch.indexName+' failed to be created on Azure Search. http status code was: '+response.statusCode);
 				}
 			});
-		} else {
+		} else  {
 			if (error){console.log(error);}
-			console.log('Connection to Azure Search failed, expected http status code 200 and got instead '+response.statusCode);
+			console.log('Connection to Azure Search failed, query was: ');
+			console.log(options);
+	        if (response) {console.log('http status code was: '+response.statusCode)};
 		}
 	}
 });

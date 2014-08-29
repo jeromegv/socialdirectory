@@ -212,10 +212,65 @@ exports.postOrganization = function(req, res,next) {
       req.flash('errors', { msg: 'Organization with that name already exists.' });
       return res.redirect('/organization');
     }
-    organization.save(function(err) {
+    organization.save(function(err,organization) {
       if (err) { 
         return next(err);
       } else {
+        //was able to update mongo, now update azure
+        var organizationAzure = [{
+          "@search.action": "upload",
+          orgId:organization._id,
+          name: req.body.name,
+          email: req.body.email,
+          locationAddress:req.body.address,
+          phoneNumber: req.body.phoneNumber,
+          website: saveUrl(req.body.website),
+          parentOrganization: req.body.parentOrganization,
+          descriptionService: req.body.descriptionService,
+          primaryBusinessSector: req.body.primaryBusinessSector,
+          descriptionCause: req.body.descriptionCause,
+          socialPurposeCategory: req.body.socialPurposeCategory,
+          organizationalStructure: req.body.organizationalStructure,
+          active: organization.active,
+          //need to derive date created from ID 
+          dateCreated: moment.utc(parseInt(organization._id.toString().substr(0, 8),16)*1000).toISOString(),
+          lastUpdated: moment.utc(Date.now()).toISOString()
+        }];
+        if (req.body.yearFounded!=''){
+          organizationAzure.yearFounded=req.body.yearFounded;
+        }
+        if (req.body.longitude!='' && req.body.latitude!=''){
+          organizationAzure.location={ 
+            "type": "Point", 
+            "coordinates": [req.sanitize('longitude').toFloat(), req.sanitize('latitude').toFloat()]
+          };
+        }
+        var options = {
+          url: 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'/docs/index?api-version='+secrets.azureSearch.apiVersion,
+          json: true,
+          method: 'POST',
+          headers: {
+            'host': secrets.azureSearch.url,
+            'api-key': secrets.azureSearch.apiKey,
+            'Content-Type': 'application/json'
+          },
+          body: {"value":organizationAzure}
+        };
+        console.log(util.inspect(options.body,{  depth: null }));
+        request(options, function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            //console.log('organization '+ req.body.name + ' created, success');
+          } else {
+            if (error){
+              console.log(error);
+            }
+            console.log('organization '+ req.body.name + ' failed to be created on Azure Search, query was: ');
+            console.log(options);
+            if (response) {
+              console.log('http status code was: '+response.statusCode)
+            };
+          }
+        });
         return res.redirect('/');
       }
     });
@@ -299,17 +354,13 @@ exports.putOrganization = function(req, res,next) {
         return next(err);
     } else {
       if (result===1){
-        //was able to update mongo, now update azure
+        //was able to update mongo, now update azure search
         var organizationAzure = [{
           "@search.action": "upload",
           orgId:req.params.id,
           name: req.body.name,
           email: req.body.email,
           locationAddress:req.body.address,
-          "location": { 
-            "type": "Point", 
-            "coordinates": [req.sanitize('longitude').toFloat(), req.sanitize('latitude').toFloat()]
-          },
           phoneNumber: req.body.phoneNumber,
           website: saveUrl(req.body.website),
           parentOrganization: req.body.parentOrganization,
@@ -325,6 +376,12 @@ exports.putOrganization = function(req, res,next) {
         }];
         if (req.body.yearFounded!=''){
           organizationAzure.yearFounded=req.body.yearFounded;
+        }
+        if (req.body.longitude!='' && req.body.latitude!=''){
+          organizationAzure.location={ 
+            "type": "Point", 
+            "coordinates": [req.sanitize('longitude').toFloat(), req.sanitize('latitude').toFloat()]
+          };
         }
         var options = {
           url: 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'/docs/index?api-version='+secrets.azureSearch.apiVersion,
@@ -342,11 +399,17 @@ exports.putOrganization = function(req, res,next) {
           if (!error && response.statusCode == 200) {
             //console.log('organization '+ req.body.name + ' created, success');
           } else {
-            if (error){console.log(error);}
-            console.log('organization '+ req.body.name + ' failed to be created on Azure Search. http status code was: '+response.statusCode);
+            if (error){
+              console.log(error);
+            }
+            console.log('organization '+ req.body.name + ' failed to be updated on Azure Search, query was: ');
+            console.log(options);
+            if (response) {
+              console.log('http status code was: '+response.statusCode)
+            };
+
           }
         });
-
         return res.redirect('/');
       } else {
         console.log('No records were updated');
