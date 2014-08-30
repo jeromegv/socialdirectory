@@ -80,6 +80,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator());
 app.use(methodOverride(function(req, res){
+  //config of method override to be able to use a POST form to make a PUT query to the API
   if (req.body && typeof req.body === 'object' && '_method' in req.body) {
     // look in urlencoded POST bodies and delete it
     var method = req.body._method
@@ -140,6 +141,7 @@ app.post('/account/profile', passportConf.isAuthenticated, userController.postUp
 app.post('/account/password', passportConf.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConf.isAuthenticated, userController.postDeleteAccount);
 app.get('/organization',passportConf.isAuthenticated,organizationController.addOrganization);
+app.get('/searchorganization',organizationController.searchOrganization);
 app.post('/organization', passportConf.isAuthenticated,organizationController.postOrganization);
 app.get('/organization/:id',passportConf.isAuthenticated,organizationController.updateOrganization);
 app.put('/organization/:id', passportConf.isAuthenticated,organizationController.putOrganization);

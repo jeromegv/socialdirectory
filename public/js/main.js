@@ -60,6 +60,34 @@ $(document).ready(function() {
 	  $('#address').autoGeocoder({disableDefaultUI:false});
 	});
 
+	$( "#search" ).autocomplete({
+      source: function( request, response ) {
+        $.ajax({
+          url: "http://localhost:3000/searchorganization",
+          data: {
+            search: request.term
+          },
+          success: function( data ) {
+            response( data );
+          }
+        });
+      },
+	  	minLength: 3,
+	    select: function( event, ui ) {
+				window.location.href = '/organization/'+ui.item.orgId
+			},
+			focus: function (event, ui) {
+	       this.value = ui.item['@search.text'];
+	       event.preventDefault(); 
+		}
+
+    })
+    .autocomplete( "instance" )._renderItem = function( ul, item ) {
+      return $( "<li>" )
+        .append( "<a href='/organization/"+item.orgId+"'>" + item['@search.text'] + "</a>" )
+        .appendTo( ul );
+    };
+
 
 
 });

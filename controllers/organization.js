@@ -69,6 +69,9 @@ function getSocialMediaName(parsedUrl){
         case 'google':
             socialMediaName='google plus';
             break;
+        case 'blogspot':
+            socialMediaName='blogspot';
+            break;
         default:
             socialMediaName='other';
     }
@@ -443,4 +446,41 @@ exports.deleteOrganization = function (req,res,next){
         return res.send('');
       }
     });
+}
+
+/**
+ * GET /searchorganization/
+ * Search an organization with Azure Search Suggestion service and return as JSON 
+ * Since we don't want client side javascript from our site to talk directly with the service
+ */
+exports.searchOrganization = function (req,res,next){
+  if (typeof(req.query.search)!='undefined' && req.query.search!=''){
+    var options = {
+      url: 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'/docs/suggest?search='+req.query.search+'&api-version='+secrets.azureSearch.apiVersion,
+          json: true,
+          method: 'GET',
+          headers: {
+            'host': secrets.azureSearch.url,
+            'api-key': secrets.azureSearch.apiKey,
+            'Content-Type': 'application/json'
+          }
+    };
+    request(options, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        return res.json(body.value);
+       } else {
+          if (error){
+            console.log(error);
+          }
+          console.log('search failed to execute on Azure Search, query was:');
+          console.log(options);
+          if (response) {
+            console.log('http status code was: '+response.statusCode)
+          };
+        return res.send(null);
+       }
+    });
+  } else {
+    return res.send(null);
+  }
 }

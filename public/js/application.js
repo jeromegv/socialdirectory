@@ -17,4 +17,9 @@
 //= require lib/bootstrap.min
 //= require lib/jquery.auto-geocoder
 //= require parsleyjs/dist/parsley.min
+//= require jquery-ui/ui/minified/core.min
+//= require jquery-ui/ui/minified/widget.min
+//= require jquery-ui/ui/minified/menu.min
+//= require jquery-ui/ui/minified/position.min
+//= require jquery-ui/ui/autocomplete
 //= require main

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "directory": "public/components",
   "dependencies": {
-    "parsleyjs": "~2.0.3"
+    "parsleyjs": "~2.0.3",
+    "jquery-ui": "~1.11.1"
   }
 }

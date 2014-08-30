@@ -2,14 +2,13 @@ var Organization = require('../models/Organization');
 var moment = require('moment');
 var request = require('request');
 var secrets = require('../config/secrets');
+
 /**
  * GET /
  * Home page.
  */
-
-
 exports.index = function(req, res) {
-	//if this is a search, we query azure search
+	//if there is a search url parameter, we query azure search using that term and render the results
 	if (typeof(req.query.search)!='undefined' && req.query.search!=''){
 		var options = {
 		  url: 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'/docs?search='+req.query.search+'&api-version='+secrets.azureSearch.apiVersion,
@@ -27,6 +26,8 @@ exports.index = function(req, res) {
 					title: 'Search for '+req.query.search,
 					organizations: body.value,
 					moment: moment,
+					resultCount: body.value.length,
+					searchTerm: req.query.search
 				});
 			 } else {
 	            if (error){console.log(error);}
