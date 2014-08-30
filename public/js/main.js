@@ -63,7 +63,7 @@ $(document).ready(function() {
 	$( "#search" ).autocomplete({
       source: function( request, response ) {
         $.ajax({
-          url: "http://localhost:3000/searchorganization",
+          url: "/searchorganization",
           data: {
             search: request.term
           },
