@@ -455,6 +455,11 @@ exports.deleteOrganization = function (req,res,next){
  */
 exports.searchOrganization = function (req,res,next){
   if (typeof(req.query.search)!='undefined' && req.query.search!=''){
+    req.assert('search','search as you type length must be between 3 and 100').isLength(3, 100);
+    var errors = req.validationErrors();
+    if (errors) {
+      return res.send(null);
+    }
     var options = {
       url: 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'/docs/suggest?search='+req.query.search+'&api-version='+secrets.azureSearch.apiVersion,
           json: true,
