@@ -173,7 +173,7 @@ exports.postOrganization = function(req, res,next) {
   }
 
   var organization = new Organization({
-    name: req.body.name,
+    name: req.sanitize('name').trim(),
     email: req.body.email,
     Location: {
           address: req.body.address
@@ -184,7 +184,7 @@ exports.postOrganization = function(req, res,next) {
     website: saveUrl(req.body.website),
     logo: saveUrl(req.body.logo),
     parentOrganization: req.body.parentOrganization,
-    yearFounded: req.body.yearFounded,
+    yearFounded: req.sanitize('yearFounded').toInt(),
     descriptionService: req.body.descriptionService,
     primaryBusinessSector: req.body.primaryBusinessSector,
     descriptionCause: req.body.descriptionCause,
@@ -213,7 +213,7 @@ exports.postOrganization = function(req, res,next) {
   });
   organization.socialMedia = socialMedia;
 
-  Organization.findOne({ name: req.body.name }, function(err, existingOrganization) {
+  Organization.findOne({ name: req.sanitize('name').trim() }, function(err, existingOrganization) {
     if (existingOrganization) {
       req.flash('errors', { msg: 'Organization with that name already exists.' });
       return res.redirect('/organization');
@@ -226,7 +226,7 @@ exports.postOrganization = function(req, res,next) {
         var organizationAzure = [{
           "@search.action": "upload",
           orgId:organization._id,
-          name: req.body.name,
+          name: req.sanitize('name').trim(),
           email: req.body.email,
           locationAddress:req.body.address,
           phoneNumber: req.body.phoneNumber,
@@ -244,7 +244,7 @@ exports.postOrganization = function(req, res,next) {
           additionalResourcesNameList: additionalResourcesName
         }];
         if (req.body.yearFounded!=''){
-          organizationAzure.yearFounded=req.body.yearFounded;
+          organizationAzure.yearFounded=req.sanitize('yearFounded').toInt();
         }
         if (req.body.longitude!='' && req.body.latitude!=''){
           organizationAzure.location={ 
@@ -266,12 +266,12 @@ exports.postOrganization = function(req, res,next) {
         console.log(util.inspect(options.body,{  depth: null }));
         request(options, function (error, response, body) {
           if (!error && response.statusCode == 200) {
-            //console.log('organization '+ req.body.name + ' created, success');
+            //console.log('organization '+ req.sanitize('name').trim() + ' created, success');
           } else {
             if (error){
               console.log(error);
             }
-            console.log('organization '+ req.body.name + ' failed to be created on Azure Search, query was: ');
+            console.log('organization '+ req.sanitize('name').trim() + ' failed to be created on Azure Search, query was: ');
             console.log(options);
             if (response) {
               console.log('http status code was: '+response.statusCode)
@@ -319,7 +319,7 @@ exports.putOrganization = function(req, res,next) {
     }
 
   var organization = {
-    name: req.body.name,
+    name: req.sanitize('name').trim(),
     email: req.body.email,
     Location: {
           address: req.body.address
@@ -330,7 +330,7 @@ exports.putOrganization = function(req, res,next) {
     website: saveUrl(req.body.website),
     logo: saveUrl(req.body.logo),
     parentOrganization: req.body.parentOrganization,
-    yearFounded: req.body.yearFounded,
+    yearFounded: req.sanitize('yearFounded').toInt(),
     descriptionService: req.body.descriptionService,
     primaryBusinessSector: req.body.primaryBusinessSector,
     descriptionCause: req.body.descriptionCause,
@@ -367,7 +367,7 @@ exports.putOrganization = function(req, res,next) {
         var organizationAzure = [{
           "@search.action": "upload",
           orgId:req.params.id,
-          name: req.body.name,
+          name: req.sanitize('name').trim(),
           email: req.body.email,
           locationAddress:req.body.address,
           phoneNumber: req.body.phoneNumber,
@@ -386,7 +386,7 @@ exports.putOrganization = function(req, res,next) {
 
         }];
         if (req.body.yearFounded!=''){
-          organizationAzure.yearFounded=req.body.yearFounded;
+          organizationAzure.yearFounded=req.sanitize('yearFounded').toInt();
         }
         if (req.body.longitude!='' && req.body.latitude!=''){
           organizationAzure.location={ 
@@ -408,12 +408,12 @@ exports.putOrganization = function(req, res,next) {
         console.log(util.inspect(options.body,{  depth: null }));
         request(options, function (error, response, body) {
           if (!error && response.statusCode == 200) {
-            //console.log('organization '+ req.body.name + ' created, success');
+            //console.log('organization '+ req.sanitize('name').trim() + ' created, success');
           } else {
             if (error){
               console.log(error);
             }
-            console.log('organization '+ req.body.name + ' failed to be updated on Azure Search, query was: ');
+            console.log('organization '+ req.sanitize('name').trim() + ' failed to be updated on Azure Search, query was: ');
             console.log(options);
             if (response) {
               console.log('http status code was: '+response.statusCode)
