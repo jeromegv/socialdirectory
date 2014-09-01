@@ -220,7 +220,9 @@ exports.postOrganization = function(req, res,next) {
   var additionalResourcesName = new Array();
   req.body.resourceName.forEach(function(entry,index) {
       additionalResources[index]={resourceName:entry,resourceUrl:saveUrl(req.body.resourceUrl[index])};
-      additionalResourcesName[index]=entry;
+      if (entry!=''){
+        additionalResourcesName[index]=entry;
+      }
   });
 
   organization.additionalResources = additionalResources;
@@ -384,7 +386,9 @@ exports.putOrganization = function(req, res,next) {
   var additionalResourcesName = new Array();
   req.body.resourceName.forEach(function(entry,index) {
       additionalResources[index]={resourceName:entry,resourceUrl:saveUrl(req.body.resourceUrl[index])};
-      additionalResourcesName[index]=entry;
+      if (entry!=''){
+        additionalResourcesName[index]=entry;
+      }
   });
   organization.additionalResources = additionalResources;
 
