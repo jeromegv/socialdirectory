@@ -210,6 +210,11 @@ exports.postOrganization = function(req, res,next) {
   } else {
     organization.demographicImpact = new Array();
   }
+  if (typeof(req.body.socialPurposeCategoryTags)!='undefined'){
+    organization.socialPurposeCategoryTags = req.body.socialPurposeCategoryTags;
+  } else {
+    organization.socialPurposeCategoryTags = new Array();
+  }
 
   var additionalResources = new Array();
   var additionalResourcesName = new Array();
@@ -251,7 +256,6 @@ exports.postOrganization = function(req, res,next) {
           descriptionService: req.body.descriptionService,
           primaryBusinessSector: req.body.primaryBusinessSector,
           descriptionCause: req.body.descriptionCause,
-          socialPurposeCategory: req.body.socialPurposeCategory,
           organizationalStructure: req.body.organizationalStructure,
           active: organization.active,
           //need to derive date created from ID 
@@ -263,6 +267,11 @@ exports.postOrganization = function(req, res,next) {
           organizationAzure[0].demographicImpact=organization.demographicImpact;
         } else {
           organizationAzure[0].demographicImpact = new Array(organization.demographicImpact);
+        }
+        if (Array.isArray(organization.socialPurposeCategoryTags)){
+          organizationAzure[0].socialPurposeCategoryTags=organization.socialPurposeCategoryTags;
+        } else {
+          organizationAzure[0].socialPurposeCategoryTags = new Array(organization.socialPurposeCategoryTags);
         }
         if (req.body.yearFounded!=''){
           organizationAzure[0].yearFounded=req.sanitize('yearFounded').toInt();
@@ -366,6 +375,11 @@ exports.putOrganization = function(req, res,next) {
   } else {
     organization.demographicImpact = new Array();
   }
+  if (typeof(req.body.socialPurposeCategoryTags)!='undefined'){
+    organization.socialPurposeCategoryTags = req.body.socialPurposeCategoryTags;
+  } else {
+    organization.socialPurposeCategoryTags = new Array();
+  }
   var additionalResources = new Array();
   var additionalResourcesName = new Array();
   req.body.resourceName.forEach(function(entry,index) {
@@ -403,7 +417,6 @@ exports.putOrganization = function(req, res,next) {
           descriptionService: req.body.descriptionService,
           primaryBusinessSector: req.body.primaryBusinessSector,
           descriptionCause: req.body.descriptionCause,
-          socialPurposeCategory: req.body.socialPurposeCategory,
           organizationalStructure: req.body.organizationalStructure,
           active: req.sanitize('active').toBoolean(),
           //need to derive date created from ID 
@@ -416,6 +429,11 @@ exports.putOrganization = function(req, res,next) {
           organizationAzure[0].demographicImpact=organization.demographicImpact;
         } else {
           organizationAzure[0].demographicImpact = new Array(organization.demographicImpact);
+        }
+        if (Array.isArray(organization.socialPurposeCategoryTags)){
+          organizationAzure[0].socialPurposeCategoryTags=organization.socialPurposeCategoryTags;
+        } else {
+          organizationAzure[0].socialPurposeCategoryTags = new Array(organization.socialPurposeCategoryTags);
         }
         if (req.body.yearFounded!=''){
           organizationAzure[0].yearFounded=req.sanitize('yearFounded').toInt();

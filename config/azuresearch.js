@@ -36,7 +36,7 @@ request(options, function (error, response, body) {
 			    {"name": "descriptionService", "type": "Edm.String","filterable": false,"facetable": false}, 
 			    {"name": "primaryBusinessSector", "type": "Edm.String"}, 
 			    {"name": "descriptionCause", "type": "Edm.String","filterable": false,"facetable": false}, 
-			    {"name": "socialPurposeCategory", "type": "Edm.String"}, 
+			    {"name": "socialPurposeCategoryTags", "type": "Collection(Edm.String)"},
 			    {"name": "demographicImpact", "type": "Collection(Edm.String)"},
 			    {"name": "organizationalStructure", "type": "Edm.String"}, 
 			    {"name": "active", "type": "Edm.Boolean"}, 

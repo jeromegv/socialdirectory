@@ -17,6 +17,7 @@ var organizationSchema = new mongoose.Schema({
   primaryBusinessSector: {type: String, default: ''},
   descriptionCause: {type: String, default: ''},
   socialPurposeCategory: {type: String, default: ''},
+  socialPurposeCategoryTags: [{type: String,default:''}],
   demographicImpact: [{type: String,default:''}],
   organizationalStructure: {type: String, default: ''},
   privateNote: {type: String, default: ''},

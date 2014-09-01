@@ -88,7 +88,11 @@ $(document).ready(function() {
         .appendTo( ul );
     };
     $("#demographicImpact").select2({
-	    placeholder: "Choose up to 3",
+	    placeholder: "Choose up to 3 demographic groups",
+	    maximumSelectionSize: 3
+	});
+	$("#socialPurposeCategoryTags").select2({
+	    placeholder: "Choose up to 3 social purpose categories",
 	    maximumSelectionSize: 3
 	});
 

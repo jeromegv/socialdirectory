@@ -79,6 +79,22 @@ block content
       .col-sm-4
         input.form-control(type='text', name='socialPurposeCategory', id='socialPurposeCategory', placeholder='Social Purpose Category',value=organization.socialPurposeCategory)
     .form-group
+      label(class='col-sm-2 control-label', for='socialPurposeCategoryTags') Social Purpose Category
+      .col-sm-4
+        select.form-control(name='socialPurposeCategoryTags', id='socialPurposeCategoryTags', multiple="multiple")
+            option(value='Cultural',selected=(_.contains(organization.socialPurposeCategoryTags,"Cultural"))) Cultural
+            option(value='Environmental',selected=(_.contains(organization.socialPurposeCategoryTags,"Environmental"))) Environmental
+            option(value='Income generation for parent or affiliate organization',selected=(_.contains(organization.socialPurposeCategoryTags,"Income generation for parent or affiliate organization"))) Income generation for parent or affiliate organization
+            option(value='Employment development & skills training',selected=(_.contains(organization.socialPurposeCategoryTags,"Employment development & skills training"))) Employment development & skills training
+            option(value='Entrepreneurship & small business development',selected=(_.contains(organization.socialPurposeCategoryTags,"Entrepreneurship & small business development"))) Entrepreneurship & small business development
+            option(value='Microfinance, investing, and financial services',selected=(_.contains(organization.socialPurposeCategoryTags,"Microfinance, investing, and financial services"))) Microfinance, investing, and financial services
+            option(value='Education',selected=(_.contains(organization.socialPurposeCategoryTags,"Education"))) Education
+            option(value='Supports social enterprise development',selected=(_.contains(organization.socialPurposeCategoryTags,"Supports social enterprise development"))) Supports social enterprise development
+            option(value='Social entrepreneurial skills development',selected=(_.contains(organization.socialPurposeCategoryTags,"Social entrepreneurial skills development"))) Social entrepreneurial skills development
+            option(value='Poverty eradication',selected=(_.contains(organization.socialPurposeCategoryTags,"Poverty eradication"))) Poverty eradication
+            option(value='Health and wellness',selected=(_.contains(organization.socialPurposeCategoryTags,"Health and wellness"))) Health and wellness
+            option(value='Food, housing & basic needs',selected=(_.contains(organization.socialPurposeCategoryTags,"Food, housing & basic needs"))) Food, housing & basic needs
+    .form-group
       label(class='col-sm-2 control-label', for='demographicImpact') Which demographic groups does the social enterprise impact?
       .col-sm-4
         select.form-control(name='demographicImpact', id='demographicImpact', multiple="multiple")
