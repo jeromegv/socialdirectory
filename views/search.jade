@@ -21,7 +21,9 @@ block content
             td
                 a(href=organization.website,target="_blank")= organization.website
             td.hidden-xs= organization.primaryBusinessSector
-            td.hidden-xs= organization.socialPurposeCategory
+            td.hidden-xs
+              for tags in organization.socialPurposeCategoryTags
+               =tags+', '
             td.hidden-sm.hidden-xs
               - var org = String(organization.orgId); org = parseInt(org.substr(0, 8),16)*1000
               =moment(org).format("YYYY-MM-DD HH:mm")
