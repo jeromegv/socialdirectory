@@ -46,7 +46,7 @@ request(options, function (error, response, body) {
 			     ]
 			};
 			request(options, function (error, response, body) {
-				if (!error && response.statusCode == 201) {
+				if (!error && (response.statusCode == 201 || response.statusCode==204)) {
 					console.log('index '+secrets.azureSearch.indexName+' created on Azure Search, success');
 				} else {
 					if (error){console.log(error);}
