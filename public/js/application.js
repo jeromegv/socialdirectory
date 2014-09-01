@@ -22,4 +22,5 @@
 //= require jquery-ui/ui/minified/menu.min
 //= require jquery-ui/ui/minified/position.min
 //= require jquery-ui/ui/autocomplete
+//= require select2/select2.min
 //= require main

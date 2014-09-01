@@ -4,6 +4,7 @@ var request = require('request');
 var urlNode = require('url');
 var util = require('util');
 var moment = require('moment');
+var _ = require('lodash');
 
 //make sure every url reference is saved with full HTTP or HTTPS
 function saveUrl(entry){
@@ -133,7 +134,8 @@ exports.updateOrganization = function(req, res) {
     if (!error && response.statusCode == 200) {
       res.render('organization/update', {
         title: 'Update '+body.name,
-        organization: body
+        organization: body,
+        _:_
       });
     }
   });
@@ -184,11 +186,12 @@ exports.postOrganization = function(req, res,next) {
     website: saveUrl(req.body.website),
     logo: saveUrl(req.body.logo),
     parentOrganization: req.body.parentOrganization,
-    yearFounded: req.sanitize('yearFounded').toInt(),
+    yearFounded: req.body.yearFounded,
     descriptionService: req.body.descriptionService,
     primaryBusinessSector: req.body.primaryBusinessSector,
     descriptionCause: req.body.descriptionCause,
     socialPurposeCategory: req.body.socialPurposeCategory,
+    demographicImpact : req.body.demographicImpact,
     organizationalStructure: req.body.organizationalStructure,
     privateNote: req.body.privateNote,
     active: req.sanitize('active').toBoolean(),
@@ -236,6 +239,7 @@ exports.postOrganization = function(req, res,next) {
           primaryBusinessSector: req.body.primaryBusinessSector,
           descriptionCause: req.body.descriptionCause,
           socialPurposeCategory: req.body.socialPurposeCategory,
+          demographicImpact: req.body.demographicImpact,
           organizationalStructure: req.body.organizationalStructure,
           active: organization.active,
           //need to derive date created from ID 
@@ -244,7 +248,7 @@ exports.postOrganization = function(req, res,next) {
           additionalResourcesNameList: additionalResourcesName
         }];
         if (req.body.yearFounded!=''){
-          organizationAzure.yearFounded=req.sanitize('yearFounded').toInt();
+          organizationAzure.yearFounded=req.body.yearFounded;
         }
         if (req.body.longitude!='' && req.body.latitude!=''){
           organizationAzure.location={ 
@@ -330,11 +334,12 @@ exports.putOrganization = function(req, res,next) {
     website: saveUrl(req.body.website),
     logo: saveUrl(req.body.logo),
     parentOrganization: req.body.parentOrganization,
-    yearFounded: req.sanitize('yearFounded').toInt(),
+    yearFounded: req.body.yearFounded,
     descriptionService: req.body.descriptionService,
     primaryBusinessSector: req.body.primaryBusinessSector,
     descriptionCause: req.body.descriptionCause,
     socialPurposeCategory: req.body.socialPurposeCategory,
+    demographicImpact : req.body.demographicImpact,
     organizationalStructure: req.body.organizationalStructure,
     privateNote: req.body.privateNote,
     active: req.sanitize('active').toBoolean(),
@@ -356,6 +361,7 @@ exports.putOrganization = function(req, res,next) {
       }
   });
   organization.socialMedia = socialMedia;
+
 //we lose createdBy if we dont do findbyidupdate
   Organization.update({ _id: req.params.id }, organization, {safe:true, multi:false}, function(err, result){
     if (err) {
@@ -377,6 +383,7 @@ exports.putOrganization = function(req, res,next) {
           primaryBusinessSector: req.body.primaryBusinessSector,
           descriptionCause: req.body.descriptionCause,
           socialPurposeCategory: req.body.socialPurposeCategory,
+          demographicImpact: req.body.demographicImpact,
           organizationalStructure: req.body.organizationalStructure,
           active: req.sanitize('active').toBoolean(),
           //need to derive date created from ID 
@@ -386,7 +393,7 @@ exports.putOrganization = function(req, res,next) {
 
         }];
         if (req.body.yearFounded!=''){
-          organizationAzure.yearFounded=req.sanitize('yearFounded').toInt();
+          organizationAzure.yearFounded=req.body.yearFounded;
         }
         if (req.body.longitude!='' && req.body.latitude!=''){
           organizationAzure.location={ 

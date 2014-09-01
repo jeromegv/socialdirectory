@@ -87,6 +87,10 @@ $(document).ready(function() {
         .append( "<a href='/organization/"+item.orgId+"'>" + item['@search.text'] + "</a>" )
         .appendTo( ul );
     };
+    $("#demographicImpact").select2({
+	    placeholder: "Choose up to 3",
+	    maximumSelectionSize: 3
+	});
 
 
 

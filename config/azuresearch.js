@@ -35,15 +35,13 @@ request(options, function (error, response, body) {
 				{"name": "yearFounded", "type": "Edm.Int32"}, 
 			    {"name": "descriptionService", "type": "Edm.String","filterable": false,"facetable": false}, 
 			    {"name": "primaryBusinessSector", "type": "Edm.String"}, 
-
 			    {"name": "descriptionCause", "type": "Edm.String","filterable": false,"facetable": false}, 
-
 			    {"name": "socialPurposeCategory", "type": "Edm.String"}, 
+			    {"name": "demographicImpact", "type": "Collection(Edm.String)"},
 			    {"name": "organizationalStructure", "type": "Edm.String"}, 
 			    {"name": "active", "type": "Edm.Boolean"}, 
 			    {"name": "dateCreated", "type": "Edm.DateTimeOffset"}, 
-			    {"name": "lastUpdated", "type": "Edm.DateTimeOffset"}, 
-			    
+			    {"name": "lastUpdated", "type": "Edm.DateTimeOffset"},     
 			    {"name": "additionalResourcesNameList", "type": "Collection(Edm.String)"}  
 			     ]
 			};

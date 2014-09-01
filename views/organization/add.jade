@@ -67,6 +67,20 @@ block content
       .col-sm-4
         input.form-control(type='text', name='socialPurposeCategory', id='socialPurposeCategory', placeholder='Social Purpose Category')
     .form-group
+      label(class='col-sm-2 control-label', for='demographicImpact') Which demographic groups does the social enterprise impact?
+      .col-sm-4
+        select.form-control(name='demographicImpact', id='demographicImpact', multiple="multiple")
+            option(value='Community groups') Community groups
+            option(value='Homeless') Homeless
+            option(value='Aboriginal / Indigenous groups') Aboriginal / Indigenous groups
+            option(value='Youth') Youth
+            option(value='Women') Women
+            option(value='Individuals with disabilities') Individuals with disabilities
+            option(value='Elderly') Elderly
+            option(value='Low-income individuals') Low-income individuals
+            option(value='Immigrants') Immigrants
+            option(value='Other social enterprises, co-operatives or charities, etc.') Other social enterprises, co-operatives or charities, etc.
+    .form-group
       label(class='col-sm-2 control-label', for='descriptionCause') What makes it a social enterprise?
       .col-sm-8
         textarea.form-control(type='text', name='descriptionCause', id='descriptionCause', rows='4', placeholder='What makes it a social enterprise?')
