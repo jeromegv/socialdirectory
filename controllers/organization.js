@@ -200,7 +200,7 @@ exports.postOrganization = function(req, res,next) {
   if (typeof(req.body.demographicImpact)!='undefined'){
     organization.demographicImpact = req.body.demographicImpact;
   } else {
-    organization.demographicImpact = '';
+    organization.demographicImpact = new Array();
   }
 
   var additionalResources = new Array();
@@ -244,7 +244,6 @@ exports.postOrganization = function(req, res,next) {
           primaryBusinessSector: req.body.primaryBusinessSector,
           descriptionCause: req.body.descriptionCause,
           socialPurposeCategory: req.body.socialPurposeCategory,
-          demographicImpact: req.body.demographicImpact,
           organizationalStructure: req.body.organizationalStructure,
           active: organization.active,
           //need to derive date created from ID 
@@ -252,11 +251,16 @@ exports.postOrganization = function(req, res,next) {
           lastUpdated: moment.utc(Date.now()).toISOString(),
           additionalResourcesNameList: additionalResourcesName
         }];
+        if (Array.isArray(organization.demographicImpact)){
+          organizationAzure[0].demographicImpact=organization.demographicImpact;
+        } else {
+          organizationAzure[0].demographicImpact = new Array(organization.demographicImpact);
+        }
         if (req.body.yearFounded!=''){
-          organizationAzure.yearFounded=req.body.yearFounded;
+          organizationAzure[0].yearFounded=req.sanitize('yearFounded').toInt();
         }
         if (req.body.longitude!='' && req.body.latitude!=''){
-          organizationAzure.location={ 
+          organizationAzure[0].location={ 
             "type": "Point", 
             "coordinates": [req.sanitize('longitude').toFloat(), req.sanitize('latitude').toFloat()]
           };
@@ -352,7 +356,7 @@ exports.putOrganization = function(req, res,next) {
   if (typeof(req.body.demographicImpact)!='undefined'){
     organization.demographicImpact = req.body.demographicImpact;
   } else {
-    organization.demographicImpact = '';
+    organization.demographicImpact = new Array();
   }
   var additionalResources = new Array();
   var additionalResourcesName = new Array();
@@ -392,7 +396,6 @@ exports.putOrganization = function(req, res,next) {
           primaryBusinessSector: req.body.primaryBusinessSector,
           descriptionCause: req.body.descriptionCause,
           socialPurposeCategory: req.body.socialPurposeCategory,
-          demographicImpact: req.body.demographicImpact,
           organizationalStructure: req.body.organizationalStructure,
           active: req.sanitize('active').toBoolean(),
           //need to derive date created from ID 
@@ -401,11 +404,16 @@ exports.putOrganization = function(req, res,next) {
           additionalResourcesNameList:additionalResourcesName
 
         }];
+        if (Array.isArray(organization.demographicImpact)){
+          organizationAzure[0].demographicImpact=organization.demographicImpact;
+        } else {
+          organizationAzure[0].demographicImpact = new Array(organization.demographicImpact);
+        }
         if (req.body.yearFounded!=''){
-          organizationAzure.yearFounded=req.body.yearFounded;
+          organizationAzure[0].yearFounded=req.sanitize('yearFounded').toInt();
         }
         if (req.body.longitude!='' && req.body.latitude!=''){
-          organizationAzure.location={ 
+          organizationAzure[0].location={ 
             "type": "Point", 
             "coordinates": [req.sanitize('longitude').toFloat(), req.sanitize('latitude').toFloat()]
           };
