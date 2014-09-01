@@ -191,12 +191,17 @@ exports.postOrganization = function(req, res,next) {
     primaryBusinessSector: req.body.primaryBusinessSector,
     descriptionCause: req.body.descriptionCause,
     socialPurposeCategory: req.body.socialPurposeCategory,
-    demographicImpact : req.body.demographicImpact,
     organizationalStructure: req.body.organizationalStructure,
     privateNote: req.body.privateNote,
     active: req.sanitize('active').toBoolean(),
     createdBy: req.user._id
   });
+
+  if (typeof(req.body.demographicImpact)!='undefined'){
+    organization.demographicImpact = req.body.demographicImpact;
+  } else {
+    organization.demographicImpact = '';
+  }
 
   var additionalResources = new Array();
   var additionalResourcesName = new Array();
@@ -339,12 +344,16 @@ exports.putOrganization = function(req, res,next) {
     primaryBusinessSector: req.body.primaryBusinessSector,
     descriptionCause: req.body.descriptionCause,
     socialPurposeCategory: req.body.socialPurposeCategory,
-    demographicImpact : req.body.demographicImpact,
     organizationalStructure: req.body.organizationalStructure,
     privateNote: req.body.privateNote,
     active: req.sanitize('active').toBoolean(),
     lastUpdated: Date.now()
   };    
+  if (typeof(req.body.demographicImpact)!='undefined'){
+    organization.demographicImpact = req.body.demographicImpact;
+  } else {
+    organization.demographicImpact = '';
+  }
   var additionalResources = new Array();
   var additionalResourcesName = new Array();
   req.body.resourceName.forEach(function(entry,index) {
