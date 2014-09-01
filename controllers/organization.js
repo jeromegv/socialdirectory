@@ -86,9 +86,10 @@ function getSocialMediaName(parsedUrl){
 
 exports.getOrganization = function(req, res) {
   Organization.find(function(err, organizations) {
-    if (!err){
+    if (!err && organizations!=null){
       return res.jsonp(organizations);
     } else {
+      res.status(400);
       return res.send(err);
     }
   });
@@ -101,9 +102,13 @@ exports.getOrganization = function(req, res) {
 
 exports.getOrganizationId = function(req, res) {
   Organization.findById(req.params.id,function(err, organization) {
-    if (!err){
+    if (!err && organization!=null){
       return res.jsonp(organization);
+    } else if (!err && organization==null){
+      res.status(404);
+      return res.send(null);
     } else {
+      res.status(400);
       return res.send(err);
     }
   });
@@ -137,6 +142,9 @@ exports.updateOrganization = function(req, res) {
         organization: body,
         _:_
       });
+    } else {
+      req.flash('errors', { msg: 'The organization requested can\'t be rendered' });
+      return res.redirect('back');
     }
   });
 };

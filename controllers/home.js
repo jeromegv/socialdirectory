@@ -56,6 +56,14 @@ exports.index = function(req, res) {
 					organizations: body,
 					moment: moment
 				});
+			} else {
+				if (error){console.log(error);}
+				if (response) {console.log('http status code was: '+response.statusCode)};
+				res.render('home', {
+					title: 'Home',
+					organizations: new Array(),
+					moment: moment
+				});
 			}
 		});
 	}
