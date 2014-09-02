@@ -1,0 +1,17 @@
+{
+    "Agriculture, forestry, fishing mining" : [],
+    "Consulting and professional services": ["Research","Marketing & Outreach","Recruitment Services","Finance and insurance","Microfinance & investment","Real estate & housing","Web & Graphic Design","Law, advocacy, politics"],
+    "Education" : [],
+    "Emergency relief" : [],
+    "Employment services" : ["Training"],
+    "Environment and animal protection":["Clean Technology","Conservation"],
+    "Facilities (banquet, conference, party)": [],
+    "Food and hospitality services":["Food service/catering","Food production and/or distribution"],
+    "Arts" : ["Theatre/performing arts","Gallery/display","Music"],
+    "Health care":[],
+    "Production/manufacturing":[],
+    "Services to social enterprise, co-operatives, non-profits, charities, etc.":["Microfinancing","Crowdfunding","Traditional fundraising","Network and community development","Consulting","Marketing & Outreach","Financial services","Law, advocacy, politics"],
+    "Sports and Recreation":[],
+    "Tourism":["Voluntourism","Ecotourism","Cultural tourism","Commercial Tourism"],
+    "Retail & Ecommerce":["Green products","Fair Trade","Filipino handcrafts","Clothing items & Cosmetics","Home and décor"]
+}
