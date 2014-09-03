@@ -124,7 +124,6 @@ exports.getOrganizationId = function(req, res) {
  */
 
 exports.addOrganization = function(req, res) {
-  console.log(businessSector);
   res.render('organization/add', {
     title: 'Add Organization',
     businessSector: businessSector
