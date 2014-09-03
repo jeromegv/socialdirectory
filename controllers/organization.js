@@ -5,6 +5,7 @@ var urlNode = require('url');
 var util = require('util');
 var moment = require('moment');
 var _ = require('lodash');
+var businessSector = require('../public/json/primaryBusinessSector.json');
 
 //make sure every url reference is saved with full HTTP or HTTPS
 function saveUrl(entry){
@@ -79,6 +80,8 @@ function getSocialMediaName(parsedUrl){
     return socialMediaName;
 }
 
+
+
 /**
  * GET /api/organization
  * List of all organizations
@@ -114,14 +117,17 @@ exports.getOrganizationId = function(req, res) {
   });
 };
 
+
 /**
  * GET /organization
  * Render form page to add a new organization
  */
 
 exports.addOrganization = function(req, res) {
+  console.log(businessSector);
   res.render('organization/add', {
-    title: 'Add Organization'
+    title: 'Add Organization',
+    businessSector: businessSector
   });
 };
 
@@ -140,7 +146,8 @@ exports.updateOrganization = function(req, res) {
       res.render('organization/update', {
         title: 'Update '+body.name,
         organization: body,
-        _:_
+        _:_,
+        businessSector: businessSector
       });
     } else {
       req.flash('errors', { msg: 'The organization requested can\'t be rendered' });
@@ -197,6 +204,7 @@ exports.postOrganization = function(req, res,next) {
     yearFounded: req.body.yearFounded,
     descriptionService: req.body.descriptionService,
     primaryBusinessSector: req.body.primaryBusinessSector,
+    primaryBusinessSector_1: req.body.primaryBusinessSector_1,
     descriptionCause: req.body.descriptionCause,
     socialPurposeCategory: req.body.socialPurposeCategory,
     organizationalStructure: req.body.organizationalStructure,
@@ -214,6 +222,12 @@ exports.postOrganization = function(req, res,next) {
     organization.socialPurposeCategoryTags = req.body.socialPurposeCategoryTags;
   } else {
     organization.socialPurposeCategoryTags = new Array();
+  }
+
+  if (typeof(req.body.primaryBusinessSector_2)!='undefined'){
+    organization.primaryBusinessSector_2 = req.body.primaryBusinessSector_2;
+  } else {
+    organization.primaryBusinessSector_2 = new Array();
   }
 
   var additionalResources = new Array();
@@ -256,7 +270,7 @@ exports.postOrganization = function(req, res,next) {
           website: saveUrl(req.body.website),
           parentOrganization: req.body.parentOrganization,
           descriptionService: req.body.descriptionService,
-          primaryBusinessSector: req.body.primaryBusinessSector,
+          primaryBusinessSector_1: req.body.primaryBusinessSector_1,
           descriptionCause: req.body.descriptionCause,
           organizationalStructure: req.body.organizationalStructure,
           active: organization.active,
@@ -274,6 +288,11 @@ exports.postOrganization = function(req, res,next) {
           organizationAzure[0].socialPurposeCategoryTags=organization.socialPurposeCategoryTags;
         } else {
           organizationAzure[0].socialPurposeCategoryTags = new Array(organization.socialPurposeCategoryTags);
+        }
+        if (Array.isArray(organization.primaryBusinessSector_2)){
+          organizationAzure[0].primaryBusinessSector_2=organization.primaryBusinessSector_2;
+        } else {
+          organizationAzure[0].primaryBusinessSector_2 = new Array(organization.primaryBusinessSector_2);
         }
         if (req.body.yearFounded!=''){
           organizationAzure[0].yearFounded=req.sanitize('yearFounded').toInt();
@@ -365,6 +384,7 @@ exports.putOrganization = function(req, res,next) {
     yearFounded: req.body.yearFounded,
     descriptionService: req.body.descriptionService,
     primaryBusinessSector: req.body.primaryBusinessSector,
+    primaryBusinessSector_1: req.body.primaryBusinessSector_1,
     descriptionCause: req.body.descriptionCause,
     socialPurposeCategory: req.body.socialPurposeCategory,
     organizationalStructure: req.body.organizationalStructure,
@@ -381,6 +401,11 @@ exports.putOrganization = function(req, res,next) {
     organization.socialPurposeCategoryTags = req.body.socialPurposeCategoryTags;
   } else {
     organization.socialPurposeCategoryTags = new Array();
+  }
+    if (typeof(req.body.primaryBusinessSector_2)!='undefined'){
+    organization.primaryBusinessSector_2 = req.body.primaryBusinessSector_2;
+  } else {
+    organization.primaryBusinessSector_2 = new Array();
   }
   var additionalResources = new Array();
   var additionalResourcesName = new Array();
@@ -419,7 +444,7 @@ exports.putOrganization = function(req, res,next) {
           website: saveUrl(req.body.website),
           parentOrganization: req.body.parentOrganization,
           descriptionService: req.body.descriptionService,
-          primaryBusinessSector: req.body.primaryBusinessSector,
+          primaryBusinessSector_1: req.body.primaryBusinessSector_1,
           descriptionCause: req.body.descriptionCause,
           organizationalStructure: req.body.organizationalStructure,
           active: req.sanitize('active').toBoolean(),
@@ -438,6 +463,11 @@ exports.putOrganization = function(req, res,next) {
           organizationAzure[0].socialPurposeCategoryTags=organization.socialPurposeCategoryTags;
         } else {
           organizationAzure[0].socialPurposeCategoryTags = new Array(organization.socialPurposeCategoryTags);
+        }
+        if (Array.isArray(organization.primaryBusinessSector_2)){
+          organizationAzure[0].primaryBusinessSector_2=organization.primaryBusinessSector_2;
+        } else {
+          organizationAzure[0].primaryBusinessSector_2 = new Array(organization.primaryBusinessSector_2);
         }
         if (req.body.yearFounded!=''){
           organizationAzure[0].yearFounded=req.sanitize('yearFounded').toInt();

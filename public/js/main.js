@@ -60,6 +60,8 @@ $(document).ready(function() {
 	  $('#address').autoGeocoder({disableDefaultUI:false});
 	});
 
+    //enable the autocomplete search as you type (azure suggestions) on the searchbar
+    //call the internal API for the query and show results returned by API
 	$( "#search" ).autocomplete({
       source: function( request, response ) {
         $.ajax({
@@ -87,6 +89,7 @@ $(document).ready(function() {
         .append( "<a href='/organization/"+item.orgId+"'>" + item['@search.text'] + "</a>" )
         .appendTo( ul );
     };
+    //enable select2 on various fields of add/update pages
     $("#demographicImpact").select2({
 	    placeholder: "Choose up to 3 demographic groups",
 	    maximumSelectionSize: 3
@@ -95,6 +98,50 @@ $(document).ready(function() {
 	    placeholder: "Choose up to 3 social purpose categories",
 	    maximumSelectionSize: 3
 	});
+	$("#primaryBusinessSector_1").select2({
+		placeholder: "Select a Primary Business Sector",
+		allowClear: true
+	});
+	//primary business sector has a complex 2 levels hierarchy so we load this category hierarchy
+	//from a JSON file and show a second level category if it exists
+	$("#primaryBusinessSector_1")
+    .on("change", function(e) { 
+    	if(e.val!=''){
+	    	$.getJSON("/json/primaryBusinessSector.json", function(json) {
+			    if (json[e.val].length>0){
+			    	//remove second level if it exists
+			    	if ($("#primaryBusinessSector_2_formgroup")){
+			    		$("#primaryBusinessSector_2_formgroup").remove();
+			    	}
+			    	var location = $('<div class="form-group" id="primaryBusinessSector_2_formgroup"><label for="primaryBusinessSector_2" id="label_primaryBusinessSector_2" class="col-sm-2 control-label">Sub-Category Business Sector</label><div class="col-sm-4"><select multiple required class="form-control" name="primaryBusinessSector_2", id="primaryBusinessSector_2"><option></option></select></div></div>').insertAfter($("#label_primaryBusinessSector_1").parent());
+				    json[e.val].forEach(function(entry) {
+				    	$("#primaryBusinessSector_2").append('<option value="'+entry+'">'+entry+'</option>');
+					});
+					$("#primaryBusinessSector_2").select2({
+						placeholder: "Choose up to 3 sub Primary Business Sector",
+						maximumSelectionSize: 3
+					});
+				} else {
+					//remove second level if it exists when there is no value for second level
+			    	if ($("#primaryBusinessSector_2_formgroup")){
+			    		$("#primaryBusinessSector_2_formgroup").remove();
+			    	}
+				}
+			});
+		} else {
+			//remove second level if user clears the selection of first level
+			if ($("#primaryBusinessSector_2_formgroup")){
+	    		$("#primaryBusinessSector_2_formgroup").remove();
+	    	}
+		}
+    });
+
+	if ($("#primaryBusinessSector_2_formgroup")){
+		$("#primaryBusinessSector_2").select2({
+			placeholder: "Choose up to 3 sub Primary Business Sector",
+			maximumSelectionSize: 3
+		});
+	}
 
 
 

@@ -15,6 +15,8 @@ var organizationSchema = new mongoose.Schema({
   yearFounded: {type: Number,  min: 1800, max: 2100, default: ''},
   descriptionService: {type: String, default: ''},
   primaryBusinessSector: {type: String, default: ''},
+  primaryBusinessSector_1: {type: String, default: ''},
+  primaryBusinessSector_2: [{type: String, default: ''}],
   descriptionCause: {type: String, default: ''},
   socialPurposeCategory: {type: String, default: ''},
   socialPurposeCategoryTags: [{type: String,default:''}],

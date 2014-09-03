@@ -19,8 +19,12 @@ block content
             td
               a(href='organization/'+organization._id)= organization.name
             td
-                a(href=organization.website,target="_blank")= organization.website
-            td.hidden-xs= organization.primaryBusinessSector
+                a(href=organization.website,target="_blank")= organization.website 
+            td.hidden-xs= organization.primaryBusinessSector_1
+              if(organization.primaryBusinessSector_2.length > 0)
+                |-->
+              for tags in organization.primaryBusinessSector_2
+                 =tags+', '
             td.hidden-xs
               for tags in organization.socialPurposeCategoryTags
                =tags+', '

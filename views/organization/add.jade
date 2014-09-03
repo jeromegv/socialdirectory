@@ -55,17 +55,16 @@ block content
       .col-sm-2
         input.form-control(type='text', name='yearFounded', id='yearFounded',placeholder='Year Founded',data-parsley-type="integer",data-parsley-range="[1800,2100]")
     .form-group
-      label(class='col-sm-2 control-label', for='primaryBusinessSector') Primary Business Sector
+      label(class='col-sm-2 control-label', for='primaryBusinessSector_1',id='label_primaryBusinessSector_1') Primary Business Sector
       .col-sm-4
-        input.form-control(type='text', name='primaryBusinessSector', id='primaryBusinessSector', placeholder='Primary Business Sector')
+        select.form-control(name='primaryBusinessSector_1', id='primaryBusinessSector_1')
+          option()
+          for index,entry in businessSector
+            option(value=entry)= entry
     .form-group
       label(class='col-sm-2 control-label', for='descriptionService') About the Organization
       .col-sm-8
         textarea.form-control(type='text', name='descriptionService', id='descriptionService', rows='4', placeholder='About the Organization')
-    .form-group
-      label(class='col-sm-2 control-label', for='socialPurposeCategory') Social Purpose Category
-      .col-sm-4
-        input.form-control(type='text', name='socialPurposeCategory', id='socialPurposeCategory', placeholder='Social Purpose Category')
     .form-group
       label(class='col-sm-2 control-label', for='socialPurposeCategoryTags') Social Purpose Category
       .col-sm-4
@@ -83,7 +82,6 @@ block content
             option(value='Health and wellness') Health and wellness
             option(value='Food, housing & basic needs') Food, housing & basic needs
             option(value='Rural development') Rural development
-
     .form-group
       label(class='col-sm-2 control-label', for='demographicImpact') Which demographic groups does the social enterprise impact?
       .col-sm-4

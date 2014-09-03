@@ -67,15 +67,30 @@ block content
       .col-sm-2
         input.form-control(type='text', name='yearFounded', id='yearFounded',placeholder='Year Founded',data-parsley-type="integer",data-parsley-range="[1800,2100]",value=organization.yearFounded)
     .form-group
-      label(class='col-sm-2 control-label', for='primaryBusinessSector') Primary Business Sector
+      label(class='col-sm-2 control-label', for='primaryBusinessSector') Primary Business Sector (Old)
       .col-sm-4
         input.form-control(type='text', name='primaryBusinessSector', id='primaryBusinessSector', placeholder='Primary Business Sector',value=organization.primaryBusinessSector)
+    .form-group
+      label(class='col-sm-2 control-label', for='primaryBusinessSector_1',id='label_primaryBusinessSector_1') Primary Business Sector
+      .col-sm-4
+        select.form-control(name='primaryBusinessSector_1', id='primaryBusinessSector_1')
+          option()
+          for index,entry in businessSector
+            option(value=entry,selected=(_.contains(organization.primaryBusinessSector_1,entry)))= entry
+    if (typeof(organization.primaryBusinessSector_2)!=undefined && typeof(organization.primaryBusinessSector_1)!=undefined && businessSector[organization.primaryBusinessSector_1]!=undefined)
+      .form-group(id='primaryBusinessSector_2_formgroup')
+        label(class='col-sm-2 control-label', for='primaryBusinessSector_2',id='label_primaryBusinessSector_2') Sub-Category Business Sector
+        .col-sm-4
+          select.form-control(name='primaryBusinessSector_2', id='primaryBusinessSector_2',multiple,required)
+            option()
+            for subCat in businessSector[organization.primaryBusinessSector_1]
+              option(value=subCat,selected=(_.contains(organization.primaryBusinessSector_2,subCat)))= subCat
     .form-group
       label(class='col-sm-2 control-label', for='descriptionService') About the Organization
       .col-sm-8
         textarea.form-control(type='text', name='descriptionService', id='descriptionService', rows='4', placeholder='About the Organization')=organization.descriptionService
     .form-group
-      label(class='col-sm-2 control-label', for='socialPurposeCategory') Social Purpose Category
+      label(class='col-sm-2 control-label', for='socialPurposeCategory') Social Purpose Category (Old)
       .col-sm-4
         input.form-control(type='text', name='socialPurposeCategory', id='socialPurposeCategory', placeholder='Social Purpose Category',value=organization.socialPurposeCategory)
     .form-group
