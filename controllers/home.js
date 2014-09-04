@@ -2,6 +2,8 @@ var Organization = require('../models/Organization');
 var moment = require('moment');
 var request = require('request');
 var secrets = require('../config/secrets');
+var fieldsName = require('../public/json/listFields.json');
+
 
 /**
  * GET /
@@ -10,8 +12,32 @@ var secrets = require('../config/secrets');
 exports.index = function(req, res) {
 	//if there is a search url parameter, we query azure search using that term and render the results
 	if (typeof(req.query.search)!='undefined' && req.query.search!=''){
+		var searchTerm = req.query.search;
+
+		var facetFields = ["primaryBusinessSector_1","primaryBusinessSector_2","socialPurposeCategoryTags",
+		"demographicImpact","active"];
+
+		var highlighFields=["descriptionService","descriptionCause","demographicImpact",
+		"primaryBusinessSector_1","primaryBusinessSector_2","socialPurposeCategoryTags",
+		"additionalResourcesNameList","name","parentOrganization","locationAddress",
+		"organizationalStructure,website,email"];
+
+		var url = 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'/docs?search='+searchTerm;
+		facetFields.forEach(function(entry,index) {
+			url+="&facet="+entry;
+		});
+		url+="&highlight=";
+		highlighFields.forEach(function(entry,index) {
+			if (typeof(highlighFields[index+1])!='undefined'){
+				url+=entry+",";
+			} else {
+				url+=entry;
+			}
+		});
+		url+='&api-version='+secrets.azureSearch.apiVersion;
+
 		var options = {
-		  url: 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'/docs?search='+req.query.search+'&api-version='+secrets.azureSearch.apiVersion,
+		  url: url,
           json: true,
           method: 'GET',
           headers: {
@@ -23,11 +49,13 @@ exports.index = function(req, res) {
 		request(options, function (error, response, body) {
 			if (!error && response.statusCode == 200) {
 				res.render('search', {
-					title: 'Search for '+req.query.search,
+					title: 'Search for '+searchTerm,
 					organizations: body.value,
+					facets: body['@search.facets'],
 					moment: moment,
 					resultCount: body.value.length,
-					searchTerm: req.query.search
+					searchTerm: searchTerm,
+					fieldsName:fieldsName
 				});
 			 } else {
 	            if (error){console.log(error);}

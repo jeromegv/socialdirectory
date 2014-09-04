@@ -3,36 +3,43 @@ extends layout
 block content
   h1 #{resultCount} search results for #{searchTerm}
   hr
-  .table-responsive
-    table.table.table-striped.table-hover
-      thead
-        tr
-          th Organization Name
-          th Website
-          th.hidden-xs Primary Business Sector
-          th.hidden-xs Social Purpose Category
-          th.hidden-sm.hidden-xs Created Time
-          th.hidden-xs Active
-      tbody
-        for organization in organizations
-          tr
-            td
-              a(href='organization/'+organization.orgId)= organization.name
-            td
-                a(href=organization.website,target="_blank")= organization.website
-            td.hidden-xs= organization.primaryBusinessSector_1
-              if(organization.primaryBusinessSector_2.length > 0)
-                |-->
-              for tags in organization.primaryBusinessSector_2
-                 =tags+', '
-            td.hidden-xs
-              for tags in organization.socialPurposeCategoryTags
-               =tags+', '
-            td.hidden-sm.hidden-xs
-              - var org = String(organization.orgId); org = parseInt(org.substr(0, 8),16)*1000
-              =moment(org).format("YYYY-MM-DD HH:mm")
-            td.hidden-xs
-              if(organization.active)
-                i.icon.ion-eye(style="font-size:16px")
-              else
-                i.icon.ion-eye-disabled(style="font-size:16px")
+  .col-sm-2
+    if typeof(facets)!=undefined
+      for facet,facetname in facets
+        if (Array.isArray(facet))
+          .row
+            if (facetname == 'primaryBusinessSector_1' && facet.length>0)
+              h5= fieldsName[facetname]
+            else if (facetname == 'socialPurposeCategoryTags' && facet.length>0)
+              h5= fieldsName[facetname]
+            else if (facetname == 'active' && (facet[0].count>0 || facet[1].count>0))
+              h5= fieldsName[facetname]
+            else if (facetname =='demographicImpact' && facet.length>0)
+              h5= fieldsName[facetname]
+          for refinement in facet
+            if (refinement.count>0)
+              .row= refinement.value
+  .col-sm-10
+    .row
+      .table-responsive
+        table.table.table-striped.table-hover
+          thead
+            tr
+              th= fieldsName["name"]
+              th Highlight
+          tbody
+            for organization in organizations
+              tr
+                td
+                  a(href='organization/'+organization.orgId)= organization.name
+                td
+                  if typeof(organization['@search.highlights'])!='undefined'
+                    - counter = 0
+                    for highlight,highlightname in organization['@search.highlights']
+                      if (Array.isArray(highlight))
+                        for value in highlight
+                          - counter++
+                          if (counter<4)
+                            p!=fieldsName[highlightname]+': '+value
+                            
+                    

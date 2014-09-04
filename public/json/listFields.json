@@ -1,0 +1,21 @@
+{
+    "name" : "Organization Name",
+    "email": "Email",
+    "locationAddress" : "Location",
+    "location" : "Longitude/Latitude",
+    "phoneNumber" : "Phone Number",
+    "website":"Website",
+    "parentOrganization": "Parent Organization",
+    "yearFounded":"Year Founded",
+    "descriptionService" : "About the Organization",
+    "primaryBusinessSector_1":"Primary Business Sector",
+    "primaryBusinessSector_2":"Sub-Category Business Sector",
+    "descriptionCause":"What makes it a social enterprise",
+    "socialPurposeCategoryTags":"Social Purpose Category",
+    "demographicImpact":"Demographic Group Impact",
+    "organizationalStructure":"Organizational Structure",
+    "active":"Active",
+    "dateCreated":"Date Created",
+    "lastUpdated":"lastUpdated",
+    "additionalResourcesNameList":"Resource Name"
+}

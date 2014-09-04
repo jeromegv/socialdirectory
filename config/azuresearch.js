@@ -26,10 +26,10 @@ request(options, function (error, response, body) {
 			  "fields": [
 			    {"name": "orgId", "type": "Edm.String", "key":true, "searchable": false},
 			    {"name": "name", "type": "Edm.String", "suggestions": true}, 
-			    {"name": "email", "type": "Edm.String","filterable": false,"facetable": false, "retrievable": false}, 
+			    {"name": "email", "type": "Edm.String","filterable": false,"facetable": false}, 
 			    {"name": "locationAddress", "type": "Edm.String","filterable": false,"facetable": false}, 
 			    {"name": "location", "type": "Edm.GeographyPoint"},
-			    {"name": "phoneNumber", "type": "Edm.String","filterable": false,"facetable": false, "retrievable": false}, 
+			    {"name": "phoneNumber", "type": "Edm.String","filterable": false,"facetable": false}, 
 			    {"name": "website", "type": "Edm.String","filterable": false,"facetable": false}, 
 			    {"name": "parentOrganization", "type": "Edm.String", "suggestions": true}, 
 				{"name": "yearFounded", "type": "Edm.Int32"}, 
