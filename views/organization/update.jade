@@ -114,9 +114,9 @@ block content
       label(class='col-sm-2 control-label', for='demographicImpact') Which demographic groups does the social enterprise impact?
       .col-sm-4
         select.form-control(name='demographicImpact', id='demographicImpact', multiple="multiple")
-            option(value='Community groups') Community groups (TO DELETE)
-            option(value='Disaster affected groups') Disaster affected groups
-            option(value='Rural Communities') Rural Communities
+            option(value='Community groups',selected=(_.contains(organization.demographicImpact,"Community groups"))) Community groups (TO DELETE)
+            option(value='Disaster affected groups',selected=(_.contains(organization.demographicImpact,"Disaster affected groups"))) Disaster affected groups
+            option(value='Rural Communities',selected=(_.contains(organization.demographicImpact,"Rural Communities"))) Rural Communities
             option(value='Homeless',selected=(_.contains(organization.demographicImpact,"Homeless"))) Homeless
             option(value='Aboriginal / Indigenous groups',selected=(_.contains(organization.demographicImpact,"Aboriginal / Indigenous groups"))) Aboriginal / Indigenous groups
             option(value='Youth',selected=(_.contains(organization.demographicImpact,"Youth"))) Youth
