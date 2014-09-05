@@ -74,6 +74,9 @@ function getSocialMediaName(parsedUrl){
         case 'blogspot':
             socialMediaName='blogspot';
             break;
+        case 'vimeo':
+            socialMediaName='vimeo';
+            break;
         default:
             socialMediaName='other';
     }
