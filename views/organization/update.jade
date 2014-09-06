@@ -75,8 +75,8 @@ block content
       .col-sm-4
         select.form-control(name='primaryBusinessSector_1', id='primaryBusinessSector_1')
           option()
-          for index,entry in businessSector
-            option(value=entry,selected=(_.contains(organization.primaryBusinessSector_1,entry)))= entry
+          for entry,index in businessSector
+            option(value=index,selected=(_.contains(organization.primaryBusinessSector_1,index)))= index
     if (typeof(organization.primaryBusinessSector_2)!=undefined && typeof(organization.primaryBusinessSector_1)!=undefined && businessSector[organization.primaryBusinessSector_1]!=undefined && businessSector[organization.primaryBusinessSector_1].length>0)
       .form-group(id='primaryBusinessSector_2_formgroup')
         label(class='col-sm-2 control-label', for='primaryBusinessSector_2',id='label_primaryBusinessSector_2') Sub-Category Business Sector
@@ -97,7 +97,7 @@ block content
       label(class='col-sm-2 control-label', for='socialPurposeCategoryTags') Social Purpose Category
       .col-sm-4
         select.form-control(name='socialPurposeCategoryTags', id='socialPurposeCategoryTags', multiple="multiple")
-          for index,entry in socialPurposeCategory
+          for entry,index in socialPurposeCategory
             option(value=index,selected=(_.contains(organization.socialPurposeCategoryTags,index)))= entry
     .form-group
       label(class='col-sm-2 control-label', for='demographicImpact') Which demographic groups does the social enterprise impact?
