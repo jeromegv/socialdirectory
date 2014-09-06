@@ -6,6 +6,7 @@ var util = require('util');
 var moment = require('moment');
 var _ = require('lodash');
 var businessSector = require('../public/json/primaryBusinessSector.json');
+var socialPurposeCategory = require('../public/json/socialPurposeCategory.json');
 
 //make sure every url reference is saved with full HTTP or HTTPS
 function saveUrl(entry){
@@ -129,7 +130,8 @@ exports.getOrganizationId = function(req, res) {
 exports.addOrganization = function(req, res) {
   res.render('organization/add', {
     title: 'Add Organization',
-    businessSector: businessSector
+    businessSector: businessSector,
+    socialPurposeCategory:socialPurposeCategory
   });
 };
 
@@ -149,7 +151,8 @@ exports.updateOrganization = function(req, res) {
         title: 'Update '+body.name,
         organization: body,
         _:_,
-        businessSector: businessSector
+        businessSector: businessSector,
+        socialPurposeCategory:socialPurposeCategory
       });
     } else {
       req.flash('errors', { msg: 'The organization requested can\'t be rendered' });
@@ -205,10 +208,8 @@ exports.postOrganization = function(req, res,next) {
     parentOrganization: req.body.parentOrganization,
     yearFounded: req.body.yearFounded,
     descriptionService: req.body.descriptionService,
-    primaryBusinessSector: req.body.primaryBusinessSector,
     primaryBusinessSector_1: req.body.primaryBusinessSector_1,
     descriptionCause: req.body.descriptionCause,
-    socialPurposeCategory: req.body.socialPurposeCategory,
     organizationalStructure: req.body.organizationalStructure,
     privateNote: req.body.privateNote,
     active: req.sanitize('active').toBoolean(),

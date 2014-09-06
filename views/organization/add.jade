@@ -69,19 +69,8 @@ block content
       label(class='col-sm-2 control-label', for='socialPurposeCategoryTags') Social Purpose Category
       .col-sm-4
         select.form-control(name='socialPurposeCategoryTags', id='socialPurposeCategoryTags', multiple="multiple")
-            option(value='Cultural') Cultural
-            option(value='Environment & Sustainability') Environment & Sustainability
-            option(value='Income generation for parent or affiliate organization') Income generation for parent or affiliate organization
-            option(value='Employment development & skills training') Employment development & skills training
-            option(value='Entrepreneurship & small business development') Entrepreneurship & small business development
-            option(value='Microfinance, investing, and financial services') Microfinance, investing, and financial services
-            option(value='Education') Education
-            option(value='Supports social enterprise development') Supports social enterprise development
-            option(value='Social entrepreneurial skills development') Social entrepreneurial skills development
-            option(value='Poverty eradication') Poverty eradication
-            option(value='Health and wellness') Health and wellness
-            option(value='Food, housing & basic needs') Food, housing & basic needs
-            option(value='Rural development') Rural development
+            for index,entry in socialPurposeCategory
+              option(value=index)= entry
     .form-group
       label(class='col-sm-2 control-label', for='demographicImpact') Which demographic groups does the social enterprise impact?
       .col-sm-4
