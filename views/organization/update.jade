@@ -77,7 +77,7 @@ block content
           option()
           for index,entry in businessSector
             option(value=entry,selected=(_.contains(organization.primaryBusinessSector_1,entry)))= entry
-    if (typeof(organization.primaryBusinessSector_2)!=undefined && typeof(organization.primaryBusinessSector_1)!=undefined && businessSector[organization.primaryBusinessSector_1]!=undefined)
+    if (typeof(organization.primaryBusinessSector_2)!=undefined && typeof(organization.primaryBusinessSector_1)!=undefined && businessSector[organization.primaryBusinessSector_1]!=undefined && businessSector[organization.primaryBusinessSector_1].length>0)
       .form-group(id='primaryBusinessSector_2_formgroup')
         label(class='col-sm-2 control-label', for='primaryBusinessSector_2',id='label_primaryBusinessSector_2') Sub-Category Business Sector
         .col-sm-4
