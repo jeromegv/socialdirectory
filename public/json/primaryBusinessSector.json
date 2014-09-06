@@ -1,6 +1,6 @@
 {
     "Agriculture, forestry, fishing mining" : [],
-    "Consulting and professional services": ["Research","Marketing & Outreach","Recruitment Services","Finance and insurance","Microfinance & investment","Real estate & housing","Web & Graphic Design","Law, advocacy, politics"],
+    "Consulting and professional services": ["Research","Marketing & Outreach","Recruitment Services","Finance & Insurance","Microfinance & Investment","Real Estate & Housing","Web & Graphic Design","Law, advocacy, politics"],
     "Education" : [],
     "Emergency relief" : [],
     "Employment services" : ["Training"],
@@ -10,7 +10,7 @@
     "Arts" : ["Theatre/performing arts","Gallery/display","Music"],
     "Health care":[],
     "Production/manufacturing":[],
-    "Services to social enterprise, co-operatives, non-profits, charities, etc.":["Microfinancing","Crowdfunding","Traditional fundraising","Network and community development","Consulting","Marketing & Outreach","Financial services","Law, advocacy, politics"],
+    "Services to social enterprise, co-operatives, non-profits, charities, etc.":["Microfinancing & investing","Crowdfunding","Traditional Fundraising","Network & Community Development","Consulting","Marketing & Outreach","Finance & Insurance","Law, advocacy, politics","Research","Recruitment Services","Web & Graphic Design","Real Estate & Housing","Training & Management Services"],
     "Sports and Recreation":[],
     "Tourism":["Voluntourism","Ecotourism","Cultural tourism","Commercial Tourism"],
     "Retail & Ecommerce":["Green products","Fair Trade","Filipino handcrafts","Clothing items & Cosmetics","Home and décor"]
