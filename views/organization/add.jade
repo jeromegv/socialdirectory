@@ -75,17 +75,8 @@ block content
       label(class='col-sm-2 control-label', for='demographicImpact') Which demographic groups does the social enterprise impact?
       .col-sm-4
         select.form-control(name='demographicImpact', id='demographicImpact', multiple="multiple")
-            option(value='Disaster affected groups') Disaster affected groups
-            option(value='Rural Communities') Rural Communities
-            option(value='Homeless') Homeless
-            option(value='Aboriginal / Indigenous groups') Aboriginal / Indigenous groups
-            option(value='Youth') Youth
-            option(value='Women') Women
-            option(value='Individuals with disabilities') Individuals with disabilities
-            option(value='Elderly') Elderly
-            option(value='Low-income individuals') Low-income individuals
-            option(value='Immigrants') Immigrants
-            option(value='Other social enterprises, co-operatives or charities, etc.') Other social enterprises, co-operatives or charities, etc.
+            for entry,index in demographicImpact
+              option(value=index)= entry
     .form-group
       label(class='col-sm-2 control-label', for='descriptionCause') What makes it a social enterprise?
       .col-sm-8

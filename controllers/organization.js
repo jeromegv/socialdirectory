@@ -5,8 +5,10 @@ var urlNode = require('url');
 var util = require('util');
 var moment = require('moment');
 var _ = require('lodash');
+//load the strings that will be used in the UI for various categories
 var businessSector = require('../public/json/primaryBusinessSector.json');
 var socialPurposeCategory = require('../public/json/socialPurposeCategory.json');
+var demographicImpact = require('../public/json/demographicImpact.json');
 
 //make sure every url reference is saved with full HTTP or HTTPS
 function saveUrl(entry){
@@ -131,7 +133,8 @@ exports.addOrganization = function(req, res) {
   res.render('organization/add', {
     title: 'Add Organization',
     businessSector: businessSector,
-    socialPurposeCategory:socialPurposeCategory
+    socialPurposeCategory:socialPurposeCategory,
+    demographicImpact:demographicImpact
   });
 };
 
@@ -152,7 +155,8 @@ exports.updateOrganization = function(req, res) {
         organization: body,
         _:_,
         businessSector: businessSector,
-        socialPurposeCategory:socialPurposeCategory
+        socialPurposeCategory:socialPurposeCategory,
+        demographicImpact:demographicImpact
       });
     } else {
       req.flash('errors', { msg: 'The organization requested can\'t be rendered' });
