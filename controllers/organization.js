@@ -80,6 +80,9 @@ function getSocialMediaName(parsedUrl){
         case 'vimeo':
             socialMediaName='vimeo';
             break;
+        case 'wordpress':
+            socialMediaName='wordpress';
+            break;
         default:
             socialMediaName='other';
     }
