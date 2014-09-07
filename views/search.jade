@@ -2,13 +2,17 @@ extends layout
 
 block content
   h1 #{resultCount} search results for #{searchTerm}
+  for filterValue,filterName in selectedFilters
+    h4 #{fieldsName[filterName]}: #{filterValue}
   hr
   .col-sm-2
-    if typeof(facets)!=undefined
+    if typeof(facets)!=undefined && resultCount>1
       for facet,facetname in facets
-        if (Array.isArray(facet))
+        if (Array.isArray(facet)&& selectedFilters[facetname]==undefined)
           .row
             if (facetname == 'primaryBusinessSector_1' && facet.length>0)
+              h5= fieldsName[facetname]
+            if (facetname == 'primaryBusinessSector_2' && facet.length>0)
               h5= fieldsName[facetname]
             else if (facetname == 'socialPurposeCategoryTags' && facet.length>0)
               h5= fieldsName[facetname]
@@ -17,8 +21,10 @@ block content
             else if (facetname =='demographicImpact' && facet.length>0)
               h5= fieldsName[facetname]
           for refinement in facet
-            if (refinement.count>0)
-              .row= refinement.value
+            if (refinement.count>0 && refinement.value!=='')
+              .row
+                p.small
+                  a(href=refinement.link) #{refinement.value} (#{refinement.count})
   .col-sm-10
     .row
       .table-responsive

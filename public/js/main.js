@@ -142,7 +142,4 @@ $(document).ready(function() {
 			maximumSelectionSize: 3
 		});
 	}
-
-
-
 });
