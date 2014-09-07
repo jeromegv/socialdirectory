@@ -31,7 +31,7 @@ request(options, function (error, response, body) {
 			    {"name": "location", "type": "Edm.GeographyPoint"},
 			    {"name": "phoneNumber", "type": "Edm.String","filterable": false,"facetable": false}, 
 			    {"name": "website", "type": "Edm.String","filterable": false,"facetable": false}, 
-			    {"name": "parentOrganization", "type": "Edm.String", "suggestions": true}, 
+			    {"name": "parentOrganization", "type": "Edm.String"}, 
 				{"name": "yearFounded", "type": "Edm.Int32"}, 
 			    {"name": "descriptionService", "type": "Edm.String","filterable": false,"facetable": false}, 
 			    {"name": "primaryBusinessSector_1", "type": "Edm.String"}, 
