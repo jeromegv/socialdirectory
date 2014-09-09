@@ -23,8 +23,8 @@ block content
             td.hidden-xs= organization.primaryBusinessSector_1
               if(typeof(organization.primaryBusinessSector_2)!=undefined && organization.primaryBusinessSector_2.length > 0)
                 |-->
-              for tags in organization.primaryBusinessSector_2
-                 =tags+', '
+                for tags in organization.primaryBusinessSector_2
+                   =tags+', '
             td.hidden-xs
               for tags in organization.socialPurposeCategoryTags
                =tags+', '
