@@ -21,7 +21,7 @@ block content
             td
                 a(href=organization.website,target="_blank")= organization.website 
             td.hidden-xs= organization.primaryBusinessSector_1
-              if(typeof(organization.primaryBusinessSector_2)!=undefined && organization.primaryBusinessSector_2.length > 0)
+              if(typeof(organization.primaryBusinessSector_2)!='undefined' && organization.primaryBusinessSector_2.length > 0)
                 |-->
                 for tags in organization.primaryBusinessSector_2
                    =tags+', '
