@@ -26,8 +26,9 @@ block content
                 for tags in organization.primaryBusinessSector_2
                    =tags+', '
             td.hidden-xs
-              for tags in organization.socialPurposeCategoryTags
-               =tags+', '
+              if(typeof(organization.socialPurposeCategoryTags)!='undefined'
+                for tags in organization.socialPurposeCategoryTags
+                 =tags+', '
             td.hidden-sm.hidden-xs
               - var org = String(organization._id); org = parseInt(org.substr(0, 8),16)*1000
               =moment(org).format("YYYY-MM-DD HH:mm")
