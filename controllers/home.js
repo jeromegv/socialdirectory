@@ -180,7 +180,10 @@ exports.index = function(req, res) {
 		//if this is just a normal home page, we display from our internal organization API
 		var options = {
 		    url: res.locals.host+'/api/organization',
-		    json: true
+		    json: true,
+		    headers: {
+		    	secretkey:secrets.internalAPIKey
+		    }
 		};
 		request(options, function (error, response, body) {
 			if (!error && response.statusCode == 200) {

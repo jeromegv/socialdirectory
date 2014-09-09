@@ -27,6 +27,7 @@ module.exports = {
     apiVersion: '2014-07-31-Preview'
   },
 
-  sessionSecret: process.env.SESSION_SECRET || 'Your Session Secret goes here'
+  sessionSecret: process.env.SESSION_SECRET || 'Your Session Secret goes here',
+  internalAPIKey: process.env.INTERNAL_API_KEY || 'Internal API key for logged in users to get more data back from DB'
 
 };

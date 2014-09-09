@@ -89,7 +89,22 @@ function getSocialMediaName(parsedUrl){
     return socialMediaName;
 }
 
-
+//when user is loggedin, we want to show privateNote with public api, otherwise, hide it
+function loggedInSelectQuery(req){
+  if (req.isAuthenticated()|| (req.get('secretkey')==secrets.internalAPIKey)) {
+    return ('+privateNote');
+  } else {
+    return ("");
+  }
+}
+//when user is not logged in, we don't want to show unpublished organizations
+function loggedInQuery(req){
+  if (req.isAuthenticated()|| (req.get('secretkey')==secrets.internalAPIKey)) {
+    return ("");
+  } else {
+    return ({active: true});
+  }
+}
 
 /**
  * GET /api/organization
@@ -97,7 +112,7 @@ function getSocialMediaName(parsedUrl){
  */
 
 exports.getOrganization = function(req, res) {
-  Organization.find(function(err, organizations) {
+  Organization.find(loggedInQuery(req)).select(loggedInSelectQuery(req)).exec(function(err, organizations) {
     if (!err && organizations!=null){
       return res.jsonp(organizations);
     } else {
@@ -113,8 +128,8 @@ exports.getOrganization = function(req, res) {
  */
 
 exports.getOrganizationId = function(req, res) {
-  Organization.findById(req.params.id,function(err, organization) {
-    if (!err && organization!=null){
+  Organization.findById(req.params.id).select(loggedInSelectQuery(req)).exec(function(err, organization) {
+    if (!err && organization!=null && (organization.active===true || req.isAuthenticated() || req.get('secretkey')==secrets.internalAPIKey)){
       return res.jsonp(organization);
     } else if (!err && organization==null){
       res.status(404);
@@ -149,7 +164,10 @@ exports.addOrganization = function(req, res) {
 exports.updateOrganization = function(req, res) {
   var options = {
       url: res.locals.host+'/api/organization/'+req.params.id,
-      json: true
+      json: true,
+      headers: {
+        secretkey:secrets.internalAPIKey
+      }
   };
   request(options, function (error, response, body) {
     if (!error && response.statusCode == 200) {
@@ -254,7 +272,7 @@ exports.postOrganization = function(req, res,next) {
   var socialMedia = new Array();
   req.body.socialMediaUrl.forEach(function(entry,index) {
       if (req.body.socialMediaUrl[index]!=''){
-        var parsedUrl = urlNode.parse(req.body.socialMediaUrl[index]).hostname;
+        var parsedUrl = urlNode.parse(saveUrl(req.body.socialMediaUrl[index])).hostname;
         socialMedia[index]={socialMediaName:getSocialMediaName(parsedUrl),socialMediaUrl:saveUrl(req.body.socialMediaUrl[index])};
       }
   });
@@ -430,7 +448,7 @@ exports.putOrganization = function(req, res,next) {
   var socialMedia = new Array();
   req.body.socialMediaUrl.forEach(function(entry,index) {
       if (req.body.socialMediaUrl[index]!=''){
-        var parsedUrl = urlNode.parse(req.body.socialMediaUrl[index]).hostname;      
+        var parsedUrl = urlNode.parse(saveUrl(req.body.socialMediaUrl[index])).hostname;      
         socialMedia[index]={socialMediaName:getSocialMediaName(parsedUrl),socialMediaUrl:saveUrl(req.body.socialMediaUrl[index])};
       }
   });

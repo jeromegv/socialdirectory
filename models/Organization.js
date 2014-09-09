@@ -22,7 +22,7 @@ var organizationSchema = new mongoose.Schema({
   socialPurposeCategoryTags: [{type: String,default:''}],
   demographicImpact: [{type: String,default:''}],
   organizationalStructure: {type: String, default: ''},
-  privateNote: {type: String, default: ''},
+  privateNote: {type: String, default: '',select: false},
   active: {type: Boolean, default: false},
   lastUpdated: {type: Date, default: Date.now},
   socialMedia: [ {socialMediaUrl: {type: String }, socialMediaName: {type: String} } ],
