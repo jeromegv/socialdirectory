@@ -27,6 +27,12 @@ module.exports = {
     apiVersion: '2014-07-31-Preview'
   },
 
+  //to send forgot password emails
+  sendgrid: {
+    user: 'Your SendGrid Username',
+    password: 'Your SendGrid Password'
+  },
+
   sessionSecret: process.env.SESSION_SECRET || 'Your Session Secret goes here',
   internalAPIKey: process.env.INTERNAL_API_KEY || 'Internal API key for logged in users to get more data back from DB'
 
