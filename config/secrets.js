@@ -30,7 +30,8 @@ module.exports = {
   //to send forgot password emails
   sendgrid: {
     user: 'Your SendGrid Username',
-    password: 'Your SendGrid Password'
+    password: 'Your SendGrid Password',
+    emailFrom: 'The email the sendgrid emails should be sent from'
   },
 
   sessionSecret: process.env.SESSION_SECRET || 'Your Session Secret goes here',

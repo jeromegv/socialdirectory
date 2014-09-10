@@ -98,7 +98,7 @@ exports.postSignup = function(req, res, next) {
 
   User.findOne({ email: req.body.email }, function(err, existingUser) {
     if (existingUser) {
-      req.flash('errors', { msg: 'Account with that email address already exists.' });
+      req.flash('errors', { msg: 'A confirmation email has been sent to your email' });
       return res.redirect('/signup');
     }
     user.save(function(err) {
@@ -260,8 +260,8 @@ exports.postReset = function(req, res, next) {
       });
       var mailOptions = {
         to: user.email,
-        from: 'hackathon@starter.com',
-        subject: 'Your Hackathon Starter password has been changed',
+        from: secrets.sendgrid.emailFrom,
+        subject: 'Your Social Directory password has been changed',
         text: 'Hello,\n\n' +
           'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
       };
@@ -316,7 +316,9 @@ exports.postForgot = function(req, res, next) {
     function(token, done) {
       User.findOne({ email: req.body.email.toLowerCase() }, function(err, user) {
         if (!user) {
-          req.flash('errors', { msg: 'No account with that email address exists.' });
+          //we do not want to tell if the user email exists in the database or not, so same generic message as if the forgot form worked
+          req.flash('info', { msg: 'An e-mail has been sent to ' + req.body.email.toLowerCase() + ' with further instructions.' });
+          console.log("Someone tried to reset a password on a non existing email: "+ req.body.email.toLowerCase());
           return res.redirect('/forgot');
         }
 
@@ -338,8 +340,8 @@ exports.postForgot = function(req, res, next) {
       });
       var mailOptions = {
         to: user.email,
-        from: 'hackathon@starter.com',
-        subject: 'Reset your password on Hackathon Starter',
+        from: secrets.sendgrid.emailFrom,
+        subject: 'Reset your password on Social Directory',
         text: 'You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n' +
           'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
           'http://' + req.headers.host + '/reset/' + token + '\n\n' +
