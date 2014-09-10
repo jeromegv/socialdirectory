@@ -119,6 +119,8 @@ exports.index = function(req, res) {
 	if (typeof(req.query.search)!='undefined' && req.query.search!=''){
 		var searchTerm = req.query.search;
 
+	    var scoringProfile = "normalSearchBoost";
+
 		var facetFields = ["primaryBusinessSector_1,sort:count","primaryBusinessSector_2,sort:count","socialPurposeCategoryTags,sort:count","demographicImpact,sort:count","active,sort:-value"];
 
 		var highlighFields=["descriptionService","descriptionCause","demographicImpact",
@@ -144,6 +146,7 @@ exports.index = function(req, res) {
 			var filterQueryString = req.query.filter;
 
 		}
+		url+='&scoringProfile='+scoringProfile;
 		url+='&api-version='+secrets.azureSearch.apiVersion;
 
 		var options = {

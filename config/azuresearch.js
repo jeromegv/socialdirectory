@@ -44,7 +44,17 @@ request(options, function (error, response, body) {
 			    {"name": "dateCreated", "type": "Edm.DateTimeOffset"}, 
 			    {"name": "lastUpdated", "type": "Edm.DateTimeOffset"},     
 			    {"name": "additionalResourcesNameList", "type": "Collection(Edm.String)"}  
-			     ]
+			     ],
+			    "scoringProfiles":[
+			    {
+			    	"name": "normalSearchBoost",
+			    	"text":{
+				    	"weights": { 
+				    		//default value is 1, any number above 1 will increase boosting of the field, higher number = higher boost
+	   						"name": 2
+	   					}
+   					}
+			    }]
 			};
 			request(options, function (error, response, body) {
 				if (!error && (response.statusCode == 201 || response.statusCode==204)) {
