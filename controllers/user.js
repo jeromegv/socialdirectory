@@ -81,7 +81,7 @@ exports.getSignup = function(req, res) {
 
 exports.postSignup = function(req, res, next) {
   req.assert('email', 'Email is not valid').isEmail();
-  req.assert('password', 'Password must be at least 4 characters long').len(4);
+  req.assert('password', 'Password must be at least 6 characters long').len(6);
   req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
 
   var errors = req.validationErrors();
@@ -150,7 +150,7 @@ exports.postUpdateProfile = function(req, res, next) {
  */
 
 exports.postUpdatePassword = function(req, res, next) {
-  req.assert('password', 'Password must be at least 4 characters long').len(4);
+  req.assert('password', 'Password must be at least 6 characters long').len(6);
   req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
 
   var errors = req.validationErrors();
@@ -217,7 +217,7 @@ exports.getReset = function(req, res) {
  */
 
 exports.postReset = function(req, res, next) {
-  req.assert('password', 'Password must be at least 4 characters long.').len(4);
+  req.assert('password', 'Password must be at least 6 characters long.').len(6);
   req.assert('confirm', 'Passwords must match.').equals(req.body.password);
 
   var errors = req.validationErrors();
