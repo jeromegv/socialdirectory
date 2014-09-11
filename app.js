@@ -96,6 +96,8 @@ app.use(session({
   store: new MongoStore({
     url: secrets.db,
     auto_reconnect: true
+  }, function () {
+    console.log("mongostore db connection open");
   })
 }));
 app.use(passport.initialize());

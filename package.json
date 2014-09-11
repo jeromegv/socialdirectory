@@ -42,10 +42,8 @@
     "odata-parser": "^1.0.0"
   },
   "devDependencies": {
-    "blessed": "^0.0.37",
     "chai": "^1.9.1",
-    "mocha": "^1.20.1",
-    "multiline": "^0.3.4",
+    "mocha": "^1.21.4",
     "supertest": "^0.13.0"
   }
 }
