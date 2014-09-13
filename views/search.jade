@@ -12,7 +12,7 @@ block content
           .row
             if (facetname == 'primaryBusinessSector_1' && facet.length>0)
               h5= fieldsName[facetname]
-            if (facetname == 'primaryBusinessSector_2' && facet.length>0)
+            else if (facetname == 'primaryBusinessSector_2' && facet.length>0 && selectedFilters['primaryBusinessSector_1']!=undefined)
               h5= fieldsName[facetname]
             else if (facetname == 'socialPurposeCategoryTags' && facet.length>0)
               h5= fieldsName[facetname]
@@ -21,7 +21,7 @@ block content
             else if (facetname =='demographicImpact' && facet.length>0)
               h5= fieldsName[facetname]
           for refinement in facet
-            if (refinement.count>0 && refinement.value!=='')
+            if (refinement.count>0 && refinement.value!=='' && (facetname != 'primaryBusinessSector_2' || selectedFilters['primaryBusinessSector_1']!=undefined))
               .row
                 p.small
                   a(href=refinement.link) #{refinement.value} (#{refinement.count})
