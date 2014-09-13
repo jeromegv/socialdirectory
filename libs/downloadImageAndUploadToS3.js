@@ -11,6 +11,9 @@ var getAndSaveFile = function(url,desiredFileName,callback) {
 	if (!secrets.s3.key || !secrets.s3.secret || !secrets.s3.bucket){
 		return callback('S3 is not configured in the secrets file, logo will not be uploaded');
 	}
+	if (!url){
+		return callback('No URL in the organization, logo will not be uploaded');
+	}
 	async.waterfall([
 	  //downloading logo from url
 	  //save to temp directory
