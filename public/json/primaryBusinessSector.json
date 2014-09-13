@@ -1,9 +1,8 @@
 {
     "Agriculture, forestry, fishing mining" : [],
-    "Consulting and professional services": ["Research","Marketing & Outreach","Recruitment Services","Finance & Insurance","Microfinance & Investment","Real Estate & Housing","Web & Graphic Design","Law, advocacy, politics"],
+    "Consulting and professional services": ["Research","Marketing & Outreach","Recruitment Services","Finance & Insurance","Microfinance & Investment","Real Estate & Housing","Web & Graphic Design","Law, advocacy, politics","Employment services","Training"],
     "Education" : [],
     "Emergency relief" : [],
-    "Employment services" : ["Training"],
     "Environment and animal protection":["Clean Technology","Conservation"],
     "Facilities (banquet, conference, party)": [],
     "Food and hospitality services":["Food service/catering","Food production and/or distribution"],
