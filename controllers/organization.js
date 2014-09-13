@@ -5,6 +5,7 @@ var urlNode = require('url');
 var util = require('util');
 var moment = require('moment');
 var _ = require('lodash');
+var path = require('path');
 //load the strings that will be used in the UI for various categories
 var businessSector = require('../public/json/primaryBusinessSector.json');
 var socialPurposeCategory = require('../public/json/socialPurposeCategory.json');
@@ -19,6 +20,15 @@ function saveUrl(entry){
     }
   }
   return entry;
+}
+
+function convertToSlug(Text)
+{
+    return Text
+        .toLowerCase()
+        .replace(/[^\w ]+/g,'')
+        .replace(/ +/g,'-')
+        ;
 }
 
 //Get root name of website based on hostname (without TLD)
@@ -289,7 +299,8 @@ exports.postOrganization = function(req, res,next) {
         return next(err);
       } else {
         //save logo url to S3
-        downloadImageAndUploadToS3.getAndSaveFile(organization.logo,function (error,amazonUrl){
+        var desiredFileName = convertToSlug(organization.name) + '-' + path.basename(organization.logo);
+        downloadImageAndUploadToS3.getAndSaveFile(organization.logo,desiredFileName,function (error,amazonUrl){
           if (error){
             console.log(error);
           } else {
@@ -479,7 +490,8 @@ exports.putOrganization = function(req, res,next) {
       var bucketName = secrets.s3.bucket+'.s3.amazonaws.com';
       //we only get the logo url and save on S3 if it's NOT already a url of a local bucket S3 amazon URL (if it was done before)
       if (urlNode.parse(resultOrg.logo).hostname!=bucketName){
-        downloadImageAndUploadToS3.getAndSaveFile(organization.logo,function (error,amazonUrl){
+        var desiredFileName = convertToSlug(organization.name) + '-' + path.basename(organization.logo);
+        downloadImageAndUploadToS3.getAndSaveFile(organization.logo,desiredFileName,function (error,amazonUrl){
           if (error){
             console.log(error);
           } else {

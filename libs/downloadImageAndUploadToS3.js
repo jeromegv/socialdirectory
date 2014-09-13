@@ -7,7 +7,7 @@ var knox = require('knox');
 var fs = require('fs');
 var mimeMagic = require( "node-ee-mime-magic" );
 
-var getAndSaveFile = function(url,callback) {
+var getAndSaveFile = function(url,desiredFileName,callback) {
 	if (!secrets.s3.key || !secrets.s3.secret || !secrets.s3.bucket){
 		return callback('S3 is not configured in the secrets file, logo will not be uploaded');
 	}
@@ -15,7 +15,7 @@ var getAndSaveFile = function(url,callback) {
 	  //downloading logo from url
 	  //save to temp directory
 	  function(callback){
-	    var filePath = '/tmp/'+path.basename(url);
+	    var filePath = '/tmp/'+desiredFileName;
 	    var req = request(url);
 		req.on('response', function(response) {
 			if (response.statusCode == 200) {
