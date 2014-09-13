@@ -333,17 +333,17 @@ exports.postOrganization = function(req, res,next) {
         if (Array.isArray(organization.demographicImpact)){
           organizationAzure[0].demographicImpact=organization.demographicImpact;
         } else {
-          organizationAzure[0].demographicImpact = new Array(organization.demographicImpact);
+          organizationAzure[0].demographicImpact = new Array(organization.demographicImpact.toString());
         }
         if (Array.isArray(organization.socialPurposeCategoryTags)){
           organizationAzure[0].socialPurposeCategoryTags=organization.socialPurposeCategoryTags;
         } else {
-          organizationAzure[0].socialPurposeCategoryTags = new Array(organization.socialPurposeCategoryTags);
+          organizationAzure[0].socialPurposeCategoryTags = new Array(organization.socialPurposeCategoryTags.toString());
         }
         if (Array.isArray(organization.primaryBusinessSector_2)){
           organizationAzure[0].primaryBusinessSector_2=organization.primaryBusinessSector_2;
         } else {
-          organizationAzure[0].primaryBusinessSector_2 = new Array(organization.primaryBusinessSector_2);
+          organizationAzure[0].primaryBusinessSector_2 = new Array(organization.primaryBusinessSector_2.toString());
         }
         if (req.body.yearFounded!=''){
           organizationAzure[0].yearFounded=req.sanitize('yearFounded').toInt();
@@ -526,17 +526,17 @@ exports.putOrganization = function(req, res,next) {
       if (Array.isArray(organization.demographicImpact)){
         organizationAzure[0].demographicImpact=resultOrg.demographicImpact;
       } else {
-        organizationAzure[0].demographicImpact = new Array(resultOrg.demographicImpact);
+        organizationAzure[0].demographicImpact = new Array(resultOrg.demographicImpact.toString());
       }
       if (Array.isArray(organization.socialPurposeCategoryTags)){
         organizationAzure[0].socialPurposeCategoryTags=resultOrg.socialPurposeCategoryTags;
       } else {
-        organizationAzure[0].socialPurposeCategoryTags = new Array(resultOrg.socialPurposeCategoryTags);
+        organizationAzure[0].socialPurposeCategoryTags = new Array(resultOrg.socialPurposeCategoryTags.toString());
       }
       if (Array.isArray(organization.primaryBusinessSector_2)){
         organizationAzure[0].primaryBusinessSector_2=resultOrg.primaryBusinessSector_2;
       } else {
-        organizationAzure[0].primaryBusinessSector_2 = new Array(resultOrg.primaryBusinessSector_2);
+        organizationAzure[0].primaryBusinessSector_2 = new Array(resultOrg.primaryBusinessSector_2.toString());
       }
       if (req.body.yearFounded!=''){
         organizationAzure[0].yearFounded=req.sanitize('yearFounded').toInt();
@@ -558,7 +558,7 @@ exports.putOrganization = function(req, res,next) {
         },
         body: {"value":organizationAzure}
       };
-      //console.log(util.inspect(options.body,{  depth: null }));
+      console.log(util.inspect(options.body,{  depth: null }));
       request(options, function (error, response, body) {
         if (!error && response.statusCode == 200) {
           //console.log('organization '+ req.sanitize('name').trim() + ' created, success');
