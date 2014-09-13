@@ -9,6 +9,7 @@ var _ = require('lodash');
 var businessSector = require('../public/json/primaryBusinessSector.json');
 var socialPurposeCategory = require('../public/json/socialPurposeCategory.json');
 var demographicImpact = require('../public/json/demographicImpact.json');
+var downloadImageAndUploadToS3 = require("../libs/downloadImageAndUploadToS3.js");
 
 //make sure every url reference is saved with full HTTP or HTTPS
 function saveUrl(entry){
@@ -287,6 +288,17 @@ exports.postOrganization = function(req, res,next) {
       if (err) { 
         return next(err);
       } else {
+        //save logo url to S3
+        downloadImageAndUploadToS3.getAndSaveFile(organization.logo,function (error,amazonUrl){
+          if (error){
+            console.log(error);
+          } else {
+            //update specific field in organization
+            organization.logo=amazonUrl;
+            organization.save();
+          }
+        });
+        
         //was able to update mongo, now update azure
         var organizationAzure = [{
           "@search.action": "upload",
@@ -342,7 +354,7 @@ exports.postOrganization = function(req, res,next) {
           },
           body: {"value":organizationAzure}
         };
-        console.log(util.inspect(options.body,{  depth: null }));
+        //console.log(util.inspect(options.body,{  depth: null }));
         request(options, function (error, response, body) {
           if (!error && response.statusCode == 200) {
             //console.log('organization '+ req.sanitize('name').trim() + ' created, success');
@@ -454,90 +466,103 @@ exports.putOrganization = function(req, res,next) {
   });
   organization.socialMedia = socialMedia;
 
-//we lose createdBy if we dont do findbyidupdate
-  Organization.update({ _id: req.params.id }, organization, {safe:true, multi:false}, function(err, result){
+  //todo: createdby
+  Organization.findOneAndUpdate({ _id: req.params.id }, organization, function(err, resultOrg){
     if (err) {
-        console.log(err);
-        return next(err);
+      console.log(err);
+      return next(err);
+    } else if (!resultOrg) {
+      console.log('No records were updated');
+      return next(new Error('No records were updated'));
     } else {
-      if (result===1){
-        //was able to update mongo, now update azure search
-        var organizationAzure = [{
-          "@search.action": "upload",
-          orgId:req.params.id,
-          name: req.sanitize('name').trim(),
-          email: req.body.email,
-          locationAddress:req.body.address,
-          phoneNumber: req.body.phoneNumber,
-          website: saveUrl(req.body.website),
-          parentOrganization: req.body.parentOrganization,
-          descriptionService: req.body.descriptionService,
-          primaryBusinessSector_1: req.body.primaryBusinessSector_1,
-          descriptionCause: req.body.descriptionCause,
-          organizationalStructure: req.body.organizationalStructure,
-          active: req.sanitize('active').toBoolean(),
-          //need to derive date created from ID 
-          dateCreated: moment.utc(parseInt(req.params.id.substr(0, 8),16)*1000).toISOString(),
-          lastUpdated: moment.utc(Date.now()).toISOString(),
-          additionalResourcesNameList:additionalResourcesName
-
-        }];
-        if (Array.isArray(organization.demographicImpact)){
-          organizationAzure[0].demographicImpact=organization.demographicImpact;
-        } else {
-          organizationAzure[0].demographicImpact = new Array(organization.demographicImpact);
-        }
-        if (Array.isArray(organization.socialPurposeCategoryTags)){
-          organizationAzure[0].socialPurposeCategoryTags=organization.socialPurposeCategoryTags;
-        } else {
-          organizationAzure[0].socialPurposeCategoryTags = new Array(organization.socialPurposeCategoryTags);
-        }
-        if (Array.isArray(organization.primaryBusinessSector_2)){
-          organizationAzure[0].primaryBusinessSector_2=organization.primaryBusinessSector_2;
-        } else {
-          organizationAzure[0].primaryBusinessSector_2 = new Array(organization.primaryBusinessSector_2);
-        }
-        if (req.body.yearFounded!=''){
-          organizationAzure[0].yearFounded=req.sanitize('yearFounded').toInt();
-        }
-        if (req.body.longitude!='' && req.body.latitude!=''){
-          organizationAzure[0].location={ 
-            "type": "Point", 
-            "coordinates": [req.sanitize('longitude').toFloat(), req.sanitize('latitude').toFloat()]
-          };
-        }
-        var options = {
-          url: 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'/docs/index?api-version='+secrets.azureSearch.apiVersion,
-          json: true,
-          method: 'POST',
-          headers: {
-            'host': secrets.azureSearch.url,
-            'api-key': secrets.azureSearch.apiKey,
-            'Content-Type': 'application/json'
-          },
-          body: {"value":organizationAzure}
-        };
-        console.log(util.inspect(options.body,{  depth: null }));
-        request(options, function (error, response, body) {
-          if (!error && response.statusCode == 200) {
-            //console.log('organization '+ req.sanitize('name').trim() + ' created, success');
+      //save logo url to S3
+      var bucketName = secrets.s3.bucket+'.s3.amazonaws.com';
+      //we only get the logo url and save on S3 if it's NOT already a url of a local bucket S3 amazon URL (if it was done before)
+      if (urlNode.parse(resultOrg.logo).hostname!=bucketName){
+        downloadImageAndUploadToS3.getAndSaveFile(organization.logo,function (error,amazonUrl){
+          if (error){
+            console.log(error);
           } else {
-            if (error){
-              console.log(error);
-            }
-            console.log('organization '+ req.sanitize('name').trim() + ' failed to be updated on Azure Search, query was: ');
-            console.log(options);
-            if (response) {
-              console.log('http status code was: '+response.statusCode)
-            };
-
+            //update specific field in organization
+            resultOrg.logo=amazonUrl;
+            resultOrg.save();
           }
         });
-        return res.redirect('/');
-      } else {
-        console.log('No records were updated');
-        return next(new Error('No records were updated'));
       }
+
+      //was able to update mongo, now update azure search
+      var organizationAzure = [{
+        "@search.action": "upload",
+        orgId:req.params.id,
+        name: req.sanitize('name').trim(),
+        email: req.body.email,
+        locationAddress:req.body.address,
+        phoneNumber: req.body.phoneNumber,
+        website: saveUrl(req.body.website),
+        parentOrganization: req.body.parentOrganization,
+        descriptionService: req.body.descriptionService,
+        primaryBusinessSector_1: req.body.primaryBusinessSector_1,
+        descriptionCause: req.body.descriptionCause,
+        organizationalStructure: req.body.organizationalStructure,
+        active: req.sanitize('active').toBoolean(),
+        //need to derive date created from ID 
+        dateCreated: moment.utc(parseInt(req.params.id.substr(0, 8),16)*1000).toISOString(),
+        lastUpdated: moment.utc(Date.now()).toISOString(),
+        additionalResourcesNameList:additionalResourcesName
+
+      }];
+      if (Array.isArray(organization.demographicImpact)){
+        organizationAzure[0].demographicImpact=resultOrg.demographicImpact;
+      } else {
+        organizationAzure[0].demographicImpact = new Array(resultOrg.demographicImpact);
+      }
+      if (Array.isArray(organization.socialPurposeCategoryTags)){
+        organizationAzure[0].socialPurposeCategoryTags=resultOrg.socialPurposeCategoryTags;
+      } else {
+        organizationAzure[0].socialPurposeCategoryTags = new Array(resultOrg.socialPurposeCategoryTags);
+      }
+      if (Array.isArray(organization.primaryBusinessSector_2)){
+        organizationAzure[0].primaryBusinessSector_2=resultOrg.primaryBusinessSector_2;
+      } else {
+        organizationAzure[0].primaryBusinessSector_2 = new Array(resultOrg.primaryBusinessSector_2);
+      }
+      if (req.body.yearFounded!=''){
+        organizationAzure[0].yearFounded=req.sanitize('yearFounded').toInt();
+      }
+      if (req.body.longitude!='' && req.body.latitude!=''){
+        organizationAzure[0].location={ 
+          "type": "Point", 
+          "coordinates": [req.sanitize('longitude').toFloat(), req.sanitize('latitude').toFloat()]
+        };
+      }
+      var options = {
+        url: 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'/docs/index?api-version='+secrets.azureSearch.apiVersion,
+        json: true,
+        method: 'POST',
+        headers: {
+          'host': secrets.azureSearch.url,
+          'api-key': secrets.azureSearch.apiKey,
+          'Content-Type': 'application/json'
+        },
+        body: {"value":organizationAzure}
+      };
+      //console.log(util.inspect(options.body,{  depth: null }));
+      request(options, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+          //console.log('organization '+ req.sanitize('name').trim() + ' created, success');
+        } else {
+          if (error){
+            console.log(error);
+          }
+          console.log('organization '+ req.sanitize('name').trim() + ' failed to be updated on Azure Search, query was: ');
+          console.log(options);
+          if (response) {
+            console.log('http status code was: '+response.statusCode)
+          };
+
+        }
+      });
+      return res.redirect('/');
     }
     
   });

@@ -27,6 +27,12 @@ module.exports = {
     apiVersion: '2014-07-31-Preview'
   },
 
+  s3: {
+  	key: process.env.S3_KEY || 'S3 key goes here',
+  	secret: process.env.S3_SECRET || 'S3 secret goes here',
+  	bucket: process.env.S3_BUCKET || 'S3 bucket goes here'
+  },
+
   //to send forgot password emails
   sendgrid: {
     user: 'Your SendGrid Username',
