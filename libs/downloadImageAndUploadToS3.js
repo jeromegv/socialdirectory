@@ -82,8 +82,6 @@ var getAndSaveFile = function(url,desiredFileName,callback) {
 	      callback('File size was 0, no upload occured',filePath);
 	    } 
 	  }],function (error, filePath, amazonUrl) {
-	    //TODO save new amazon url in the record
-
 	    //we are done with the temp file, delete it
 	    if (filePath){
 	      fs.unlink(filePath, function (err) {

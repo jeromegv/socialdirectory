@@ -166,6 +166,23 @@ block content
               label(class='btn btn-primary active')
                 input(type='radio',name='active',id='active2',value="false",checked)
                 |OFF
+    .form-group
+        label(class='col-sm-2 control-label', for='isSocialEnterprise') Is a social enterprise
+        div(class='col-sm-8 btn-group',data-toggle='buttons')
+            if (organization.isSocialEnterprise==true)
+              label(class='btn btn-primary active')
+                input(type='radio',name='isSocialEnterprise',id='isSocialEnterprise1',value="true",checked)
+                |YES
+              label(class='btn btn-primary')
+                input(type='radio',name='isSocialEnterprise',id='isSocialEnterprise2',value="false")
+                |NO
+            else
+              label(class='btn btn-primary')
+                input(type='radio',name='isSocialEnterprise',id='isSocialEnterprise1',value="true")
+                |YES
+              label(class='btn btn-primary active')
+                input(type='radio',name='isSocialEnterprise',id='isSocialEnterprise2',value="false",checked)
+                |NO
 
 
     .form-group

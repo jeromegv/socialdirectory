@@ -24,6 +24,7 @@ var organizationSchema = new mongoose.Schema({
   organizationalStructure: {type: String, default: ''},
   privateNote: {type: String, default: '',select: false},
   active: {type: Boolean, default: false},
+  isSocialEnterprise: {type:Boolean, default:true},
   lastUpdated: {type: Date, default: Date.now},
   socialMedia: [ {socialMediaUrl: {type: String }, socialMediaName: {type: String} } ],
   additionalResources: [ {resourceUrl: {type: String }, resourceName: {type: String} } ]

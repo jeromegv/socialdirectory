@@ -40,7 +40,8 @@ request(options, function (error, response, body) {
 			    {"name": "socialPurposeCategoryTags", "type": "Collection(Edm.String)"},
 			    {"name": "demographicImpact", "type": "Collection(Edm.String)"},
 			    {"name": "organizationalStructure", "type": "Edm.String"}, 
-			    {"name": "active", "type": "Edm.Boolean"}, 
+			    {"name": "active", "type": "Edm.Boolean"},
+			    {"name": "isSocialEnterprise", "type": "Edm.Boolean"}, 
 			    {"name": "dateCreated", "type": "Edm.DateTimeOffset"}, 
 			    {"name": "lastUpdated", "type": "Edm.DateTimeOffset"},     
 			    {"name": "additionalResourcesNameList", "type": "Collection(Edm.String)"}  

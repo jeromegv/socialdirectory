@@ -91,6 +91,9 @@ function getSocialMediaName(parsedUrl){
         case 'vimeo':
             socialMediaName='vimeo';
             break;
+        case 'foursquare':
+            socialMediaName='foursquare';
+            break;
         case 'wordpress':
             socialMediaName='wordpress';
             break;
@@ -249,6 +252,7 @@ exports.postOrganization = function(req, res,next) {
     organizationalStructure: req.body.organizationalStructure,
     privateNote: req.body.privateNote,
     active: req.sanitize('active').toBoolean(),
+    isSocialEnterprise: req.sanitize('isSocialEnterprise').toBoolean(),
     createdBy: req.user._id
   });
 
@@ -325,6 +329,7 @@ exports.postOrganization = function(req, res,next) {
           descriptionCause: req.body.descriptionCause,
           organizationalStructure: req.body.organizationalStructure,
           active: organization.active,
+          isSocialEnterprise: organization.isSocialEnterprise,
           //need to derive date created from ID 
           dateCreated: moment.utc(parseInt(organization._id.toString().substr(0, 8),16)*1000).toISOString(),
           lastUpdated: moment.utc(Date.now()).toISOString(),
@@ -441,6 +446,7 @@ exports.putOrganization = function(req, res,next) {
     organizationalStructure: req.body.organizationalStructure,
     privateNote: req.body.privateNote,
     active: req.sanitize('active').toBoolean(),
+    isSocialEnterprise: req.sanitize('isSocialEnterprise').toBoolean(),
     lastUpdated: Date.now()
   };    
   if (typeof(req.body.demographicImpact)!='undefined'){
@@ -516,7 +522,8 @@ exports.putOrganization = function(req, res,next) {
         primaryBusinessSector_1: req.body.primaryBusinessSector_1,
         descriptionCause: req.body.descriptionCause,
         organizationalStructure: req.body.organizationalStructure,
-        active: req.sanitize('active').toBoolean(),
+        active: organization.active,
+        isSocialEnterprise: organization.isSocialEnterprise,
         //need to derive date created from ID 
         dateCreated: moment.utc(parseInt(req.params.id.substr(0, 8),16)*1000).toISOString(),
         lastUpdated: moment.utc(Date.now()).toISOString(),
