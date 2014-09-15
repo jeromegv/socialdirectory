@@ -21,8 +21,8 @@ var passport = require('passport');
 var expressValidator = require('express-validator');
 var connectAssets = require('connect-assets');
 
-//Configure azure search, setup index if does not exist yet
-var azureSearch = require('./config/azuresearch');
+//load local azuresearch config
+var azureSearch = require('./libs/azuresearch');
 /**
  * Controllers (route handlers).
  */
@@ -52,6 +52,8 @@ mongoose.connect(secrets.db);
 mongoose.connection.on('error', function() {
   console.error('MongoDB Connection Error. Make sure MongoDB is running.');
 });
+
+azureSearch.initIndex();
 
 var hour = 3600000;
 var day = hour * 24;
