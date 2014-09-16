@@ -150,7 +150,7 @@ app.post('/organization', passportConf.isAuthenticated,organizationController.po
 app.get('/organization/:id',passportConf.isAuthenticated,organizationController.updateOrganization);
 app.put('/organization/:id', passportConf.isAuthenticated,organizationController.putOrganization);
 app.delete('/organization/:id', passportConf.isAuthenticated,organizationController.deleteOrganization);
-
+app.get('/reloadOrganizationsInAzure',passportConf.isAuthenticated,organizationController.getReloadOrganizationsInAzure);
 /**
 * Public REST API routes
 */

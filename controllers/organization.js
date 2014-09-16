@@ -155,6 +155,25 @@ exports.getOrganizationId = function(req, res) {
   });
 };
 
+/**
+ * GET /reloadOrganizationsInAzure
+ * Force send every organizations directly into Azure search
+ */
+ exports.getReloadOrganizationsInAzure = function(req, res) {
+  Organization.find(loggedInQuery(req)).select(loggedInSelectQuery(req)).exec(function(err, organizations) {
+    if (!err && organizations!=null){
+      azureSearch.uploadRecord(organizations,function(error){
+        if (error){
+          console.log(error);
+        }
+      });
+      return res.redirect('/');
+    } else {
+      res.status(400);
+      return res.send(err);
+    }
+  });
+};
 
 /**
  * GET /organization

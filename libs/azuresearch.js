@@ -79,10 +79,10 @@ var initIndex = function() {
 		}
 	});
 };
-//to make a POST query to azure search that will upsert the organization
-var uploadRecord = function(organization,callback){
+
+var buildAzureOrganizationObject = function(organization){
 	//was able to update mongo, now update azure search
-	var organizationAzure = [{
+	var organizationAzure = {
 		"@search.action": "upload",
 		orgId: organization._id.toString(),
 		name: organization.name,
@@ -96,12 +96,11 @@ var uploadRecord = function(organization,callback){
 		descriptionCause: organization.descriptionCause,
 		organizationalStructure: organization.organizationalStructure,
 		active: organization.active,
-		//TODO:re-enable when index supports socialenterprise
-		//isSocialEnterprise: organization.isSocialEnterprise,
+		isSocialEnterprise: organization.isSocialEnterprise,
 		//need to derive date created from ID 
 		dateCreated: moment.utc(parseInt(organization._id.toString().substr(0, 8),16)*1000).toISOString(),
 		lastUpdated: moment.utc(Date.now()).toISOString()
-	}];
+	};
 	//		
 	var additionalResourcesName = new Array();
 	organization.additionalResources.forEach(function(entry,index) {
@@ -109,32 +108,50 @@ var uploadRecord = function(organization,callback){
 	    	additionalResourcesName[index]=entry.resourceName;
 	    }
 	});
-	organizationAzure[0].additionalResourcesNameList=additionalResourcesName;
+	organizationAzure.additionalResourcesNameList=additionalResourcesName;
 
 	if (Array.isArray(organization.demographicImpact)){
-		organizationAzure[0].demographicImpact=organization.demographicImpact;
+		organizationAzure.demographicImpact=organization.demographicImpact;
 	} else {
-		organizationAzure[0].demographicImpact = new Array(organization.demographicImpact.toString());
+		organizationAzure.demographicImpact = new Array(organization.demographicImpact.toString());
 	}
 	if (Array.isArray(organization.socialPurposeCategoryTags)){
-		organizationAzure[0].socialPurposeCategoryTags=organization.socialPurposeCategoryTags;
+		organizationAzure.socialPurposeCategoryTags=organization.socialPurposeCategoryTags;
 	} else {
-		organizationAzure[0].socialPurposeCategoryTags = new Array(organization.socialPurposeCategoryTags.toString());
+		organizationAzure.socialPurposeCategoryTags = new Array(organization.socialPurposeCategoryTags.toString());
 	}
 	if (Array.isArray(organization.primaryBusinessSector_2)){
-		organizationAzure[0].primaryBusinessSector_2=organization.primaryBusinessSector_2;
+		organizationAzure.primaryBusinessSector_2=organization.primaryBusinessSector_2;
 	} else {
-		organizationAzure[0].primaryBusinessSector_2 = new Array(organization.primaryBusinessSector_2.toString());
+		organizationAzure.primaryBusinessSector_2 = new Array(organization.primaryBusinessSector_2.toString());
 	}
 	if (organization.yearFounded!=null){
-		organizationAzure[0].yearFounded=parseInt(organization.yearFounded);
+		organizationAzure.yearFounded=parseInt(organization.yearFounded);
 	}
 	if (organization.Location.longitude!=null && organization.Location.latitude!=null){
-		organizationAzure[0].location={ 
+		organizationAzure.location={ 
 		  "type": "Point", 
 		  "coordinates": [parseFloat(organization.Location.longitude), parseFloat(organization.Location.latitude)]
 		};
 	}
+	return organizationAzure;
+}
+//to make a POST query to azure search that will upsert the organization
+var uploadRecord = function(organization,callback){
+	
+	var organizationAzure = new Array();
+	if (!Array.isArray(organization)){
+		organizationAzure[0] = buildAzureOrganizationObject(organization);
+	} else {
+		if (organization.length<=1000){
+			organization.forEach(function(entry,index) {
+				organizationAzure[index]=buildAzureOrganizationObject(entry);
+			});
+		} else {
+			callback('You can only send up to 1000 records at the time to AzureSearch');
+		}
+	}
+
 	var options = {
 	url: 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'/docs/index?api-version='+secrets.azureSearch.apiVersion,
 	json: true,
@@ -167,3 +184,4 @@ var uploadRecord = function(organization,callback){
 
 exports.initIndex = initIndex;
 exports.uploadRecord = uploadRecord;
+exports.buildAzureOrganizationObject = buildAzureOrganizationObject;
