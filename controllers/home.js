@@ -7,10 +7,10 @@ var _ = require('lodash');
 var parser = require("odata-parser");
 
 //To add/replace a parameter to an existing URL
-function insertParam(key, value,currentUrl)
+function insertParam(key, value,sourceURL)
 {
     key = encodeURI(key); value = encodeURIComponent(value);
-    var kvp = currentUrl.substr(1).split('&');
+    var kvp = sourceURL.split('&');
     var i=kvp.length; var x; while(i--) 
     {
         x = kvp[i].split('=');
@@ -24,34 +24,45 @@ function insertParam(key, value,currentUrl)
     if(i<0) {kvp[kvp.length] = [key,value].join('=');}
     return kvp.join('&'); 
 }
+//to remove a parameter from an url
+function removeParam(key, sourceURL) {
+    var rtn = sourceURL.split("?")[0],
+        param,
+        params_arr = [],
+        queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
+    if (queryString !== "") {
+        params_arr = queryString.split("&");
+        for (var i = params_arr.length - 1; i >= 0; i -= 1) {
+            param = params_arr[i].split("=")[0];
+            if (param === key) {
+                params_arr.splice(i, 1);
+            }
+        }
+        rtn = rtn + "?" + params_arr.join("&");
+    }
+    return rtn;
+}
+
+//get parameter in the URL provided
+function getParam(key,sourceURL) {
+    var query = sourceURL.substring(1);
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == key) {
+            return decodeURIComponent(pair[1]);
+        }
+    }
+}
 
 //This function is being used to add a filter URL to the facet object 
 //to be used when users click the facet filter
-function buildFacets(facets,currentUrl,filterQueryString){
+function buildFacets(facets,currentUrl){
 	for (var facetName in facets) {
 		var facetRefinements = facets[facetName];
 		if (Array.isArray(facetRefinements)){
 			facetRefinements.forEach(function(entry,index) {
-				if (facetName=='primaryBusinessSector_1'){
-					if (!filterQueryString){
-						facets[facetName][index]['link']=insertParam("filter",facetName+" eq '"+facetRefinements[index]['value']+"'",currentUrl);
-					} else {
-						//if there is already a refinement selected, add the existing refinement first + add new refinement
-						facets[facetName][index]['link']=insertParam("filter",filterQueryString+' and '+facetName+" eq '"+facetRefinements[index]['value']+"'",currentUrl);							
-					}
-				} else if (facetName=='active'){
-					if (!filterQueryString){
-						facets[facetName][index]['link']=insertParam("filter",facetName+" eq "+facetRefinements[index]['value'],currentUrl);
-					} else {
-						facets[facetName][index]['link']=insertParam("filter",filterQueryString+' and '+facetName+" eq "+facetRefinements[index]['value'],currentUrl);
-					}
-				} else {
-					if (!filterQueryString){
-						facets[facetName][index]['link']=insertParam("filter",facetName+"/any(t: t eq '"+facetRefinements[index]['value']+"')",currentUrl);
-					} else {
-						facets[facetName][index]['link']=insertParam("filter",filterQueryString+' and '+facetName+"/any(t: t eq '"+facetRefinements[index]['value']+"')",currentUrl);						
-					}
-				}
+				facets[facetName][index]['link']=buildUrlFromFacet(facetName,facetRefinements[index]['value'],currentUrl);
 			});
 		}
 	}
@@ -63,7 +74,7 @@ function buildFacets(facets,currentUrl,filterQueryString){
 //so we have to look at the filter parameter in the URL to know how the response was filtered
 //the format of the filter parameter is in OData. we use a odata-parser to parse it but unfortunately
 //this library does not support any/all collection(tags) type of parameters so we have to parse it manually
-function buildSelectedFilters(filterQueryString){
+function buildSelectedFilters(filterQueryString,currentUrl){
 	var selectedFilters=new Object();
 	//if there was a filter defined
 	if (filterQueryString){
@@ -80,7 +91,7 @@ function buildSelectedFilters(filterQueryString){
 					filterArrayForForeach.push(entry);
 					//add the selected filter to our array of selectedFilters
 					var positionLastApostrophe=entry.lastIndexOf("'");
-					selectedFilters[entry.substring(0,entry.indexOf("/any"))]=entry.substring(entry.lastIndexOf("'",positionLastApostrophe-1)+1,positionLastApostrophe);
+					selectedFilters[entry.substring(0,entry.indexOf("/any"))]={value:entry.substring(entry.lastIndexOf("'",positionLastApostrophe-1)+1,positionLastApostrophe)};
 				}
 			});
 			filterArrayForForeach.forEach(function(entry,index) {
@@ -97,15 +108,68 @@ function buildSelectedFilters(filterQueryString){
 				var firstSelection = parsedFilter['$filter'];
 				while (firstSelection['type']!='eq'){
 					if (firstSelection['left']['type']=='eq'){
-						selectedFilters[firstSelection['left']['left']['name']]=firstSelection['left']['right']['value'];
+						selectedFilters[firstSelection['left']['left']['name']]={value:firstSelection['left']['right']['value']};
 					}
 					if (firstSelection['right']['type']=='eq'){
-						selectedFilters[firstSelection['right']['left']['name']]=firstSelection['right']['right']['value'];
+						selectedFilters[firstSelection['right']['left']['name']]={value:firstSelection['right']['right']['value']};
+
 					}
 					firstSelection=firstSelection['right'];
 				}
-				selectedFilters[firstSelection['left']['name']]=firstSelection['right']['value'];
+				selectedFilters[firstSelection['left']['name']]={value:firstSelection['right']['value']};
 			}
+		}
+	}
+	//once we are done building the selected filters, we add the "removeUrl" to each selected filters
+	//to allow removing the filter from the query when clicking on X button next to selected filter
+	selectedFilters = buildUrlToRemove(selectedFilters,currentUrl);
+	return selectedFilters;
+}
+
+
+
+function buildUrlFromFacet(facetName,facetValue,currentUrl){
+	var link;
+
+	//get the 'filter' part of the current url, if it exists
+	var filterQueryString = getParam('filter',currentUrl);
+
+	if (facetName=='primaryBusinessSector_1'){
+		if (!filterQueryString){
+			link=insertParam("filter",facetName+" eq '"+facetValue+"'",currentUrl);
+		} else {
+			//if there is already a refinement selected, add the existing refinement first + add new refinement
+			link=insertParam("filter",filterQueryString+' and '+facetName+" eq '"+facetValue+"'",currentUrl);							
+		}
+	} else if (facetName=='active'){
+		if (!filterQueryString){
+			link=insertParam("filter",facetName+" eq "+facetValue,currentUrl);
+		} else {
+			link=insertParam("filter",filterQueryString+' and '+facetName+" eq "+facetValue,currentUrl);
+		}
+	} else {
+		if (!filterQueryString){
+			link=insertParam("filter",facetName+"/any(t: t eq '"+facetValue+"')",currentUrl);
+		} else {
+			link=insertParam("filter",filterQueryString+' and '+facetName+"/any(t: t eq '"+facetValue+"')",currentUrl);						
+		}
+	}
+	return link;
+}
+//We take the object that contains all selected filters and we build the URL that will be
+//used for when someone click to REMOVE the refinement
+function buildUrlToRemove(selectedFilters,currentUrl){
+	//so we go over every selected filters
+	for (var key in selectedFilters) {
+		//we remove the filter parameter from the URL of the current page, and we rebuild it
+		var cleanUrl = removeParam("filter",currentUrl);
+		//the removed url will basically be a list of refinements of every selected filters
+		//EXCEPT for the current selected filters (since this one gets removed)
+		for (var key2 in selectedFilters) {
+			if (key2!=key){
+				cleanUrl = buildUrlFromFacet(key2,selectedFilters[key2]['value'],cleanUrl);
+			}
+			selectedFilters[key]['removeUrl']=cleanUrl;
 		}
 	}
 	return selectedFilters;
@@ -144,7 +208,6 @@ exports.index = function(req, res) {
 		if (typeof(req.query.filter)!='undefined'){
 			url+='&$filter='+encodeURIComponent(req.query.filter);
 			var filterQueryString = req.query.filter;
-
 		}
 		url+='&scoringProfile='+scoringProfile;
 		url+='&api-version='+secrets.azureSearch.apiVersion;
@@ -164,12 +227,12 @@ exports.index = function(req, res) {
 				res.render('search', {
 					title: 'Search for '+searchTerm,
 					organizations: body.value,
-					facets: buildFacets(body['@search.facets'],req.originalUrl,filterQueryString),
+					facets: buildFacets(body['@search.facets'],req.originalUrl),
 					moment: moment,
 					resultCount: body.value.length,
 					searchTerm: searchTerm,
 					fieldsName:fieldsName,
-					selectedFilters:buildSelectedFilters(filterQueryString)
+					selectedFilters:buildSelectedFilters(filterQueryString,req.originalUrl)
 				});
 			 } else {
 	            if (error){console.log(error);}

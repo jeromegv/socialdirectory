@@ -3,7 +3,9 @@ extends layout
 block content
   h1 #{resultCount} search results for #{searchTerm}
   for filterValue,filterName in selectedFilters
-    h4 #{fieldsName[filterName]}: #{filterValue}
+    h4 #{fieldsName[filterName]}: #{filterValue.value} 
+      a(href=filterValue.removeUrl)
+        span.ion-ios7-close-outline
   hr
   .col-sm-2
     if typeof(facets)!=undefined && resultCount>1
