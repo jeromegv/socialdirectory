@@ -4,6 +4,7 @@ var fs = require('fs');
 var async = require('async');
 var path = require('path');
 var knox = require('knox');
+var Imagemin = require('imagemin');
 var fs = require('fs');
 var mimeMagic = require( "node-ee-mime-magic" );
 
@@ -33,7 +34,7 @@ var getAndSaveFile = function(url,desiredFileName,callback) {
 		}).on('error',function(error){
 			callback('error while trying to download the url: '+url+' '+error);
 		});
-	  },function(filePath,contentType,callback){
+	  },function (filePath,contentType,callback){
 	    //read temp file from disk
 	    fs.readFile(filePath, function (error, data) {
 	      if (error){
@@ -42,7 +43,7 @@ var getAndSaveFile = function(url,desiredFileName,callback) {
 	        callback(null,data,filePath,contentType);
 	      }
 	    });
-	  },function(fileData,filePath,contentType,callback){
+	  },function (fileData,filePath,contentType,callback){
 	    //make sure the link given is an image
 	    mimeMagic( fileData, function( err, mimeType ){
 	        if (err) {
@@ -50,9 +51,40 @@ var getAndSaveFile = function(url,desiredFileName,callback) {
 	        } else if (!mimeType) {
 	          callback('Mimetype cannot be found, logo url is most likely not an image');
 	        } else {
-	          callback(null,fileData,filePath,contentType);
+	          callback(null,mimeType,fileData,filePath,contentType);
 	        }
 	    } );
+	  },function (mimeType,fileData,filePath,contentType,callback){
+  		//we take the image and optimize it (reduce the size)
+	    var imagemin = new Imagemin().src(filePath).dest('/tmp');
+
+	    if (mimeType.mime=="image/gif"){
+		    imagemin = imagemin.use(Imagemin.gifsicle({ interlaced: true }));
+	    } else if (mimeType.mime=="image/jpeg"){
+	    	imagemin = imagemin.use(Imagemin.jpegtran({ progressive: true }));
+	    } else if (mimeType.mime == "image/png"){
+	    	imagemin = imagemin.use(Imagemin.optipng({ optimizationLevel: 3 }));
+	    } else {
+        	return callback(null,fileData,filePath,contentType);
+	    }
+	    imagemin.run(function (err, files) {
+		    if (err) {
+		    	console.log('Error running imagemin, skipping image optimization step');
+		    	console.log(err);
+		    	callback(null,fileData,filePath,contentType);
+		    } else {
+		    	//imagemin completed optimization, reading this new file (that should have overwritten the previous one)
+		    	fs.readFile(filePath, function (error, data) {
+					if (error){
+				    	console.log('Error reading imagemin optimized file, skipping image optimization step');
+						console.log(error);
+		    			callback(null,fileData,filePath,contentType);
+					} else {
+						callback(null,data,filePath,contentType);
+					}
+				});
+		    }
+		});
 	  },function (fileData,filePath,contentType,callback){
 	    if (fileData.length>0){
 	      //upload image S3 with Knox

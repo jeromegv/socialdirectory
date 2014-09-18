@@ -41,7 +41,8 @@
     "moment": "^2.8.3",
     "odata-parser": "^1.0.0",
     "knox": "^0.9.1",
-    "node-ee-mime-magic": "^0.1.1"
+    "node-ee-mime-magic": "^0.1.1",
+    "imagemin": "^2.0.0"
   },
   "devDependencies": {
     "chai": "^1.9.1",
