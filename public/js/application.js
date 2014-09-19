@@ -21,6 +21,6 @@
 //= require jquery-ui/ui/minified/widget.min
 //= require jquery-ui/ui/minified/menu.min
 //= require jquery-ui/ui/minified/position.min
-//= require jquery-ui/ui/autocomplete
+//= require jquery-ui/ui/minified/autocomplete.min
 //= require select2/select2.min
 //= require main
