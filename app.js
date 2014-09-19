@@ -147,15 +147,15 @@ app.post('/account/delete', passportConf.isAuthenticated, userController.postDel
 app.get('/organization',passportConf.isAuthenticated,organizationController.addOrganization);
 app.get('/searchorganization',organizationController.searchOrganization);
 app.post('/organization', passportConf.isAuthenticated,organizationController.postOrganization);
-app.get('/organization/:id',passportConf.isAuthenticated,organizationController.updateOrganization);
-app.put('/organization/:id', passportConf.isAuthenticated,organizationController.putOrganization);
-app.delete('/organization/:id', passportConf.isAuthenticated,organizationController.deleteOrganization);
+app.get('/organization/:slug',passportConf.isAuthenticated,organizationController.updateOrganization);
+app.put('/organization/:slug', passportConf.isAuthenticated,organizationController.putOrganization);
+app.delete('/organization/:slug', passportConf.isAuthenticated,organizationController.deleteOrganization);
 app.get('/reloadOrganizationsInAzure',passportConf.isAuthenticated,organizationController.getReloadOrganizationsInAzure);
 /**
 * Public REST API routes
 */
 app.get('/api/organization', organizationController.getOrganization);
-app.get('/api/organization/:id', organizationController.getOrganizationId);
+app.get('/api/organization/:slug', organizationController.getOrganizationSlug);
 
 
 /**

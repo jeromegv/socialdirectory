@@ -36,9 +36,9 @@ $(document).ready(function() {
 
 		setCSRFToken($('meta[name="csrf-token"]').attr('content'));
 		event.preventDefault();
-		var obj_id=window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
+		var slug=window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
 		jQuery.ajax({
-	      url: "/organization/"+obj_id,
+	      url: "/organization/"+slug,
 	      type: 'DELETE'
 	    }).done(function() {
 	      //redirect to previous page after successful form submission

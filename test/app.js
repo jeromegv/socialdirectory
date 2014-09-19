@@ -3,6 +3,7 @@ var app = require('../app.js');
 var chai = require('chai');
 var should = chai.should();
 var Organization = require('../models/Organization');
+var utils = require('../libs/utils.js');
 
 describe('GET /', function() {
   it('should return 302 redirect and go to /login', function(done) {
@@ -41,16 +42,8 @@ describe('GET /api/organization', function() {
   });
 });
 
-describe('GET /api/organization/12345', function() {
-  it('should return 400 because organization id does not translate to an objectid', function(done) {
-    request(app)
-      .get('/api/organization/12345')
-      .expect(400, done);
-  });
-});
-
 describe('GET /api/organization/560fbfaf2669ba68e5ebbfd6', function() {
-  it('should return 404 because organization objectid does not exist', function(done) {
+  it('should return 404 because organization slug cannot be found', function(done) {
     request(app)
       .get('/api/organization/560fbfaf2669ba68e5ebbfd6')
       .expect(404, done);
@@ -65,11 +58,13 @@ describe('GET /random-url', function() {
   });
 });
 
-describe('Test a working /api/organization/:id', function() {
+describe('Test a working /api/organization/:slug', function() {
   it('should be able to read a newly created organization', function(done) {
+      var name = 'Best social enterprise in Philippines';
       var org = new Organization({
         email: 'test@test.com',
-        name: 'Best social enterprise in Philippines',
+        name: name,
+        name_slug: utils.convertToSlug(name),
         active: true
       });
       org.save(function(err,organization) {
@@ -77,7 +72,7 @@ describe('Test a working /api/organization/:id', function() {
           return done(err)
         } else {
           request(app)
-            .get('/api/organization/'+organization._id)
+            .get('/api/organization/'+organization.name_slug)
             .expect(200)
             .end(function(err, res){
               if (err) return done(err);

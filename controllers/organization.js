@@ -10,7 +10,8 @@ var socialPurposeCategory = require('../public/json/socialPurposeCategory.json')
 var demographicImpact = require('../public/json/demographicImpact.json');
 //local dependencies
 var downloadImageAndUploadToS3 = require("../libs/downloadImageAndUploadToS3.js");
-var azureSearch = require('../libs/azuresearch');
+var azureSearch = require('../libs/azuresearch.js');
+var utils = require('../libs/utils.js');
 
 //make sure every url reference is saved with full HTTP or HTTPS
 function saveUrl(entry){
@@ -20,15 +21,6 @@ function saveUrl(entry){
     }
   }
   return entry;
-}
-
-function convertToSlug(Text)
-{
-    return Text
-        .toLowerCase()
-        .replace(/[^\w ]+/g,'')
-        .replace(/ +/g,'-')
-        ;
 }
 
 //Get root name of website based on hostname (without TLD)
@@ -137,15 +129,15 @@ exports.getOrganization = function(req, res) {
 };
 
 /**
- * GET /api/organization/:id
+ * GET /api/organization/:slug
  * Get a specific organization
  */
 
-exports.getOrganizationId = function(req, res) {
-  Organization.findById(req.params.id).select(loggedInSelectQuery(req)).exec(function(err, organization) {
-    if (!err && organization!=null && (organization.active===true || req.isAuthenticated() || req.get('secretkey')==secrets.internalAPIKey)){
-      return res.jsonp(organization);
-    } else if (!err && organization==null){
+exports.getOrganizationSlug = function(req, res) {
+  Organization.find({ name_slug: req.params.slug }).select(loggedInSelectQuery(req)).exec(function(err, organization) {
+    if (!err && organization!=null && organization.length>0 && (organization[0].active===true || req.isAuthenticated() || req.get('secretkey')==secrets.internalAPIKey)){
+      return res.jsonp(organization[0]);
+    } else if (!err && (organization[0]==null || organization.length<1)){
       res.status(404);
       return res.send(null);
     } else {
@@ -190,13 +182,13 @@ exports.addOrganization = function(req, res) {
 };
 
 /**
- * GET /organization/:id
+ * GET /organization/:slug
  * Render form page to add a new organization
  */
 
 exports.updateOrganization = function(req, res) {
   var options = {
-      url: res.locals.host+'/api/organization/'+req.params.id,
+      url: res.locals.host+'/api/organization/'+req.params.slug,
       json: true,
       headers: {
         secretkey:secrets.internalAPIKey
@@ -254,6 +246,7 @@ exports.postOrganization = function(req, res,next) {
 
   var organization = new Organization({
     name: req.sanitize('name').trim(),
+    name_slug: utils.convertToSlug(req.body.name),
     email: req.body.email,
     Location: {
           address: req.body.address
@@ -318,7 +311,7 @@ exports.postOrganization = function(req, res,next) {
         return next(err);
       } else {
         //save logo url to S3
-        var desiredFileName = convertToSlug(organization.name) + '-' + path.basename(organization.logo);
+        var desiredFileName = utils.convertToSlug(organization.name) + '-' + path.basename(organization.logo);
         downloadImageAndUploadToS3.getAndSaveFile(organization.logo,desiredFileName,function (error,amazonUrl){
           if (error){
             console.log(error);
@@ -342,7 +335,7 @@ exports.postOrganization = function(req, res,next) {
 
 
 /**
- * PUT /organization/:id
+ * PUT /organization/:name_slug
  * Update an organization
  */
 exports.putOrganization = function(req, res,next) {
@@ -376,6 +369,7 @@ exports.putOrganization = function(req, res,next) {
 
   var organization = {
     name: req.sanitize('name').trim(),
+    name_slug: utils.convertToSlug(req.body.name),
     email: req.body.email,
     Location: {
           address: req.body.address
@@ -427,7 +421,7 @@ exports.putOrganization = function(req, res,next) {
   organization.socialMedia = socialMedia;
 
   //todo: createdby
-  Organization.findOneAndUpdate({ _id: req.params.id }, organization, function(err, resultOrg){
+  Organization.findOneAndUpdate({ name_slug: req.params.slug }, organization, function(err, resultOrg){
     if (err) {
       console.log(err);
       return next(err);
@@ -439,7 +433,7 @@ exports.putOrganization = function(req, res,next) {
       var bucketName = secrets.s3.bucket+'.s3.amazonaws.com';
       //we only get the logo url and save on S3 if it's NOT already a url of a local bucket S3 amazon URL (if it was done before)
       if (urlNode.parse(resultOrg.logo).hostname!=bucketName){
-        var desiredFileName = convertToSlug(resultOrg.name) + '-' + path.basename(resultOrg.logo);
+        var desiredFileName = utils.convertToSlug(resultOrg.name) + '-' + path.basename(resultOrg.logo);
         downloadImageAndUploadToS3.getAndSaveFile(resultOrg.logo,desiredFileName,function (error,amazonUrl){
           if (error){
             console.log(error);
@@ -463,12 +457,12 @@ exports.putOrganization = function(req, res,next) {
 };
 
 /**
- * DELETE /organization/:id
+ * DELETE /organization/:slug
  * Update an organization
  */
 exports.deleteOrganization = function (req,res,next){
   Organization.remove({
-      _id:req.params.id
+      name_slug:req.params.slug
     }, function(err, org) {
       if (err){
         console.log(err);

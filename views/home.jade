@@ -17,7 +17,7 @@ block content
         for organization in organizations
           tr
             td
-              a(href='organization/'+organization._id)= organization.name
+              a(href='organization/'+organization.name_slug)= organization.name
             td
                 a(href=organization.website,target="_blank")= organization.website 
             td.hidden-xs= organization.primaryBusinessSector_1
