@@ -76,7 +76,7 @@ $(document).ready(function() {
       },
 	  	minLength: 3,
 	    select: function( event, ui ) {
-				window.location.href = '/organization/'+ui.item.orgId
+				window.location.href = '/organization/'+ui.item.name_slug
 			},
 			focus: function (event, ui) {
 	       this.value = ui.item['@search.text'];
@@ -86,7 +86,7 @@ $(document).ready(function() {
     })
     .autocomplete( "instance" )._renderItem = function( ul, item ) {
       return $( "<li>" )
-        .append( "<a href='/organization/"+item.orgId+"'>" + item['@search.text'] + "</a>" )
+        .append( "<a href='/organization/"+item.name_slug+"'>" + item['@search.text'] + "</a>" )
         .appendTo( ul );
     };
     //enable select2 on various fields of add/update pages

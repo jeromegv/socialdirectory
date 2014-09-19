@@ -3,6 +3,7 @@ var request = require('request');
 var Organization = require('../models/Organization');
 var moment = require('moment');
 var util = require('util');
+var utils = require ('./utils.js');
 
 
 //check if the index configured for azuresearch is present, if not create the model for this new index
@@ -31,6 +32,7 @@ var initIndex = function() {
 				  "fields": [
 				    {"name": "orgId", "type": "Edm.String", "key":true, "searchable": false},
 				    {"name": "name", "type": "Edm.String", "suggestions": true}, 
+				    {"name": "name_slug", "type": "Edm.String", "filterable": false,"facetable": false,"searchable": false}, 
 				    {"name": "email", "type": "Edm.String","filterable": false,"facetable": false}, 
 				    {"name": "locationAddress", "type": "Edm.String","filterable": false,"facetable": false}, 
 				    {"name": "location", "type": "Edm.GeographyPoint"},
@@ -86,6 +88,7 @@ var buildAzureOrganizationObject = function(organization){
 		"@search.action": "upload",
 		orgId: organization._id.toString(),
 		name: organization.name,
+		name_slug: utils.convertToSlug(organization.name),
 		email: organization.email,
 		locationAddress: organization.Location.address,
 		phoneNumber: organization.phoneNumber,
