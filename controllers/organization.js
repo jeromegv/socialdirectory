@@ -486,7 +486,7 @@ exports.searchOrganization = function (req,res,next){
       return res.send(null);
     }
     var options = {
-      url: 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'/docs/suggest?search='+req.query.search+'&fuzzy=true&api-version='+secrets.azureSearch.apiVersion,
+      url: 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'/docs/suggest?search='+req.query.search+'&$select=name_slug&fuzzy=true&api-version='+secrets.azureSearch.apiVersion,
           json: true,
           method: 'GET',
           headers: {
