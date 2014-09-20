@@ -210,6 +210,8 @@ exports.index = function(req, res) {
 			var filterQueryString = req.query.filter;
 		}
 		url+='&scoringProfile='+scoringProfile;
+		//maximum of 1000 results in the search results
+		url+='&$top=1000';
 		url+='&api-version='+secrets.azureSearch.apiVersion;
 
 		var options = {
