@@ -148,6 +148,24 @@ exports.getOrganizationSlug = function(req, res) {
 };
 
 /**
+ * GET /map
+ * Show all organizations on a map
+ */
+ exports.getMap = function(req, res) {
+  Organization.find(loggedInQuery(req)).select(loggedInSelectQuery(req)).exec(function(err, organizations) {
+    if (!err && organizations!=null){
+      res.render('websiteViews/map', {
+        title: 'Map of all organizations',
+        organizations:organizations
+      });
+    } else {
+      req.flash('errors', { msg: 'The organizations requested can\'t be rendered on a map' });
+      return res.redirect('/');
+    }
+  });
+};
+
+/**
  * GET /reloadOrganizationsInAzure
  * Force send every organizations directly into Azure search
  */

@@ -151,6 +151,8 @@ app.get('/organization/:slug',passportConf.isAuthenticated,organizationControlle
 app.put('/organization/:slug', passportConf.isAuthenticated,organizationController.putOrganization);
 app.delete('/organization/:slug', passportConf.isAuthenticated,organizationController.deleteOrganization);
 app.get('/reloadOrganizationsInAzure',passportConf.isAuthenticated,organizationController.getReloadOrganizationsInAzure);
+app.get('/map',organizationController.getMap);
+
 /**
 * Public REST API routes
 */
