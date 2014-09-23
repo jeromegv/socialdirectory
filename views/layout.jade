@@ -11,6 +11,7 @@ html
     link(rel="stylesheet",href="/components/jquery-ui/themes/smoothness/jquery-ui.min.css")
     link(rel="stylesheet",href="/components/select2/select2.css")
     != css('styles')
+    block head    
 
   body
     include partials/navbar
@@ -23,3 +24,4 @@ html
 
     script(src="http://maps.google.com/maps/api/js?sensor=false")
     != js('application')
+    block javascript

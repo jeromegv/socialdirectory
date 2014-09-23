@@ -23,4 +23,5 @@
 //= require jquery-ui/ui/minified/position.min
 //= require jquery-ui/ui/minified/autocomplete.min
 //= require select2/select2.min
+//= require leaflet/dist/leaflet.js
 //= require main
