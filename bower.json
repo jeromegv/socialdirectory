@@ -6,6 +6,7 @@
     "parsleyjs": "~2.0.3",
     "jquery-ui": "~1.11.1",
     "select2-bootstrap-css": "bootstrap3",
-    "select2": "3.5.1"
+    "select2": "3.5.1",
+    "leaflet": "~0.7.3"
   }
 }
