@@ -130,7 +130,7 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: week }));
 /**
  * Main routes. Pages
  */
-app.get('/', passportConf.isAuthenticated,homeController.index);
+app.get('/admin', passportConf.isAuthenticated,homeController.index);
 app.get('/login', userController.getLogin);
 app.post('/login', userController.postLogin);
 app.get('/logout', userController.logout);
@@ -144,12 +144,12 @@ app.get('/account', passportConf.isAuthenticated, userController.getAccount);
 app.post('/account/profile', passportConf.isAuthenticated, userController.postUpdateProfile);
 app.post('/account/password', passportConf.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConf.isAuthenticated, userController.postDeleteAccount);
-app.get('/organization',passportConf.isAuthenticated,organizationController.addOrganization);
+app.get('/admin/organization',passportConf.isAuthenticated,organizationController.addOrganization);
 app.get('/searchorganization',organizationController.searchOrganization);
-app.post('/organization', passportConf.isAuthenticated,organizationController.postOrganization);
-app.get('/organization/:slug',passportConf.isAuthenticated,organizationController.updateOrganization);
-app.put('/organization/:slug', passportConf.isAuthenticated,organizationController.putOrganization);
-app.delete('/organization/:slug', passportConf.isAuthenticated,organizationController.deleteOrganization);
+app.post('/admin/organization', passportConf.isAuthenticated,organizationController.postOrganization);
+app.get('/admin/organization/:slug',passportConf.isAuthenticated,organizationController.updateOrganization);
+app.put('/admin/organization/:slug', passportConf.isAuthenticated,organizationController.putOrganization);
+app.delete('/admin/organization/:slug', passportConf.isAuthenticated,organizationController.deleteOrganization);
 app.get('/reloadOrganizationsInAzure',passportConf.isAuthenticated,organizationController.getReloadOrganizationsInAzure);
 app.get('/map',organizationController.getMap);
 

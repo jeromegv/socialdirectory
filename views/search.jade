@@ -39,7 +39,7 @@ block content
             for organization in organizations
               tr
                 td
-                  a(href='organization/'+organization.name_slug)= organization.name
+                  a(href='/admin/organization/'+organization.name_slug)= organization.name
                 td
                   if typeof(organization['@search.highlights'])!='undefined'
                     - counter = 0

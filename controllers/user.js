@@ -12,7 +12,7 @@ var secrets = require('../config/secrets');
  */
 
 exports.getLogin = function(req, res) {
-  if (req.user) return res.redirect('/');
+  if (req.user) return res.redirect('/admin');
   res.render('account/login', {
     title: 'Login'
   });
@@ -45,7 +45,7 @@ exports.postLogin = function(req, res, next) {
     req.logIn(user, function(err) {
       if (err) return next(err);
       req.flash('success', { msg: 'Success! You are logged in.' });
-      res.redirect(req.session.returnTo || '/');
+      res.redirect(req.session.returnTo || '/admin');
     });
   })(req, res, next);
 };
@@ -57,7 +57,7 @@ exports.postLogin = function(req, res, next) {
 
 exports.logout = function(req, res) {
   req.logout();
-  res.redirect('/');
+  res.redirect('/admin');
 };
 
 /**
@@ -66,7 +66,7 @@ exports.logout = function(req, res) {
  */
 
 exports.getSignup = function(req, res) {
-  if (req.user) return res.redirect('/');
+  if (req.user) return res.redirect('/admin');
   res.render('account/signup', {
     title: 'Create Account'
   });
@@ -105,7 +105,7 @@ exports.postSignup = function(req, res, next) {
       if (err) return next(err);
       req.logIn(user, function(err) {
         if (err) return next(err);
-        res.redirect('/');
+        res.redirect('/admin');
       });
     });
   });
@@ -183,7 +183,7 @@ exports.postDeleteAccount = function(req, res, next) {
     if (err) return next(err);
     req.logout();
     req.flash('info', { msg: 'Your account has been deleted.' });
-    res.redirect('/');
+    res.redirect('/admin');
   });
 };
 
@@ -194,7 +194,7 @@ exports.postDeleteAccount = function(req, res, next) {
 
 exports.getReset = function(req, res) {
   if (req.isAuthenticated()) {
-    return res.redirect('/');
+    return res.redirect('/admin');
   }
   User
     .findOne({ resetPasswordToken: req.params.token })
@@ -272,7 +272,7 @@ exports.postReset = function(req, res, next) {
     }
   ], function(err) {
     if (err) return next(err);
-    res.redirect('/');
+    res.redirect('/admin');
   });
 };
 
@@ -283,7 +283,7 @@ exports.postReset = function(req, res, next) {
 
 exports.getForgot = function(req, res) {
   if (req.isAuthenticated()) {
-    return res.redirect('/');
+    return res.redirect('/admin');
   }
   res.render('account/forgot', {
     title: 'Forgot Password'

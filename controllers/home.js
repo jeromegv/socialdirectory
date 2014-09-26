@@ -241,7 +241,7 @@ exports.index = function(req, res) {
 	            console.log('search failed to execute on Azure Search, query was:');
 	            console.log(options);
 	            if (response) {console.log('http status code was: '+response.statusCode)};
-	         	return res.redirect('/');
+	         	return res.redirect('/admin');
 	         }
 		});
 	} else {

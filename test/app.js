@@ -5,10 +5,10 @@ var should = chai.should();
 var Organization = require('../models/Organization');
 var utils = require('../libs/utils.js');
 
-describe('GET /', function() {
+describe('GET /admin', function() {
   it('should return 302 redirect and go to /login', function(done) {
     request(app)
-      .get('/')
+      .get('/admin')
       .expect(302)
       .end(function(err, res){
         if (err) return done(err);

@@ -3,7 +3,8 @@ $(document).ready(function() {
         layers: MQ.mapLayer(),
         center: [ 12.277405, 122.665700],
         zoom: 6,
-        minZoom: 5
+        minZoom: 5,
+        detectRetina:true
     });
 
     jQuery.getJSON('/api/organization', function(organizations) {

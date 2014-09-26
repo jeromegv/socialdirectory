@@ -169,7 +169,7 @@ exports.getOrganizationSlug = function(req, res) {
           console.log(error);
         }
       });
-      return res.redirect('/');
+      return res.redirect('/admin');
     } else {
       res.status(400);
       return res.send(err);
@@ -178,7 +178,7 @@ exports.getOrganizationSlug = function(req, res) {
 };
 
 /**
- * GET /organization
+ * GET /admin/organization
  * Render form page to add a new organization
  */
 
@@ -192,7 +192,7 @@ exports.addOrganization = function(req, res) {
 };
 
 /**
- * GET /organization/:slug
+ * GET /admin/organization/:slug
  * Render form page to add a new organization
  */
 
@@ -222,7 +222,7 @@ exports.updateOrganization = function(req, res) {
 };
 
 /**
- * POST /organization
+ * POST /admin/organization
  * Add a new organization
  */
 
@@ -314,7 +314,7 @@ exports.postOrganization = function(req, res,next) {
   Organization.findOne({ name: req.sanitize('name').trim() }, function(err, existingOrganization) {
     if (existingOrganization) {
       req.flash('errors', { msg: 'Organization with that name already exists.' });
-      return res.redirect('/organization');
+      return res.redirect('/admin/organization');
     }
     organization.save(function(err,organization) {
       if (err) { 
@@ -337,7 +337,7 @@ exports.postOrganization = function(req, res,next) {
             console.log(error);
           }
         });
-        return res.redirect('/');
+        return res.redirect('/admin');
       }
     });
   });
@@ -345,7 +345,7 @@ exports.postOrganization = function(req, res,next) {
 
 
 /**
- * PUT /organization/:name_slug
+ * PUT /admin/organization/:name_slug
  * Update an organization
  */
 exports.putOrganization = function(req, res,next) {
@@ -460,14 +460,14 @@ exports.putOrganization = function(req, res,next) {
             console.log(error);
           }
       });
-      return res.redirect('/');
+      return res.redirect('/admin');
     }
     
   });
 };
 
 /**
- * DELETE /organization/:slug
+ * DELETE /admin/organization/:slug
  * Update an organization
  */
 exports.deleteOrganization = function (req,res,next){

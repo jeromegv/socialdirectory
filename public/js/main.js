@@ -38,7 +38,7 @@ $(document).ready(function() {
 		event.preventDefault();
 		var slug=window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
 		jQuery.ajax({
-	      url: "/organization/"+slug,
+	      url: "/admin/organization/"+slug,
 	      type: 'DELETE'
 	    }).done(function() {
 	      //redirect to previous page after successful form submission
@@ -76,7 +76,7 @@ $(document).ready(function() {
       },
 	  	minLength: 3,
 	    select: function( event, ui ) {
-				window.location.href = '/organization/'+ui.item.name_slug
+				window.location.href = '/admin/organization/'+ui.item.name_slug
 			},
 			focus: function (event, ui) {
 	       this.value = ui.item['@search.text'];
@@ -86,7 +86,7 @@ $(document).ready(function() {
     })
     .autocomplete( "instance" )._renderItem = function( ul, item ) {
       return $( "<li>" )
-        .append( "<a href='/organization/"+item.name_slug+"'>" + item['@search.text'] + "</a>" )
+        .append( "<a href='/admin/organization/"+item.name_slug+"'>" + item['@search.text'] + "</a>" )
         .appendTo( ul );
     };
     //enable select2 on various fields of add/update pages
