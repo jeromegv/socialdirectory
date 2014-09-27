@@ -226,7 +226,7 @@ exports.index = function(req, res) {
 		};
 		request(options, function (error, response, body) {
 			if (!error && response.statusCode == 200) {
-				res.render('search', {
+				res.render('organization/adminSearch', {
 					title: 'Search for '+searchTerm,
 					organizations: body.value,
 					facets: buildFacets(body['@search.facets'],req.originalUrl),
@@ -261,7 +261,7 @@ exports.index = function(req, res) {
 					var second = parseInt(b['_id'].substr(0, 8),16)*1000;
 					return (second-first);
 				});
-				res.render('home', {
+				res.render('organization/adminHome', {
 					title: 'Home',
 					organizations: body,
 					moment: moment
@@ -269,7 +269,7 @@ exports.index = function(req, res) {
 			} else {
 				if (error){console.log(error);}
 				if (response) {console.log('http status code was: '+response.statusCode)};
-				res.render('home', {
+				res.render('organization/adminHome', {
 					title: 'Home',
 					organizations: new Array(),
 					moment: moment
