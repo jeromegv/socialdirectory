@@ -30,6 +30,7 @@ var azureSearch = require('./libs/azuresearch');
 var homeController = require('./controllers/home');
 var userController = require('./controllers/user');
 var organizationController = require('./controllers/organization');
+var websiteController = require('./controllers/website');
 
 /**
  * API keys and Passport configuration.
@@ -151,7 +152,9 @@ app.get('/admin/organization/:slug',passportConf.isAuthenticated,organizationCon
 app.put('/admin/organization/:slug', passportConf.isAuthenticated,organizationController.putOrganization);
 app.delete('/admin/organization/:slug', passportConf.isAuthenticated,organizationController.deleteOrganization);
 app.get('/reloadOrganizationsInAzure',passportConf.isAuthenticated,organizationController.getReloadOrganizationsInAzure);
+//public facing views
 app.get('/map',organizationController.getMap);
+app.get('/',websiteController.getHome);
 
 /**
 * Public REST API routes
