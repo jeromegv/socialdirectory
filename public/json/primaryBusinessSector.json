@@ -1,6 +1,6 @@
 {
     "Agriculture, forestry, fishing mining" : [],
-    "Consulting and professional services": ["Research","Marketing & Outreach","Recruitment Services","Finance & Insurance","Microfinance & Investment","Real Estate & Housing","Web & Graphic Design","Law, advocacy, politics","Employment services","Training"],
+    "Consulting and professional services": ["Research","Marketing & Outreach","Recruitment Services","Finance & Insurance","Microfinance & Investment","Real Estate & Housing","Web & Graphic Design","Law, advocacy, politics","Employment services","Training & Management Services","Consulting","Manufacturing"],
     "Education" : ["Adult","Infants & Young Children","Youth"],
     "Emergency relief" : [],
     "Environment and animal protection":["Clean Technology","Conservation"],
@@ -9,7 +9,7 @@
     "Arts" : ["Theatre/performing arts","Gallery/display","Music"],
     "Health care":[],
     "Production/manufacturing":[],
-    "Services to social enterprise, co-operatives, non-profits, charities, etc.":["Microfinancing & investing","Crowdfunding","Traditional Fundraising","Network & Community Development","Consulting","Marketing & Outreach","Finance & Insurance","Law, advocacy, politics","Research","Recruitment Services","Web & Graphic Design","Real Estate & Housing","Training & Management Services"],
+    "Services to social enterprise, co-operatives, non-profits, charities, etc.":["Microfinancing & investing","Crowdfunding","Traditional Fundraising","Network & Community Development","Consulting","Marketing & Outreach","Finance & Insurance","Law, advocacy, politics","Research","Recruitment Services","Web & Graphic Design","Real Estate & Housing","Training & Management Services","Manufacturing"],
     "Sports and Recreation": [],
     "Tourism and hospitality":["Voluntourism","Ecotourism","Cultural tourism","Commercial Tourism","Accommodation"],
     "Retail & Ecommerce":["Green products","Fair Trade","Filipino handcrafts","Cosmetics","Jewelry, bags & accessories","Clothing & footwear","Home & décor","Parenting Products"],
