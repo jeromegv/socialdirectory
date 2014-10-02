@@ -7,14 +7,15 @@ html
     meta(name='description', content='')
     meta(name='csrf-token', content=_csrf)
     meta(name='author', content='')
-    title #{title} | Social Enterprise Directory
+    title #{title} | ChooseSocial.PH
     link(rel="stylesheet",href="/fonts/fonts.css")
     link(rel="stylesheet",href="/components/jquery-ui/themes/smoothness/jquery-ui.min.css")
     link(rel="stylesheet",href="/components/bootstrap/dist/css/bootstrap-theme.min.css")
     link(rel="stylesheet",href="/components/bootstrap/dist/css/bootstrap.min.css")
     link(rel="stylesheet",href="/components/font-awesome/css/font-awesome.css")
+    block head
     link(rel="stylesheet",href="/css/website.css")
-    block head    
+    
 
   body
     include navbar

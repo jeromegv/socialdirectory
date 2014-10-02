@@ -29,4 +29,10 @@ $(document).ready(function() {
         .append( "<a href='/admin/organization/"+item.name_slug+"'>" + item['@search.text'] + "</a>" )
         .appendTo( ul );
     };
+	$('.slick').each(function(i) {
+	    $(this).slick({
+		  	lazyLoad: 'ondemand',
+		  	infinite:true
+		  });
+	});
 });
