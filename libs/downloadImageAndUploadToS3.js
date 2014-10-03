@@ -7,6 +7,7 @@ var knox = require('knox');
 var Imagemin = require('imagemin');
 var fs = require('fs');
 var mimeMagic = require( "node-ee-mime-magic" );
+var sharp = require('sharp');
 
 var getAndSaveFile = function(url,desiredFileName,callback) {
 	if (!secrets.s3.key || !secrets.s3.secret || !secrets.s3.bucket){
@@ -65,55 +66,62 @@ var getAndSaveFile = function(url,desiredFileName,callback) {
 	    } else if (mimeType.mime == "image/png"){
 	    	imagemin = imagemin.use(Imagemin.optipng({ optimizationLevel: 3 }));
 	    } else {
-        	return callback(null,fileData,filePath,contentType);
+        	return callback(null,mimeType,fileData,filePath,contentType);
 	    }
 	    imagemin.run(function (err, files) {
 		    if (err) {
 		    	console.log('Error running imagemin, skipping image optimization step');
 		    	console.log(err);
-		    	callback(null,fileData,filePath,contentType);
+		    	callback(null,mimeType,fileData,filePath,contentType);
 		    } else {
 		    	//imagemin completed optimization, reading this new file (that should have overwritten the previous one)
 		    	fs.readFile(filePath, function (error, data) {
 					if (error){
 				    	console.log('Error reading imagemin optimized file, skipping image optimization step');
 						console.log(error);
-		    			callback(null,fileData,filePath,contentType);
+		    			callback(null,mimeType,fileData,filePath,contentType);
 					} else {
-						callback(null,data,filePath,contentType);
+						callback(null,mimeType,data,filePath,contentType);
 					}
 				});
 		    }
 		});
-	  },function (fileData,filePath,contentType,callback){
-	    if (fileData.length>0){
-	      //upload image S3 with Knox
-	      var knoxclient = knox.createClient({
-	          key: secrets.s3.key,
-	          secret: secrets.s3.secret,
-	          bucket: secrets.s3.bucket
-	      });
-	      var uploadknox = knoxclient.put('logos/'+path.basename(filePath), {
-	        'Content-length': fileData.length,
-	        'Content-Type': contentType,
-	        'x-amz-acl': 'public-read'
-	      });
-	      uploadknox.on('response', function(response){
-	        if (200 == response.statusCode) {
-	          console.log('saved logo to %s', uploadknox.url);
-	          callback(null,filePath,uploadknox.url);
-	        } else {
-	          callback('S3 did not respond with 200, response was:'+response.statusCode,filePath);
-	        }
-	      });
-	      uploadknox.on('error', function(err) {
-	        callback(err,filePath);
-	      });
-	      uploadknox.end(fileData);  
-	    } else {
-	      callback('File size was 0, no upload occured',filePath);
-	    } 
-	  }],function (error, filePath, amazonUrl) {
+	  }, function (mimeType,fileData,filePath,contentType,callback){
+	  	//upload full size optimized image to amazon
+	    uploadToKnox(fileData,filePath,contentType,function(err,amazonUrl){
+	    	if (!err){
+	    		callback(null,mimeType,filePath,contentType,amazonUrl);
+	    	} else {
+	    		callback(err,filePath);
+	    	}
+	    });
+	  }, function (mimeType,filePath,contentType,amazonUrl,callback){
+	  	var sharpObject = sharp(filePath);
+	  	//this library do not support output in GIF, only in input, so we will convert to PNG
+	  	if (mimeType.mime=="image/gif"){
+		    sharpObject = sharpObject.png();
+		    contentType == 'image/png';
+	    }
+
+	  	//create a thumbnail (smaller size)
+	  	sharpObject.resize(240,240).max().quality(90).toBuffer(function(err, buffer) {
+			//fs.writeFileSync('out.jpg', buffer);
+			uploadToKnox(buffer,'thumbnail_'+path.basename(filePath),contentType,function( err,amazonThumbnailUrl ){
+				if (!err){
+					callback(null,filePath,amazonUrl,amazonThumbnailUrl);
+				} else {
+					callback(err,filePath);
+				}
+			});
+		});
+		//create a retina version, if size allows
+	  	/*sharp(filePath).resize(null, 500).max().withoutEnlargement().progressive().quality(90).toBuffer(function(err, buffer,info) {
+		  fs.writeFileSync('out.jpg', buffer);
+			if (info.height==500){
+				callback(null,fileData,filePath,contentType);
+			}	
+		});*/
+	  }],function (error, filePath, amazonUrl,amazonThumbnailUrl) {
 	    //we are done with the temp file, delete it
 	    if (filePath){
 	      fs.unlink(filePath, function (err) {
@@ -125,9 +133,38 @@ var getAndSaveFile = function(url,desiredFileName,callback) {
 	    if (error){
 		    console.log(error);
 	    } else {
-	    	callback(null,amazonUrl);
+	    	callback(null,amazonUrl,amazonThumbnailUrl);
 	    }
 	  }
 	);
+};
+var uploadToKnox = function(fileData,filePath,contentType,callback){
+	if (fileData.length>0){
+      //upload image S3 with Knox
+      var knoxclient = knox.createClient({
+          key: secrets.s3.key,
+          secret: secrets.s3.secret,
+          bucket: secrets.s3.bucket
+      });
+      var uploadknox = knoxclient.put('logos/'+path.basename(filePath), {
+        'Content-length': fileData.length,
+        'Content-Type': contentType,
+        'x-amz-acl': 'public-read'
+      });
+      uploadknox.on('response', function(response){
+        if (200 == response.statusCode) {
+          console.log('saved logo to %s', uploadknox.url);
+          callback(null,uploadknox.url);
+        } else {
+          callback('S3 did not respond with 200, response was:'+response.statusCode);
+        }
+      });
+      uploadknox.on('error', function(err) {
+        callback(err);
+      });
+      uploadknox.end(fileData);  
+    } else {
+      callback('File size was 0, no upload occured');
+    } 
 };
 exports.getAndSaveFile = getAndSaveFile;

@@ -12,6 +12,7 @@ var organizationSchema = new mongoose.Schema({
   phoneNumber: { type: String, lowercase: true, default: ''},
   website: { type: String, default: '' },
   logo: { type: String, default: '' },
+  logoThumbnail: { type: String, default: '' },
   parentOrganization: { type: String, default: '' },
   yearFounded: {type: Number,  min: 1800, max: 2100, default: ''},
   descriptionService: {type: String, default: ''},

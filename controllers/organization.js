@@ -322,12 +322,13 @@ exports.postOrganization = function(req, res,next) {
       } else {
         //save logo url to S3
         var desiredFileName = utils.convertToSlug(organization.name) + '-' + path.basename(organization.logo);
-        downloadImageAndUploadToS3.getAndSaveFile(organization.logo,desiredFileName,function (error,amazonUrl){
+        downloadImageAndUploadToS3.getAndSaveFile(organization.logo,desiredFileName,function (error,amazonUrl,amazonThumbnailUrl){
           if (error){
             console.log(error);
           } else {
             //update specific field in organization
             organization.logo=amazonUrl;
+            organization.logoThumbnail = amazonThumbnailUrl;
             organization.save();
           }
         });
@@ -442,14 +443,15 @@ exports.putOrganization = function(req, res,next) {
       //save logo url to S3
       var bucketName = secrets.s3.bucket+'.s3.amazonaws.com';
       //we only get the logo url and save on S3 if it's NOT already a url of a local bucket S3 amazon URL (if it was done before)
-      if (urlNode.parse(resultOrg.logo).hostname!=bucketName){
+      if (urlNode.parse(resultOrg.logo).hostname!=bucketName || !resultOrg.logoThumbnail){
         var desiredFileName = utils.convertToSlug(resultOrg.name) + '-' + path.basename(resultOrg.logo);
-        downloadImageAndUploadToS3.getAndSaveFile(resultOrg.logo,desiredFileName,function (error,amazonUrl){
+        downloadImageAndUploadToS3.getAndSaveFile(resultOrg.logo,desiredFileName,function (error,amazonUrl,amazonThumbnailUrl){
           if (error){
             console.log(error);
           } else {
             //update specific field in organization
             resultOrg.logo=amazonUrl;
+            resultOrg.logoThumbnail = amazonThumbnailUrl;
             resultOrg.save();
           }
         });
