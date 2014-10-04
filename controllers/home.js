@@ -181,7 +181,7 @@ function buildUrlToRemove(selectedFilters,currentUrl){
 exports.index = function(req, res) {
 	//if there is a search url parameter, we query azure search using that term and render the results
 	if (typeof(req.query.search)!='undefined' && req.query.search!=''){
-		var searchTerm = req.query.search;
+		var searchTerm = req.sanitize('search').trim();
 
 	    var scoringProfile = "normalSearchBoost";
 

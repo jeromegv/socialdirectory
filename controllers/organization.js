@@ -493,6 +493,7 @@ exports.deleteOrganization = function (req,res,next){
 exports.searchOrganization = function (req,res,next){
   if (typeof(req.query.search)!='undefined' && req.query.search!=''){
     req.assert('search','search as you type length must be between 3 and 100').isLength(3, 100);
+    req.query.search = req.sanitize('search').trim();
     var errors = req.validationErrors();
     if (errors) {
       return res.send(null);
