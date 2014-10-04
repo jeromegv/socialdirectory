@@ -10,13 +10,14 @@ block content
 				.col-lg-3.col-md-4.col-sm-6.col-xs-12
 					.main_box
 						.box_1
+							//todo: put normal filter back and put twitter back
 							- var suborg = _.filter(organizations, function(org) { return (_.contains(org.socialPurposeCategoryTags,entry)&&org.logoThumbnail) });
 							- suborg = _.shuffle(suborg)
 							.slick
 								for entry,index in suborg
 									div
 										a(href='/'+entry.name_slug)
-											img(data-lazy=entry.logoThumbnail,width="100px")
+											img(data-lazy=entry.logoThumbnail)
 						.desc
 							h5= entry
 		row
