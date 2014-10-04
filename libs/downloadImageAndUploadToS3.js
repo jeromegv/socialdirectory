@@ -106,14 +106,19 @@ var getAndSaveFile = function(url,desiredFileName,callback) {
 	  	//create a thumbnail (smaller size)
 	  	//354: size of a picture in a 1 grid view on iPhone6+
 	  	sharpObject.resize(354,354).max().quality(90).embedWhite().progressive().toBuffer(function(err, buffer) {
+	  		if (!err){
+	  			uploadToKnox(buffer,'thumbnail_'+path.basename(filePath),contentType,function( err,amazonThumbnailUrl ){
+					if (!err){
+						callback(null,filePath,optimizedFilePath,amazonUrl,amazonThumbnailUrl);
+					} else {
+						callback(err,filePath,optimizedFilePath);
+					}
+				});
+	  		} else {
+	  			console.log(err);
+	  			callback(err,filePath,optimizedFilePath);
+	  		}
 			//fs.writeFileSync('out.jpg', buffer);
-			uploadToKnox(buffer,'thumbnail_'+path.basename(filePath),contentType,function( err,amazonThumbnailUrl ){
-				if (!err){
-					callback(null,filePath,optimizedFilePath,amazonUrl,amazonThumbnailUrl);
-				} else {
-					callback(err,filePath,optimizedFilePath);
-				}
-			});
 		});
 		//create a retina version, if size allows
 	  	/*sharp(filePath).resize(null, 500).max().withoutEnlargement().progressive().quality(90).toBuffer(function(err, buffer,info) {
