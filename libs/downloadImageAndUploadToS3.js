@@ -104,7 +104,8 @@ var getAndSaveFile = function(url,desiredFileName,callback) {
 	    }
 
 	  	//create a thumbnail (smaller size)
-	  	sharpObject.resize(240,240).max().quality(90).embedWhite().progressive().toBuffer(function(err, buffer) {
+	  	//354: size of a picture in a 1 grid view on iPhone6+
+	  	sharpObject.resize(354,354).max().quality(90).embedWhite().progressive().toBuffer(function(err, buffer) {
 			//fs.writeFileSync('out.jpg', buffer);
 			uploadToKnox(buffer,'thumbnail_'+path.basename(filePath),contentType,function( err,amazonThumbnailUrl ){
 				if (!err){
