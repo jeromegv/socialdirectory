@@ -1,10 +1,52 @@
+
+/*----------------
+   Reset
+-----------------*/
+
+
+* {
+	margin:0;
+	padding:0;
+}
+*, *:before, *:after {
+	box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+}
+
+
+body {
+	margin:0;
+	padding:0;
+	font-family: 'latoregular';
+}
+:focus {
+	outline:none;
+}
+ul, li {
+	list-style:none;
+}
+a {
+	text-decoration:none;
+}
+p {
+	margin:0;
+	padding:0;
+}
+
+
 html {
   position: relative;
   min-height: 100%;
 }
 
 body {
-  padding-top: 60px;
+  padding-top: 50px;
+}
+
+#content {
+	background:url(/images/cotnent_bg.png) repeat-x top left #f3f6f6;
+	padding:30px 0 0px 0;
 }
 
 /*----------------
@@ -12,6 +54,40 @@ body {
 -----------------*/
 .slick-prev:before, .slick-next:before {
 	color: black;
+}
+
+.product_c {
+	position:relative;
+}
+.main_box {
+	background:white;
+}
+.main_box .box_1 {
+	width:100%;
+	background:white;
+	position:relative;
+	margin-bottom: 5px;
+	/*overflow:hidden;*/
+}
+.main_box .box_1 img {
+	width:100%;
+	height:auto;
+}
+.main_box .desc {
+	border:5px solid #fff;
+	border-radius:5px;
+	box-shadow:0 2px 2px rgba(11, 25, 28, 0.1);
+	padding:10px 5px 5px 5px;
+	background:#ffffff;
+	text-align:center;
+	border-top:1px solid #efefef;
+}
+.main_box .desc h5 a {
+	color:#282727;
+}
+
+.product_c .main_box {
+	margin-bottom:40px;
 }
 
 /*----------------
@@ -268,3 +344,17 @@ h5 {
 		display:inline-block;
 	}
  }
+ /* Responsive Styles*/
+
+@media (min-width: 1200px) {
+	.main_box {
+		/*border:5px solid #fff;
+		border-radius:5px;
+		box-shadow:0 2px 2px rgba(11, 25, 28, 0.1);*/
+		background:white;
+		height:300px;
+	}
+	.main_box .box_1 {
+	height:260px;
+}
+}

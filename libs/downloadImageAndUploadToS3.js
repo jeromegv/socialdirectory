@@ -104,7 +104,7 @@ var getAndSaveFile = function(url,desiredFileName,callback) {
 	    }
 
 	  	//create a thumbnail (smaller size)
-	  	sharpObject.resize(240,240).max().quality(90).progressive().toBuffer(function(err, buffer) {
+	  	sharpObject.resize(240,240).max().quality(90).embedWhite().progressive().toBuffer(function(err, buffer) {
 			//fs.writeFileSync('out.jpg', buffer);
 			uploadToKnox(buffer,'thumbnail_'+path.basename(filePath),contentType,function( err,amazonThumbnailUrl ){
 				if (!err){

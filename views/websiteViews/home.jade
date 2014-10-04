@@ -4,17 +4,23 @@ block head
 	link(rel="stylesheet",href="/components/slick.js/slick/slick.css")
 
 block content
-		for entry,index in socialPurposeCategory
-			.col-md-4
-				h2= entry
-				- var suborg = _.filter(organizations, function(org) { return _.contains(org.socialPurposeCategoryTags,entry) });
-				- suborg = _.shuffle(suborg)
-				.slick
-					for entry,index in suborg
-						div
-							a(href='/'+entry.name_slug)
-								img(data-lazy=entry.logo,class="img-responsive")
-		a(class="twitter-timeline", data-dnt="true", href="https://twitter.com/AIESECcanada/lists/canada-local-committees", data-widget-id="517465416793206784", data-chrome="nofooter", data-tweet-limit="5") Tweets from the social enterprises we follow
-		script !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+	.product_c
+		row
+			for entry,index in socialPurposeCategory
+				.col-lg-3.col-md-4.col-sm-6.col-xs-12
+					.main_box
+						.box_1
+							- var suborg = _.filter(organizations, function(org) { return (_.contains(org.socialPurposeCategoryTags,entry)&&org.logoThumbnail) });
+							- suborg = _.shuffle(suborg)
+							.slick
+								for entry,index in suborg
+									div
+										a(href='/'+entry.name_slug)
+											img(data-lazy=entry.logoThumbnail,width="100px")
+						.desc
+							h5= entry
+		row
+			//a(class="twitter-timeline", data-dnt="true", href="https://twitter.com/AIESECcanada/lists/canada-local-committees", data-widget-id="517465416793206784", data-chrome="nofooter", data-tweet-limit="5") Tweets from the social enterprises we follow
+			//script !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
 block javascript
 	script(type="text/javascript",src="/components/slick.js/slick/slick.min.js")
