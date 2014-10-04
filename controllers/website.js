@@ -6,7 +6,7 @@ var socialPurposeCategory = require('../public/json/socialPurposeCategory.json')
  * Show home page
  */
  exports.getHome = function(req, res) {
- 	Organization.find({active: true}).select('logo name name_slug socialPurposeCategoryTags _id').exec(function(err, organizations) {
+ 	Organization.find({active: true}).select('logoThumbnail name name_slug socialPurposeCategoryTags _id').exec(function(err, organizations) {
 	    if (!err && organizations!=null){
 	        res.render('websiteViews/home', {
 				title: 'Home Page',

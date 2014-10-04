@@ -57,8 +57,8 @@ var getAndSaveFile = function(url,desiredFileName,callback) {
 	    } );
 	  },function (mimeType,fileData,filePath,contentType,callback){
   		//we take the image and optimize it (reduce the size)
-	    var imagemin = new Imagemin().src(filePath).dest('/tmp');
-
+	    var imagemin = new Imagemin().src(filePath).dest('/tmp/optimized');
+	    var optimizedFilePath = '/tmp/optimized/'+path.basename(filePath);
 	    if (mimeType.mime=="image/gif"){
 		    imagemin = imagemin.use(Imagemin.gifsicle({ interlaced: true }));
 	    } else if (mimeType.mime=="image/jpeg"){
@@ -66,36 +66,36 @@ var getAndSaveFile = function(url,desiredFileName,callback) {
 	    } else if (mimeType.mime == "image/png"){
 	    	imagemin = imagemin.use(Imagemin.optipng({ optimizationLevel: 3 }));
 	    } else {
-        	return callback(null,mimeType,fileData,filePath,contentType);
+        	return callback(null,mimeType,fileData,filePath,'',contentType);
 	    }
 	    imagemin.run(function (err, files) {
 		    if (err) {
 		    	console.log('Error running imagemin, skipping image optimization step');
 		    	console.log(err);
-		    	callback(null,mimeType,fileData,filePath,contentType);
+		    	callback(null,mimeType,fileData,filePath,'',contentType);
 		    } else {
-		    	//imagemin completed optimization, reading this new file (that should have overwritten the previous one)
-		    	fs.readFile(filePath, function (error, data) {
+		    	//imagemin completed optimization, reading this new file
+		    	fs.readFile(optimizedFilePath, function (error, data) {
 					if (error){
 				    	console.log('Error reading imagemin optimized file, skipping image optimization step');
 						console.log(error);
-		    			callback(null,mimeType,fileData,filePath,contentType);
+		    			callback(null,mimeType,fileData,filePath,'',contentType);
 					} else {
-						callback(null,mimeType,data,filePath,contentType);
+						callback(null,mimeType,data,filePath,optimizedFilePath,contentType);
 					}
 				});
 		    }
 		});
-	  }, function (mimeType,fileData,filePath,contentType,callback){
+	  }, function (mimeType,fileData,filePath,optimizedFilePath,contentType,callback){
 	  	//upload full size optimized image to amazon
-	    uploadToKnox(fileData,filePath,contentType,function(err,amazonUrl){
+	    uploadToKnox(fileData,optimizedFilePath,contentType,function(err,amazonUrl){
 	    	if (!err){
-	    		callback(null,mimeType,filePath,contentType,amazonUrl);
+	    		callback(null,mimeType,filePath,optimizedFilePath,contentType,amazonUrl);
 	    	} else {
-	    		callback(err,filePath);
+	    		callback(err,filePath,optimizedFilePath);
 	    	}
 	    });
-	  }, function (mimeType,filePath,contentType,amazonUrl,callback){
+	  }, function (mimeType,filePath,optimizedFilePath,contentType,amazonUrl,callback){
 	  	var sharpObject = sharp(filePath);
 	  	//this library do not support output in GIF, only in input, so we will convert to PNG
 	  	if (mimeType.mime=="image/gif"){
@@ -104,13 +104,13 @@ var getAndSaveFile = function(url,desiredFileName,callback) {
 	    }
 
 	  	//create a thumbnail (smaller size)
-	  	sharpObject.resize(240,240).max().quality(90).toBuffer(function(err, buffer) {
+	  	sharpObject.resize(240,240).max().quality(90).progressive().toBuffer(function(err, buffer) {
 			//fs.writeFileSync('out.jpg', buffer);
 			uploadToKnox(buffer,'thumbnail_'+path.basename(filePath),contentType,function( err,amazonThumbnailUrl ){
 				if (!err){
-					callback(null,filePath,amazonUrl,amazonThumbnailUrl);
+					callback(null,filePath,optimizedFilePath,amazonUrl,amazonThumbnailUrl);
 				} else {
-					callback(err,filePath);
+					callback(err,filePath,optimizedFilePath);
 				}
 			});
 		});
@@ -121,10 +121,17 @@ var getAndSaveFile = function(url,desiredFileName,callback) {
 				callback(null,fileData,filePath,contentType);
 			}	
 		});*/
-	  }],function (error, filePath, amazonUrl,amazonThumbnailUrl) {
+	  }],function (error, filePath,optimizedFilePath,amazonUrl,amazonThumbnailUrl) {
 	    //we are done with the temp file, delete it
 	    if (filePath){
 	      fs.unlink(filePath, function (err) {
+	        if (err){
+	          console.log(err);
+	        }
+	      });
+	    }
+	    if (optimizedFilePath){
+	      fs.unlink(optimizedFilePath, function (err) {
 	        if (err){
 	          console.log(err);
 	        }
