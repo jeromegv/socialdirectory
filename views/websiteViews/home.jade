@@ -11,7 +11,7 @@ block content
 					.main_box
 						.box_1
 							//todo: put normal filter back and put twitter back
-							- var suborg = _.filter(organizations, function(org) { return (_.contains(org.socialPurposeCategoryTags,entry)&&org.logoThumbnail) });
+							- var suborg = _.filter(organizations, function(org) { return (_.contains(org.socialPurposeCategoryTags,entry)) });
 							- suborg = _.shuffle(suborg)
 							.slick
 								for entry,index in suborg

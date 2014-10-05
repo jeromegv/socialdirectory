@@ -349,8 +349,26 @@ h5 {
 		display:inline-block;
 	}
 	.main_box{
-		width:100%;
+		width:85%;
+		float: none;
+   		margin: 0 auto;
 	}
+	.slick-prev:before, .slick-next:before { 
+		font-family: "slick"; 
+		font-size: 30px; 
+		line-height: 1; 
+		opacity: 0.75; 
+		-webkit-font-smoothing: antialiased;
+	}
+	.slick-prev{
+		height: 30px; width: 30px;
+		left:-35px;
+	}
+	.slick-next{
+		height: 30px; width: 30px;
+		right:-35px;
+	}
+
  }
 
  /* for tablet desktop */
