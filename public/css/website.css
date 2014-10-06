@@ -93,7 +93,30 @@ body {
 .product_c .main_box {
 	margin-bottom:40px;
 }
+/*----------------
+ Twitter
+-----------------*/
 
+.product_c .twitter {
+	padding:30px 0 0 0;
+	border-top:1px solid #d7dbdb;
+	box-shadow:0 -1px 1px #fff;
+}
+.product_c .twitter .desc {
+	background: #fff;
+	box-shadow: 0 2px 2px rgba(11, 25, 28, 0.1);
+	position: relative;
+	margin: 0 0 30px 0;
+	border-radius: 5PX;
+	padding:10px;
+}
+.product_c .twitter .desc h5 {
+	border-bottom:1px solid #efefef;
+	padding:15px;
+}
+.product_c .twitter .desc .desc_text {
+	padding:15px;
+}
 /*----------------
  Footer
 -----------------*/
@@ -352,6 +375,14 @@ h5 {
 		width:85%;
 		float: none;
    		margin: 0 auto;
+	}
+	.product_c .twitter {
+		width:85%;
+		float: none;
+   		margin: 0 auto;
+	}
+	.product_c .twitter .desc {
+		text-align:center;
 	}
 	.slick-prev:before, .slick-next:before { 
 		font-family: "slick"; 
