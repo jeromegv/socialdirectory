@@ -491,46 +491,13 @@ exports.deleteOrganization = function (req,res,next){
  * Since we don't want client side javascript from our site to talk directly with the service
  */
 exports.searchOrganization = function (req,res,next){
-  if (typeof(req.query.search)!='undefined' && req.query.search!=''){
-    req.assert('search','search as you type length must be between 3 and 100').isLength(3, 100);
-    req.query.search = req.sanitize('search').trim();
-    var errors = req.validationErrors();
-    if (errors) {
+  req.query.search = req.sanitize('search').trim();
+  azureSearch.searchSuggestions(req,req.query.search,function(error,response){
+    if (error){
+      console.log(error);
       return res.send(null);
-    }
-    //if someone is not authenticated, we hide inactive organization from typeahead results
-    var filter = "";
-    if (req.isAuthenticated() || (req.get('secretkey')==secrets.internalAPIKey)) {
-      filter = "";
     } else {
-      filter = "&$filter=active eq true";
+      res.json(response);
     }
-    var options = {
-      url: 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'/docs/suggest?search='+req.query.search+filter+'&$select=name_slug&fuzzy=true&api-version='+secrets.azureSearch.apiVersion,
-          json: true,
-          method: 'GET',
-          headers: {
-            'host': secrets.azureSearch.url,
-            'api-key': secrets.azureSearch.apiKey,
-            'Content-Type': 'application/json'
-          }
-    };
-    request(options, function (error, response, body) {
-      if (!error && response.statusCode == 200) {
-        return res.json(body.value);
-       } else {
-          if (error){
-            console.log(error);
-          }
-          console.log('search failed to execute on Azure Search, query was:');
-          console.log(options);
-          if (response) {
-            console.log('http status code was: '+response.statusCode)
-          };
-        return res.send(null);
-       }
-    });
-  } else {
-    return res.send(null);
-  }
+  });
 }

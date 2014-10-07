@@ -168,23 +168,64 @@ var uploadRecord = function(organization,callback){
 	};
 	console.log(util.inspect(options.body,{  depth: null }));
 	request(options, function (error, response, body) {
-	if (!error && response.statusCode == 200) {
-	  console.log('organization '+ organization.name + ' created, success');
-	  callback();
-	} else {
-	  console.log('organization '+ organization.name + ' failed to be updated on Azure Search, query was: ');
-	  console.log(options);
-	  if (error){
-	    console.log(error);
-	    callback(error);
-	  } else if (response) {
-	    console.log('http status code was: '+response.statusCode)
-	    callback('http status code was: '+response.statusCode);
-	  };
-	}
+		if (!error && response.statusCode == 200) {
+		  console.log('organization '+ organization.name + ' created, success');
+		  callback();
+		} else {
+		  console.log('organization '+ organization.name + ' failed to be updated on Azure Search, query was: ');
+		  console.log(options);
+		  if (error){
+		    console.log(error);
+		    callback(error);
+		  } else if (response) {
+		    console.log('http status code was: '+response.statusCode)
+		    callback('http status code was: '+response.statusCode);
+		  };
+		}
 	});
+}
+
+var searchSuggestions = function(req,searchTerm,callback) {
+	if (typeof(searchTerm)=='undefined'){
+		return callback('Search term is undefined');
+	}
+	if (searchTerm.length<3 || searchTerm.length>100){
+		return callback('Suggestion length must be between 3 and 100 characters');
+	}
+	   
+    //if someone is not authenticated, we hide inactive organization from typeahead results
+    var filter = "";
+    if (!req.isAuthenticated() && (req.get('secretkey')!=secrets.internalAPIKey)) {
+      filter = "&$filter=active eq true";
+    }
+    var options = {
+      url: 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'/docs/suggest?search='+req.query.search+filter+'&$select=name_slug&fuzzy=true&api-version='+secrets.azureSearch.apiVersion,
+          json: true,
+          method: 'GET',
+          headers: {
+            'host': secrets.azureSearch.url,
+            'api-key': secrets.azureSearch.apiKey,
+            'Content-Type': 'application/json'
+          }
+    };
+    request(options, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        return callback(null,body.value);
+       } else {
+          if (error){
+            console.log(error);
+          }
+          console.log('search failed to execute on Azure Search, query was:');
+          console.log(options);
+          if (response) {
+            console.log('http status code was: '+response.statusCode)
+          };
+        return callback('search failed');
+       }
+    });
 }
 
 exports.initIndex = initIndex;
 exports.uploadRecord = uploadRecord;
 exports.buildAzureOrganizationObject = buildAzureOrganizationObject;
+exports.searchSuggestions = searchSuggestions;
