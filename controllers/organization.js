@@ -498,8 +498,15 @@ exports.searchOrganization = function (req,res,next){
     if (errors) {
       return res.send(null);
     }
+    //if someone is not authenticated, we hide inactive organization from typeahead results
+    var filter = "";
+    if (req.isAuthenticated() || (req.get('secretkey')==secrets.internalAPIKey)) {
+      filter = "";
+    } else {
+      filter = "&$filter=active eq true";
+    }
     var options = {
-      url: 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'/docs/suggest?search='+req.query.search+'&$select=name_slug&fuzzy=true&api-version='+secrets.azureSearch.apiVersion,
+      url: 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'/docs/suggest?search='+req.query.search+filter+'&$select=name_slug&fuzzy=true&api-version='+secrets.azureSearch.apiVersion,
           json: true,
           method: 'GET',
           headers: {
