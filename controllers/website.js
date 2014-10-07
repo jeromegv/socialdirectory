@@ -1,5 +1,7 @@
 var Organization = require('../models/Organization');
+var secrets = require('../config/secrets');
 var _ = require('lodash');
+var request = require('request');
 var socialPurposeCategory = require('../public/json/socialPurposeCategory.json');
 /**
  * GET /
@@ -19,4 +21,26 @@ var socialPurposeCategory = require('../public/json/socialPurposeCategory.json')
 	      return res.send(err);
 	    }
 	});
+};
+
+/**
+ * GET /organization/:slug
+ * Show home page
+ */
+ exports.getOrganization = function(req, res) {
+ 	var options = {
+      url: res.locals.host+'/api/organization/'+req.params.slug,
+      json: true
+ 	};
+	request(options, function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+		  res.render('websiteViews/organization', {
+		    title: body.name,
+		    organization: body
+		  });
+		} else {
+		  req.flash('errors', { msg: 'The organization requested can\'t be rendered' });
+		  return res.redirect('back');
+		}
+  	});
 };

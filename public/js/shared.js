@@ -16,7 +16,7 @@ $(document).ready(function() {
 		minLength: 3,
 		appendTo: $("#search").parent(),
 		select: function( event, ui ) {
-			window.location.href = '/admin/organization/'+ui.item.name_slug
+			window.location.href = '/organization/'+ui.item.name_slug
 		},
 		focus: function (event, ui) {
 			this.value = ui.item['@search.text'];
@@ -26,13 +26,13 @@ $(document).ready(function() {
     })
     .autocomplete( "instance" )._renderItem = function( ul, item ) {
       return $( "<li>" )
-        .append( "<a href='/admin/organization/"+item.name_slug+"'>" + item['@search.text'] + "</a>" )
+        .append( "<a href='/organization/"+item.name_slug+"'>" + item['@search.text'] + "</a>" )
         .appendTo( ul );
     };
 	$('.slick').each(function(i) {
 	    $(this).slick({
 		  	lazyLoad: 'ondemand',
 		  	infinite:true
-		  });
+		});
 	});
 });

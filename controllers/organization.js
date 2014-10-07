@@ -193,7 +193,7 @@ exports.addOrganization = function(req, res) {
 
 /**
  * GET /admin/organization/:slug
- * Render form page to add a new organization
+ * Render form page to update an organization
  */
 
 exports.updateOrganization = function(req, res) {

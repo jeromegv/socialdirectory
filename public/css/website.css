@@ -46,7 +46,7 @@ body {
 
 #content {
 	background:url(/images/cotnent_bg.png) repeat-x top left #f3f6f6;
-	padding:30px 0 0px 0;
+	padding:30px 0 30px 0;
 }
 
 /*----------------
@@ -120,6 +120,7 @@ body {
 /*----------------
  Footer
 -----------------*/
+
 .fa-arrow-circle-right {	
 	color:#37bbec;
 	font-size:14px;

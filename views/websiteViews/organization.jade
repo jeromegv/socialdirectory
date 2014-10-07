@@ -1,0 +1,10 @@
+extends shared/layout
+
+block head
+
+block content
+	h1= organization.name
+		for entry in organization
+			p= entry
+
+block javascript
