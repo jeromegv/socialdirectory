@@ -6,5 +6,12 @@ block content
 	h1= organization.name
 		for entry in organization
 			p= entry
+	- var pinterestLink = _.filter(organization.socialMedia, { 'socialMediaName': 'pinterest' });
+	if (pinterestLink.length>0)
+		.row
+			.col-lg-12.col-md-12.col-sm-12.col-xs-12
+				a(data-pin-do="embedUser" href=pinterestLink[0].socialMediaUrl data-pin-scale-width="115" data-pin-scale-height="120" data-pin-board-width="1200")
+					Visit Pinterest's profile on Pinterest.
+				script(type="text/javascript" async src="//assets.pinterest.com/js/pinit.js")
 
 block javascript

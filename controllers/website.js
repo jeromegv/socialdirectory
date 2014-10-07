@@ -36,7 +36,8 @@ var socialPurposeCategory = require('../public/json/socialPurposeCategory.json')
 		if (!error && response.statusCode == 200) {
 		  res.render('websiteViews/organization', {
 		    title: body.name,
-		    organization: body
+		    organization: body,
+		    _ : _
 		  });
 		} else {
 		  req.flash('errors', { msg: 'The organization requested can\'t be rendered' });
