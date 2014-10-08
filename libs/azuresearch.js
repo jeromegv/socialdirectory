@@ -35,6 +35,8 @@ var initIndex = function() {
 				    {"name": "name", "type": "Edm.String", "suggestions": true}, 
 				    {"name": "name_slug", "type": "Edm.String", "filterable": false,"facetable": false,"searchable": false}, 
 				    {"name": "email", "type": "Edm.String","filterable": false,"facetable": false}, 
+				    {"name": "logo", "type": "Edm.String", "filterable": false,"facetable": false,"searchable": false},
+				    {"name": "logoThumbnail", "type": "Edm.String", "filterable": false,"facetable": false,"searchable": false},
 				    {"name": "locationAddress", "type": "Edm.String","filterable": false,"facetable": false}, 
 				    {"name": "location", "type": "Edm.GeographyPoint"},
 				    {"name": "phoneNumber", "type": "Edm.String","filterable": false,"facetable": false}, 
@@ -90,6 +92,8 @@ var buildAzureOrganizationObject = function(organization){
 		orgId: organization._id.toString(),
 		name: organization.name,
 		name_slug: utils.convertToSlug(organization.name),
+		logo: organization.logo,
+		logoThumbnail:organization.logoThumbnail,
 		email: organization.email,
 		locationAddress: organization.Location.address,
 		phoneNumber: organization.phoneNumber,
@@ -185,7 +189,8 @@ var uploadRecord = function(organization,callback){
 	});
 }
 
-var searchSuggestions = function(req,searchTerm,callback) {
+var searchSuggestions = function(req,callback) {
+	var searchTerm = req.sanitize('search').trim();
 	if (typeof(searchTerm)=='undefined'){
 		return callback('Search term is undefined');
 	}
@@ -225,7 +230,13 @@ var searchSuggestions = function(req,searchTerm,callback) {
     });
 }
 
-var search = function(searchTerm,filter,callback) {
+var search = function(req,callback) {
+	var searchTerm = req.sanitize('search').trim();
+	var filter ='';
+	if (typeof(req.query.filter)!='undefined'){
+		filter = req.query.filter;
+	}
+
 	if (!searchTerm){
 		return callback('Search term is undefined');
 	}
@@ -242,6 +253,13 @@ var search = function(searchTerm,filter,callback) {
 
 	//maximum of 1000 results in the search results
 	var topNumberResults = 1000;
+
+	//if someone is not authenticated, we hide inactive organization from typeahead results
+    if (!req.isAuthenticated() && (req.get('secretkey')!=secrets.internalAPIKey)) {
+      if (!filter){
+      	filter = "active eq true";
+      }
+    }
 
 	//build the URL for the query
 	var url = 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'/docs?search='+searchTerm;
@@ -463,7 +481,6 @@ function buildUrlToRemove(selectedFilters,currentUrl){
 
 exports.initIndex = initIndex;
 exports.uploadRecord = uploadRecord;
-exports.buildAzureOrganizationObject = buildAzureOrganizationObject;
 exports.searchSuggestions = searchSuggestions;
 exports.search = search;
 exports.buildFacets = buildFacets;

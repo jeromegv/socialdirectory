@@ -17,7 +17,7 @@ exports.index = function(req, res) {
 		if (typeof(req.query.filter)!='undefined'){
 			filter = req.query.filter;
 		}
-		azureSearch.search(searchTerm,filter,function(error,response){
+		azureSearch.search(req,function(error,response){
 			if (error){
 				return res.redirect('/admin');
 			}
@@ -25,7 +25,6 @@ exports.index = function(req, res) {
 				title: 'Search for '+searchTerm,
 				organizations: response.value,
 				facets: azureSearch.buildFacets(response['@search.facets'],req.originalUrl),
-				moment: moment,
 				resultCount: response.value.length,
 				searchTerm: searchTerm,
 				fieldsName:fieldsName,

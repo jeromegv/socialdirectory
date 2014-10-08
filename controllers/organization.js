@@ -491,8 +491,7 @@ exports.deleteOrganization = function (req,res,next){
  * Since we don't want client side javascript from our site to talk directly with the service
  */
 exports.searchOrganization = function (req,res,next){
-  req.query.search = req.sanitize('search').trim();
-  azureSearch.searchSuggestions(req,req.query.search,function(error,response){
+  azureSearch.searchSuggestions(req,function(error,response){
     if (error){
       console.log(error);
       return res.send(null);

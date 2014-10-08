@@ -1,0 +1,46 @@
+extends shared/layout
+
+block head
+	link(rel="stylesheet",href="/components/slick.js/slick/slick.css")
+
+block content
+	.title.clearfix
+		h1 #{resultCount} search results for #{searchTerm}
+	.product_c
+		.row
+			.col-lg-3.col-md-3.col-sm-4.col-xs-12
+				.sidebar.sidebar_1
+					if typeof(facets)!=undefined && resultCount>1
+						for facet,facetname in facets
+							if (Array.isArray(facet)&& selectedFilters[facetname]==undefined && facetname!='active')
+								.side_box
+									if (facetname == 'primaryBusinessSector_1' && facet.length>0)
+										h5
+											a(href='#')= fieldsName[facetname]
+									else if (facetname == 'primaryBusinessSector_2' && facet.length>0 && selectedFilters['primaryBusinessSector_1']!=undefined)
+										h5
+											a(href='#')= fieldsName[facetname]
+									else if (facetname == 'socialPurposeCategoryTags' && facet.length>0)
+										h5
+											a(href='#')= fieldsName[facetname]
+									else if (facetname =='demographicImpact' && facet.length>0)
+										h5
+											a(href='#')= fieldsName[facetname]
+									ul
+										for refinement in facet
+											if (refinement.count>0 && refinement.value!=='' && (facetname != 'primaryBusinessSector_2' || selectedFilters['primaryBusinessSector_1']!=undefined))
+												li 
+													a(href=refinement.link) #{refinement.value} (#{refinement.count})
+			.col-lg-9.col-md-9.col-sm-8.col-xs-12
+				.row
+					for entry,index in organizations
+						.col-lg-4.col-md-4.col-sm-6.col-xs-12
+							.main_box
+								.box_1
+									div
+										a(href='/organization/'+entry.name_slug)
+											img(src=entry.logoThumbnail,alt=entry.name)
+								.desc
+									h5= entry.name
+block javascript
+	script(type="text/javascript",src="/components/slick.js/slick/slick.min.js")
