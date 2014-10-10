@@ -8,11 +8,11 @@ block content
 		h1 #{resultCount} search results for #{searchTerm}
 	.product_c
 		.row
-			.col-lg-3.col-md-3.col-sm-4.col-xs-12
-				.sidebar.sidebar_1
-					if typeof(facets)!=undefined && resultCount>1
+			if typeof(facets)!=undefined && resultCount>1
+				.col-lg-3.col-md-3.col-sm-4.col-xs-12
+					.sidebar.sidebar_1
 						for facet,facetname in facets
-							if (Array.isArray(facet)&& selectedFilters[facetname]==undefined && facetname!='active')
+							if (Array.isArray(facet)&& selectedFilters[facetname]==undefined)
 								.side_box
 									if (facetname == 'primaryBusinessSector_1' && facet.length>0)
 										h5
@@ -30,6 +30,10 @@ block content
 										h5
 											a(href='#')= fieldsName[facetname]
 												i.fa.fa-caret-down
+									else if (facetname =='active' && facet.length>0)
+										h5
+											a(href='#')= fieldsName[facetname]
+												i.fa.fa-caret-down
 									ul.tgl_c
 										for refinement in facet
 											if (refinement.count>0 && refinement.value!=='' && (facetname != 'primaryBusinessSector_2' || selectedFilters['primaryBusinessSector_1']!=undefined))
@@ -37,14 +41,23 @@ block content
 													a(href=refinement.link) #{refinement.value} (#{refinement.count})
 			.col-lg-9.col-md-9.col-sm-8.col-xs-12
 				.row
-					for entry,index in organizations
+					for organization in organizations
 						.col-lg-4.col-md-4.col-sm-6.col-xs-12
-							.main_box
+							.searchbox.main_box
 								.box_1
 									div
-										a(href='/organization/'+entry.name_slug)
-											img(src=entry.logoThumbnail,alt=entry.name)
+										a(href='/organization/'+organization.name_slug)
+											img(src=organization.logoThumbnail,alt=organization.name)
 								.desc
-									h5= entry.name
+									h5
+										a(href='/organization/'+organization.name_slug)= organization.name
+									if typeof(organization['@search.highlights'])!='undefined'
+										- counter = 0
+										for highlight,highlightname in organization['@search.highlights']
+											if (Array.isArray(highlight))
+												for value in highlight
+													- counter++
+													if (counter<2)
+														p!=value
 block javascript
 	script(type="text/javascript",src="/components/slick.js/slick/slick.min.js")

@@ -232,6 +232,10 @@ var searchSuggestions = function(req,callback) {
 
 var search = function(req,callback) {
 	var searchTerm = req.sanitize('search').trim();
+	//we add start to every result, helps to bring back more results
+	if (searchTerm.indexOf("*") == -1){
+		searchTerm = searchTerm + '*';
+	}
 	var filter ='';
 	if (typeof(req.query.filter)!='undefined'){
 		filter = req.query.filter;
@@ -242,7 +246,7 @@ var search = function(req,callback) {
 	}
 
     //define the fields we want as facet and how to present the refinement values
-	var facetFields = ["primaryBusinessSector_1,sort:count","primaryBusinessSector_2,sort:count","socialPurposeCategoryTags,sort:count","demographicImpact,sort:count","active,sort:-value"];
+	var facetFields = ["primaryBusinessSector_1,sort:count","primaryBusinessSector_2,sort:count","socialPurposeCategoryTags,sort:count","demographicImpact,sort:count"];
 
 	var highlighFields=["descriptionService","descriptionCause","demographicImpact",
 	"primaryBusinessSector_1","primaryBusinessSector_2","socialPurposeCategoryTags",
@@ -261,6 +265,8 @@ var search = function(req,callback) {
       } else {
       	filter = filter+" and active eq true";
       }
+    } else {
+    	facetFields.push("active,sort:-value");
     }
 
 	//build the URL for the query
