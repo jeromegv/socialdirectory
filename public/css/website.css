@@ -362,7 +362,6 @@ h5 {
 .sidebar .side_box ul li a {
 	margin:0;
 	padding:0 0;
-	display:block;
 	font-size:14px;
 	line-height:21px;
 	color:#4e4e4e;
@@ -433,44 +432,9 @@ h5 {
 .sidebar_1 h5 a {
 	color:#282727;
 	display:block;
-	background:url(../images/arrow_down.png) no-repeat right center;
 }
-.sidebar_1 h5.active a {
-	background:url(../images/arrow_up.png) no-repeat right center;
-}
-.sidebar .price {
-	padding:12px 15px;
-}
-.sidebar .price .txtbox {
-	width: 74px;
-	border: 1px solid #d7dbdb;
-	height: 30px;
-	display: block;
-	padding: 0 15px;
-	border-radius: 15px;
-	margin: 0;
-	font-size: 14px;
-	color: #4e4e4e;
-	font-family: 'latoregular';
-	float:left;
-	text-align:center;
-}
-.sidebar .price span.to {
-	display:block;
-	font-size:14px;
-	line-height:30px;
-	color:#898989;
-	font-weight:normal;
-	text-align:center;
-	width:29px;
-	float:left;
-}
-.sidebar .price .price_bar {
-	padding: 25px 0 10px;
-}
-.sidebar .price .price_bar img {
-	max-width:100%;
-	height:auto;
+.sidebar_1 h5 i{
+	float:right;
 }
 
 .sidebar .col_box ul li span {
