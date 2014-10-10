@@ -29,10 +29,21 @@ $(document).ready(function() {
         .append( "<a href='/organization/"+item.name_slug+"'>" + item['@search.text'] + "</a>" )
         .appendTo( ul );
     };
+    //slideshow slick
 	$('.slick').each(function(i) {
 	    $(this).slick({
 		  	lazyLoad: 'ondemand',
 		  	infinite:true
 		});
 	});
+	//sidebar click to hide navigation
+	$(".sidebar h5").click(function (e) {
+        e.preventDefault();
+        $(this).parent().find(".tgl_c").slideToggle(300);
+        if ($(this).hasClass("active")) {
+            $(this).removeClass('active');
+        } else {
+            $(this).addClass('active');
+        }
+    });
 });

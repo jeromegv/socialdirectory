@@ -26,7 +26,7 @@ block content
 									else if (facetname =='demographicImpact' && facet.length>0)
 										h5
 											a(href='#')= fieldsName[facetname]
-									ul
+									ul.tgl_c
 										for refinement in facet
 											if (refinement.count>0 && refinement.value!=='' && (facetname != 'primaryBusinessSector_2' || selectedFilters['primaryBusinessSector_1']!=undefined))
 												li 
