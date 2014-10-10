@@ -484,41 +484,6 @@ h5 {
 	float:right;
 	margin-right:-3px;
 }
-.sidebar .cat_box {
-	padding:35px 15px 0 15px;
-	height:235px;
-	background:url(../images/img_2.png) no-repeat;
-	background-size:cover;
-	background-position: right top;
-}
-.sidebar .cat_box h2 {
-	color:#fff;
-	font-weight:normal;
-	margin:0;
-	padding:0;
-}
-.sidebar .cat_box h5 {
-	line-height:21px;
-	color:#ffffff;
-	border:none;
-	padding:0;
-	margin:0;
-}
-.sidebar .cat_box .down_btn {
-	width:110px;
-	height:40px;
-	display:block;
-	border-radius:5px;
-	border:2px solid #fff;
-	text-align:center;
-	font-size:13px;
-	line-height:36px;
-	font-family: 'latoblack';
-	font-weight:normal;
-	color:#fff;
-	margin:65px 0 0 0;
-	padding:0;
-}
 
  /* Responsive Styles*/
  /* for Mobile */
