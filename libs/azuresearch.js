@@ -258,6 +258,8 @@ var search = function(req,callback) {
     if (!req.isAuthenticated() && (req.get('secretkey')!=secrets.internalAPIKey)) {
       if (!filter){
       	filter = "active eq true";
+      } else {
+      	filter = filter+" and active eq true";
       }
     }
 
