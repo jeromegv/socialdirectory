@@ -5,6 +5,7 @@ var request = require('request');
 var socialPurposeCategory = require('../public/json/socialPurposeCategory.json');
 var azureSearch = require('../libs/azuresearch.js');
 var fieldsName = require('../public/json/listFields.json');
+var nodemailer = require('nodemailer');
 
 
 /**
@@ -71,4 +72,51 @@ var fieldsName = require('../public/json/listFields.json');
 		  return res.redirect('back');
 		}
   	});
+};
+
+/**
+ * GET /contactus
+ * Show contact us page
+ */
+ exports.getContactUs= function(req, res) {
+	res.render('websiteViews/contactus', {
+		title: 'Contact Us'
+	});
+};
+
+/**
+ * POST /contactus
+ * @param email
+ */
+exports.postContactUs = function(req, res, next) {
+  req.assert('name','Please enter your name').notEmpty();
+  req.assert('email', 'Please enter a valid email address.').isEmail();
+  req.assert('message','Please enter your message').notEmpty();
+
+  var errors = req.validationErrors();
+
+  if (errors) {
+    req.flash('errors', errors);
+    return res.redirect('/contactus');
+  }
+
+  var transporter = nodemailer.createTransport({
+    service: 'SendGrid',
+    auth: {
+      user: secrets.sendgrid.user,
+      pass: secrets.sendgrid.password
+    }
+  });
+
+  var mailOptions = {
+    to: secrets.sendgrid.emailForContactUs,
+    from: req.body.name + '<' + req.body.email + '>',
+    subject: 'Contact Us form sent from ChooseSocial.PH',
+    text: 'You just received this email from '+ req.body.name + ' from the contact us page of the website:\n\n' +
+      req.body.message
+  };
+  transporter.sendMail(mailOptions, function(err) {
+    req.flash('info', { msg: 'Your message has been sent to ChooseSocial.PH, thank you!' });
+    return res.redirect('/contactus');
+  });
 };

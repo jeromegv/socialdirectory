@@ -1,0 +1,52 @@
+extends shared/layout
+
+block head
+
+block content
+	.title.clearfix
+		h2 Contact Us
+	.contact_c
+		.row
+			.col-lg-6.col-md-6.col-sm-6.col-xs-12
+				.infor_c
+					h5 Information
+					.infor_c_inn
+						p Do you know of an organization that we missed? Have a question, feedback or suggestion? We'd love to hear from you!
+						.add_c
+							p
+								strong Email: 
+								a(href="mailto:gagnonje@gmail.com",target="_blank") gagnonje@gmail.com
+							p
+								strong Facebook: 
+								a(href="http://facebook.com",target="_blank") http://facebook.com
+							p
+								strong Twitter: 
+								a(href="http://twitter.com/choosesocial",target="_blank") http://twitter.com/choosesocial
+			.col-lg-6.col-md-6.col-sm-6.col-xs-12
+				.con_frm
+					h5 Contact Form
+					form(method='POST',id='contactus')
+						input(type='hidden', name='_csrf', value=_csrf)
+						.frm.con_frm_inn
+							.row
+								.col-lg-6.col-md-6.col-sm-6.col-xs-12
+									.form-group
+										.lbltxt 
+											label(class='control-label', for='name') Name:
+										input.form-control.txtbox(type='name', name='name', id='name', placeholder='Your Name',required)
+								.col-lg-6.col-md-6.col-sm-6.col-xs-12
+									.form-group
+										.lbltxt 
+											label(class='control-label', for='email') Email:
+										input.form-control.txtbox(type='email', name='email', id='email', placeholder='Email',required)
+							.row
+								.col-lg-12.col-md-12.col-sm-12.col-xs-12
+									.form-group
+										.lbltxt 
+											label(class='control-label', for='message') Message: 
+										textarea.form-control(type='text', name='message', rows='3', id='message', placeholder='Type your message here',required)
+							.row
+								.col-lg-12.col-md-12.col-sm-12.col-xs-12
+									.clearfix.frm_bot
+										input.btn_c(type='submit')
+					

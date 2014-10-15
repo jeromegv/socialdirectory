@@ -155,6 +155,8 @@ app.get('/reloadOrganizationsInAzure',passportConf.isAuthenticated,organizationC
 //public facing views
 app.get('/map',organizationController.getMap);
 app.get('/',websiteController.getHome);
+app.get('/contactus',websiteController.getContactUs);
+app.post('/contactus',websiteController.postContactUs);
 app.get('/organization/:slug',websiteController.getOrganization);
 
 /**
