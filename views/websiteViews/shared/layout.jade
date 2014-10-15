@@ -8,13 +8,16 @@ html
     meta(name='csrf-token', content=_csrf)
     meta(name='author', content='')
     title #{title} | ChooseSocial.PH
+    //-<!-- build:css /dist/css/style.css -->
     link(rel="stylesheet",href="/fonts/fonts.css")
     link(rel="stylesheet",href="/components/jquery-ui/themes/smoothness/jquery-ui.min.css")
     link(rel="stylesheet",href="/components/bootstrap/dist/css/bootstrap-theme.min.css")
     link(rel="stylesheet",href="/components/bootstrap/dist/css/bootstrap.min.css")
     link(rel="stylesheet",href="/components/font-awesome/css/font-awesome.css")
-    block head
+    link(rel="stylesheet",href="/components/slick.js/slick/slick.css")
     link(rel="stylesheet",href="/css/website.css")
+    //-<!-- endbuild -->
+    block head
     
 
   body
@@ -27,6 +30,7 @@ html
 
     include footer
 
+    //-<!-- build:js /dist/js/lib.js -->
     script(type="text/javascript",src="/components/jquery/dist/jquery.min.js")
     script(type="text/javascript",src="/components/jquery-ui/ui/minified/core.min.js")
     script(type="text/javascript",src="/components/jquery-ui/ui/minified/widget.min.js")
@@ -34,5 +38,7 @@ html
     script(type="text/javascript",src="/components/jquery-ui/ui/minified/position.min.js")
     script(type="text/javascript",src="/components/jquery-ui/ui/minified/autocomplete.min.js")
     script(type="text/javascript",src="/components/bootstrap/dist/js/bootstrap.min.js")
+    script(type="text/javascript",src="/components/slick.js/slick/slick.min.js")
     script(type="text/javascript",src="/js/shared.js")
+    //-<!-- endbuild -->
     block javascript

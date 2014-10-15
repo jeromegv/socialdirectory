@@ -555,6 +555,9 @@ h5 {
 	.tgl_c{
 		display:none;
 	}
+	h1 {
+		font-size:26px;
+	}
 
  }
 
@@ -579,6 +582,9 @@ h5 {
 		max-height: 100px;
 		overflow: hidden;
 	}
+	h1 {
+		font-size:26px;
+	}
 }
 
 /* for desktop */
@@ -602,6 +608,7 @@ h5 {
 		max-height: 100px;
 		overflow: hidden;
 	}
+
 	/*.product_c .main_box.searchbox:before {
     content:'';
     width:100%;
@@ -609,6 +616,6 @@ h5 {
     position:absolute;
     left:0;
     top:0;
-    background:linear-gradient(transparent 260px, #f3f6f6);*/
-}
+    background:linear-gradient(transparent 260px, #f3f6f6);
+	}*/
 }
