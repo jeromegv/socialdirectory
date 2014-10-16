@@ -37,7 +37,8 @@ module.exports = {
   sendgrid: {
     user: 'Your SendGrid Username',
     password: 'Your SendGrid Password',
-    emailFrom: 'The email the sendgrid emails should be sent from'
+    emailFrom: 'The email the sendgrid emails should be sent from',
+    emailForContactUs: 'The email the contact us page should send emails to'
   },
 
   sessionSecret: process.env.SESSION_SECRET || 'Your Session Secret goes here',
