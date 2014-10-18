@@ -317,7 +317,7 @@ exports.postForgot = function(req, res, next) {
       User.findOne({ email: req.body.email.toLowerCase() }, function(err, user) {
         if (!user) {
           //we do not want to tell if the user email exists in the database or not, so same generic message as if the forgot form worked
-          req.flash('info', { msg: 'An e-mail has been sent to ' + req.body.email.toLowerCase() + ' with further instructions.' });
+          req.flash('info', { msg: 'An email has been sent to ' + req.body.email.toLowerCase() + ' with further instructions.' });
           console.log("Someone tried to reset a password on a non existing email: "+ req.body.email.toLowerCase());
           return res.redirect('/forgot');
         }
@@ -348,7 +348,7 @@ exports.postForgot = function(req, res, next) {
           'If you did not request this, please ignore this email and your password will remain unchanged.\n'
       };
       transporter.sendMail(mailOptions, function(err) {
-        req.flash('info', { msg: 'An e-mail has been sent to ' + user.email + ' with further instructions.' });
+        req.flash('info', { msg: 'An email has been sent to ' + user.email + ' with further instructions.' });
         done(err, 'done');
       });
     }
