@@ -116,7 +116,11 @@ exports.postContactUs = function(req, res, next) {
       req.body.message
   };
   transporter.sendMail(mailOptions, function(err) {
-    req.flash('info', { msg: 'Your message has been sent to ChooseSocial.PH, thank you!' });
+  	if (!err){
+    	req.flash('info', { msg: 'Your message has been sent to ChooseSocial.PH, thank you!' });
+	} else {
+		req.flash('errors', { msg: 'An error occured with the form and your email was not delivered, please use an email client to email us directly' });
+	}
     return res.redirect('/contactus');
   });
 };
