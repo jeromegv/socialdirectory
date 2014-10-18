@@ -270,10 +270,16 @@ body {
 .social li.twitter a:hover {
 	background-color: #00abdc;
 }
+.social li.blog a:hover {
+	background-color: #FF7F00;
+}
 .social li.facebook a:hover * {
 	color:#fff !important;
 }
 .social li.twitter a:hover * {
+	color:#fff !important;
+}
+.social li.blog a:hover * {
 	color:#fff !important;
 }
 
