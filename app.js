@@ -120,7 +120,7 @@ app.use(function(req, res, next) {
 app.use(function(req, res, next) {
   // Remember original destination before login.
   var path = req.path.split('/')[1];
-  if (/auth|login|logout|signup|fonts|favicon/i.test(path)) {
+  if (/auth|login|components|logout|signup|fonts|favicon/i.test(path)) {
     return next();
   }
   req.session.returnTo = req.path;
@@ -155,6 +155,7 @@ app.get('/reloadOrganizationsInAzure',passportConf.isAuthenticated,organizationC
 //public facing views
 app.get('/map',organizationController.getMap);
 app.get('/',websiteController.getHome);
+app.get('/aboutus',websiteController.getAboutUs);
 app.get('/contactus',websiteController.getContactUs);
 app.post('/contactus',websiteController.postContactUs);
 app.get('/organization/:slug',websiteController.getOrganization);

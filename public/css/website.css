@@ -61,6 +61,26 @@ a.anchor{
 	text-align: center;
 }
 
+.caption p {
+	text-align: left;
+}
+
+.jumbotron {
+	background:white;
+}
+.normallist {
+	list-style-type: disc;
+}
+ul.normallist {
+	padding-left: 40px
+}
+.normaldecimallist {
+	list-style-type: decimal;
+}
+ol {
+	padding-left: 40px;
+}
+
 /*----------------
  Caroussel
 -----------------*/
@@ -97,6 +117,11 @@ a.anchor{
 	background:#ffffff;
 	text-align:center;
 	border-top:1px solid #efefef;
+}
+.main_box .desc h5 {
+	margin:0;
+	padding:0;
+	font-weight:normal;
 }
 .main_box .desc h5 a {
 	color:#282727;
@@ -299,53 +324,60 @@ a.anchor{
 
 
 h1, h2, h3, h4, h5, h6 {
-	margin:0;
+	/*margin:0;
 	padding:0;
-	font-weight:normal;
+	font-weight:normal;*/
 	font-family: 'latoregular';
+	color:#282727;
 }
 
 h1 {
+	/*color:#282727;
+	
 	font-size:34px;
 	line-height:normal;
-	color:#282727;
+	
 	font-weight:normal;
 	margin:0;
-	padding:0;
+	padding:0;*/
 }
 h2 {
+	/*color:#282727;
+	
 	font-size:28px;
 	line-height:normal;
-	color:#282727;
+	
 	font-weight:normal;
 	margin:0;
-	padding:0;
+	padding:0;*/
 }
 h3 {
+	/*color:#282727;
+	
 	font-size:22px;
 	line-height:normal;
-	color:#282727;
+	
 	font-weight:normal;
 	margin:0;
-	padding:0;
+	padding:0;*/
 	font-family: 'latobold';
 }
 h4 {
-	font-size:18px;
+	/*font-size:18px;
 	line-height:normal;
 	color:#282727;
 	font-weight:normal;
 	margin:0;
-	padding:0;
+	padding:0;*/
 	font-family: 'latobold';
 }
 h5 {
-	font-size:14px;
+	/*font-size:14px;
 	line-height:16px;
-	color:#282727;
 	font-weight:normal;
 	margin:0;
 	padding:0;
+	color:#282727;*/
 	text-transform:uppercase;
 	font-family: 'latoblack';
 }
@@ -378,14 +410,23 @@ h5 {
 	padding:7px 15px 7px 15px;
 	display:block;
 }
+
 .sidebar .side_box ul li a {
 	margin:0;
 	padding:0 0;
 	font-size:14px;
 	line-height:21px;
-	color:#4e4e4e;
+	/*color:#4e4e4e;*/
 	font-weight:normal;
 	display:block;
+	/* this replace overflow with ... */
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.badge {
+	background-color: #428bca;
+	opacity: 0.7;
 }
 .sidebar .side_box ul li:nth-child(odd) {
 	background:#fff;
@@ -498,7 +539,21 @@ h5 {
 	float:right;
 	margin-right:-3px;
 }
-
+/*----------------
+  About Us
+-----------------*/
+.whitebox {
+	position: relative;
+	box-shadow: 0 2px 2px rgba(11, 25, 28, 0.1);
+	background:#fff;
+	margin:0 0 30px 0;
+	padding:0;
+	border-radius:5px;
+}
+.team {
+	padding-bottom: 25px;
+	padding-top: 25px;
+}
 /*----------------
   Contact Us
 -----------------*/
@@ -774,7 +829,7 @@ h5 {
 		display:none;
 	}
 	h1 {
-		font-size:26px;
+		/*font-size:26px;*/
 	}
 	#content .frm .btn_c {
 		float:none;
@@ -809,7 +864,7 @@ h5 {
 		overflow: hidden;
 	}
 	h1 {
-		font-size:26px;
+		/*font-size:26px;*/
 	}
 }
 

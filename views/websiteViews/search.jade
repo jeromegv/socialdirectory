@@ -37,7 +37,8 @@ block content
 										for refinement in facet
 											if (refinement.count>0 && refinement.value!=='' && (facetname != 'primaryBusinessSector_2' || selectedFilters['primaryBusinessSector_1']!=undefined))
 												li 
-													a(href=refinement.link) #{refinement.value} (#{refinement.count})
+													a(href=refinement.link) #{refinement.value} 
+														span.badge.pull-right #{refinement.count}
 			.col-lg-9.col-md-9.col-sm-8.col-xs-12
 				.row
 					for organization in organizations

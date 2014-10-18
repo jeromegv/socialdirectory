@@ -42,8 +42,12 @@ $(document).ready(function() {
         $(this).parent().find(".tgl_c").slideToggle(300);
         if ($(this).hasClass("active")) {
             $(this).removeClass('active');
+            $(this).find("i").addClass("fa-caret-down");
+            $(this).find("i").removeClass("fa-caret-up");
         } else {
             $(this).addClass('active');
+            $(this).find("i").removeClass("fa-caret-down");
+            $(this).find("i").addClass("fa-caret-up");
         }
     });
     $('#contactus').parsley({

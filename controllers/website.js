@@ -85,6 +85,16 @@ var nodemailer = require('nodemailer');
 };
 
 /**
+ * GET /contactus
+ * Show contact us page
+ */
+ exports.getAboutUs= function(req, res) {
+	res.render('websiteViews/aboutus', {
+		title: 'About Us'
+	});
+};
+
+/**
  * POST /contactus
  * @param email
  */
