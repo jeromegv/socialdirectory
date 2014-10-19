@@ -65,8 +65,18 @@ a.anchor{
 	text-align: left;
 }
 
+.caption a h3 {
+	color: #428bca;
+	margin-top: 9px;
+}
+.caption a h4{
+	color: #428bca;
+}
+
 .jumbotron {
 	background:white;
+	padding-top: 35px;
+	padding-bottom: 35px;
 }
 .normallist {
 	list-style-type: disc;
@@ -80,7 +90,15 @@ ul.normallist {
 ol {
 	padding-left: 40px;
 }
-
+.bigicon{
+	font-size:120px;
+}
+/*.fa-heart{
+	color:red;
+}
+.fa-comments-o{
+	color:#00D000;
+}*/
 /*----------------
  Caroussel
 -----------------*/
