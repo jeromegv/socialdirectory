@@ -63,9 +63,16 @@ $(document).ready(function() {
 	//smooth scrolling
 	var $root = $('html, body');
 	$('a[href*=#]').click(function() {
-	    $root.animate({
-	        scrollTop: $('[name="' + $.attr(this, 'href').substr(1) + '"]').offset().top
-	    }, 500);
+		var href = $.attr(this, 'href');
+		if (href!='#' && href.substr(0,1)!='/'){
+			    $root.animate({
+		        scrollTop: $('[name="' + href.substr(1) + '"]').offset().top
+		    }, 500, function () {
+		        window.location.hash = href;
+		    });
+	    } else {
+	    	return true;
+	    }
 	    return false;
 	});
 });
