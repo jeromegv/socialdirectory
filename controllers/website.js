@@ -38,7 +38,7 @@ var nodemailer = require('nodemailer');
 		Organization.find({active: true}).select('logoThumbnail name name_slug socialPurposeCategoryTags _id').exec(function(error, organizations) {
 		    if (!error && organizations!=null){
 		        res.render('websiteViews/home', {
-					title: 'Home Page',
+					title: 'Home',
 					organizations:organizations,
 					socialPurposeCategory:socialPurposeCategory,
 					_ : _
