@@ -50,6 +50,7 @@ $(document).ready(function() {
             $(this).find("i").addClass("fa-caret-up");
         }
     });
+    //form validation on contact us page
     $('#contactus').parsley({
 	  successClass: 'success',
 	  errorClass: 'error',
@@ -58,5 +59,13 @@ $(document).ready(function() {
 	  },
 	  errorsWrapper: '<span class=\"help-inline\"></span>',
 	  errorTemplate: '<span></span>'
+	});
+	//smooth scrolling
+	var $root = $('html, body');
+	$('a[href*=#]').click(function() {
+	    $root.animate({
+	        scrollTop: $('[name="' + $.attr(this, 'href').substr(1) + '"]').offset().top
+	    }, 500);
+	    return false;
 	});
 });
