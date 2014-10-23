@@ -35,7 +35,7 @@ var nodemailer = require('nodemailer');
 			});
 		});
 	} else {
-		Organization.find({active: true}).select('logoThumbnail name name_slug socialPurposeCategoryTags _id').exec(function(error, organizations) {
+		Organization.find({active: true}).select('logoThumbnail name name_slug socialPurposeCategoryTags _id descriptionService').exec(function(error, organizations) {
 		    if (!error && organizations!=null){
 		        res.render('websiteViews/home', {
 					title: 'Home',

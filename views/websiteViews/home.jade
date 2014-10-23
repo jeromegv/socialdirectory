@@ -36,19 +36,22 @@ block content
 		h1 The causes
 	.product_c
 		.row
-			for entry,index in socialPurposeCategory
+			for socialPurpose,index in socialPurposeCategory
 				.col-lg-3.col-md-4.col-sm-6.col-xs-12
 					.main_box
+						.desc_title_front_page
+							h5= socialPurpose
 						.box_1
-							- var suborg = _.filter(organizations, function(org) { return (_.contains(org.socialPurposeCategoryTags,entry)) });
+							- var suborg = _.filter(organizations, function(org) { return (_.contains(org.socialPurposeCategoryTags,socialPurpose)) });
 							- suborg = _.shuffle(suborg)
 							.slick
 								for entry,index in suborg
 									div
 										a(href='/organization/'+entry.name_slug)
 											img(data-lazy=entry.logoThumbnail,alt=entry.name)
-						.desc
-							h5= entry
+										.desc
+											p= entry.descriptionService.substring(0,90)
+						
 		.row
 			.col-lg-12.col-md-12.col-sm-12.col-xs-12
 				.twitter
