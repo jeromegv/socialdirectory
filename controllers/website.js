@@ -134,3 +134,16 @@ exports.postContactUs = function(req, res, next) {
     return res.redirect('/contactus');
   });
 };
+
+exports.notFound = function(req, res){
+  res.status(404);
+  if(req.accepts('html')){
+    res.render('websiteViews/404', {title: '404: Not Found', url: req.url });
+  }
+  else if(req.accepts('json')){
+    res.json({ error: '404: Not Found' });
+  }
+  else{
+    res.send('404: Not Found');
+  }
+};

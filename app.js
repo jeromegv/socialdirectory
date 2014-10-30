@@ -174,6 +174,9 @@ if (process.env.NODE_ENV === 'development') {
   app.use(errorHandler());
 }
 
+// catch 404 & 500 errors
+app.use(websiteController.notFound);
+
 /**
  * Start Express server.
  */
