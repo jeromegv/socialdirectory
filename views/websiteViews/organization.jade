@@ -1,17 +1,96 @@
 extends shared/layout
-
 block head
-
+	link(rel="stylesheet",href="/components/leaflet/dist/leaflet.css")
 block content
-	h1= organization.name
-		for entry in organization
-			p= entry
-	- var pinterestLink = _.filter(organization.socialMedia, { 'socialMediaName': 'pinterest' });
-	if (pinterestLink.length>0)
+	.title.clearfix
+		h1= organization.name
+	.pro_main_c
 		.row
-			.col-lg-12.col-md-12.col-sm-12.col-xs-12
-				a(data-pin-do="embedUser" href=pinterestLink[0].socialMediaUrl data-pin-scale-width="115" data-pin-scale-height="120" data-pin-board-width="1200")
-					Visit Pinterest's profile on Pinterest.
-				script(type="text/javascript" async src="//assets.pinterest.com/js/pinit.js")
+			.col-lg-3.col-md-3.col-sm-3.col-xs-12
+				.text-center
+					.slider_1.clearfix
+						img(src=organization.logoThumbnail,class="img-responsive",alt=organization.name+' logo')
+			.col-lg-5.col-md-5.col-sm-5.col-xs-12
+				.desc_blk
+					h5 Description
+					.desc_blk_inn
+						h5 Care instructions
+						p= organization.descriptionService
+			.col-lg-4.col-md-4.col-sm-4.col-xs-12
+				.whitebox
+					h5 Social Purpose Category
+					for purpose in organization.socialPurposeCategoryTags 
+						p=purpose
+					h5 Demographic Group Impact
+					for impact in organization.demographicImpact 
+						p=impact 
+					h5 Business Sector
+					p=organization.primaryBusinessSector_1
+					if typeof(organization.primaryBusinessSector_2)!=undefined
+						h5 Sub-Business Sector
+						for sector in organization.primaryBusinessSector_2 
+							p=sector 
+					h5 Year Founded
+					p=organization.yearFounded
+		.tabing
+			ul.nav.nav-tabs
+				li.active 
+					a(href="#general",data-toggle="tab") General
+				li
+					a(href='#contactinfo',data-toggle="tab") Contact and Location
+				if (organization.additionalResources.length>0)
+					li 
+						a(href="#additionalresources",data-toggle="tab") Additional Resources
+			.tab-content
+				.tab-pane.active(id='general')
+					.row
+						.col-lg-6.col-md-6.col-sm-6.col-xs-12
+							.rew_blk.clearfix
+								h5 What makes it a social enterprise
+								p= organization.descriptionCause
+					.row
+						.col-lg-6.col-md-6.col-sm-6.col-xs-12
+					- var pinterestLink = _.filter(organization.socialMedia, { 'socialMediaName': 'pinterest' });
+					if (pinterestLink.length>0)
+						.row
+							.col-lg-12.col-md-12.col-sm-12.col-xs-12
+								a(data-pin-do="embedUser" href=pinterestLink[0].socialMediaUrl data-pin-scale-width="115" data-pin-scale-height="120" data-pin-board-width="1200")
+									Visit Pinterest's profile on Pinterest.
+								script(type="text/javascript" async src="//assets.pinterest.com/js/pinit.js")
+				.tab-pane(id='contactinfo')
+					h5
+						span.fa.fa-home
+						|  Website
+					p
+						a(href=organization.website,target='_blank')=organization.website
+					if (organization.email)!=''
+						h5
+							span.fa.fa-envelope 
+							|  Email
+						p
+							a(href='mailto:'+organization.email,target='_blank')
+								=organization.email
+					if (organization.phoneNumber)!=''
+						h5 
+						span.fa.fa-mobile 
+						|  Phone Number
+						p=organization.phoneNumber
+					h5 
+						span.fa.fa-home 
+						|  Address
+					p=organization.Location.address
+					//.map(id='map')
+				if (organization.additionalResources.length>0)
+					.tab-pane(id='additionalresources')
+						h4 List of resources that also talk about 
+							=organization.name
+						for resource in organization.additionalResources
+							a(href=resource.resourceUrl,target="_blank")
+								p= resource.resourceName
 
 block javascript
+	script(src="/components/leaflet/dist/leaflet.js")
+	script(src="http://open.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js?key=Fmjtd%7Cluur2h02n9%2Cb0%3Do5-9wb2da")
+	script(type="text/javascript",src="/js/loadMap.js")
+	script.
+		generateVisualization(#{organization.Location.latitude},#{organization.Location.longitude});

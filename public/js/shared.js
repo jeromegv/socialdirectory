@@ -64,7 +64,7 @@ $(document).ready(function() {
 	var $root = $('html, body');
 	$('a[href*=#]').click(function() {
 		var href = $.attr(this, 'href');
-		if (href!='#' && href.substr(0,1)!='/'){
+		if (href!='#' && href!='#general' && href!='#additionalresources' && href!='#contactinfo' && href.substr(0,1)!='/'){
 			    $root.animate({
 		        scrollTop: $('[name="' + href.substr(1) + '"]').offset().top
 		    }, 500, function () {
