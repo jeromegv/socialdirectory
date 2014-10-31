@@ -10,12 +10,12 @@ block content
 				.text-center
 					.slider_1.clearfix
 						img(src=organization.logoThumbnail,class="img-responsive",alt=organization.name+' logo')
-			.col-lg-5.col-md-5.col-sm-5.col-xs-12
+			.col-lg-9.col-md-9.col-sm-9.col-xs-12
 				.desc_blk
 					h5 About the organization
 					.desc_blk_inn
 						p= organization.descriptionService
-			.col-lg-4.col-md-4.col-sm-4.col-xs-12
+			//.col-lg-4.col-md-4.col-sm-4.col-xs-12
 				.whitebox
 					h5 Social Purpose Category
 					for purpose in organization.socialPurposeCategoryTags 
@@ -58,28 +58,35 @@ block content
 									Visit Pinterest's profile on Pinterest.
 								script(type="text/javascript" async src="//assets.pinterest.com/js/pinit.js")
 				.tab-pane(id='contactinfo')
-					h5
-						span.fa.fa-home
-						|  Website
-					p
-						a(href=organization.website,target='_blank')=organization.website
-					if (organization.email)!=''
-						h5
-							span.fa.fa-envelope 
-							|  Email
-						p
-							a(href='mailto:'+organization.email,target='_blank')
-								=organization.email
-					if (organization.phoneNumber)!=''
-						h5 
-							span.fa.fa-mobile 
-							|  Phone Number
-						p=organization.phoneNumber
-					h5 
-						span.fa.fa-home 
-						|  Address
-					p=organization.Location.address
-					//.map(id='map')
+					.row
+						.col-lg-6.col-md-6.col-sm-6.col-xs-12
+							h5
+								span.fa.fa-home
+								|  Website
+							p
+								a(href=organization.website,target='_blank')=organization.website
+							if (organization.email)!=''
+								h5
+									span.fa.fa-envelope 
+									|  Email
+								p
+									a(href='mailto:'+organization.email,target='_blank')
+										=organization.email
+							if (organization.phoneNumber)!=''
+								h5 
+									span.fa.fa-mobile 
+									|  Phone Number
+								p=organization.phoneNumber
+							h5 
+								span.fa.fa-home 
+								|  Address
+							p=organization.Location.address
+						.col-lg-6.col-md-6.col-sm-6.col-xs-12
+							if (organization.Location.latitude!=null&&organization.Location.longitude!=null)
+								h5 Where is 
+									=organization.name
+									|  in Philippines
+								.map(id='map')
 				if (organization.additionalResources.length>0)
 					.tab-pane(id='additionalresources')
 						h4 List of resources that also talk about 
@@ -87,10 +94,10 @@ block content
 						for resource in organization.additionalResources
 							a(href=resource.resourceUrl,target="_blank")
 								p= resource.resourceName
-
+	
 block javascript
 	script(src="/components/leaflet/dist/leaflet.js")
-	script(src="http://open.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js?key=Fmjtd%7Cluur2h02n9%2Cb0%3Do5-9wb2da")
+	script(src="http://open.mapquestapi.com/sdk/leaflet/v1.s/mq-map.js?key=Fmjtd%7Cluur2h02n9%2Cb0%3Do5-9wb2da")
 	script(type="text/javascript",src="/js/loadMap.js")
 	script.
-		generateVisualization(#{organization.Location.latitude},#{organization.Location.longitude});
+		generateVisualization(#{organization.Location.latitude},#{organization.Location.longitude},'#{organization}');
