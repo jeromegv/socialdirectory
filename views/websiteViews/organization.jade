@@ -12,9 +12,8 @@ block content
 						img(src=organization.logoThumbnail,class="img-responsive",alt=organization.name+' logo')
 			.col-lg-5.col-md-5.col-sm-5.col-xs-12
 				.desc_blk
-					h5 Description
+					h5 About the organization
 					.desc_blk_inn
-						h5 Care instructions
 						p= organization.descriptionService
 			.col-lg-4.col-md-4.col-sm-4.col-xs-12
 				.whitebox
@@ -30,8 +29,9 @@ block content
 						h5 Sub-Business Sector
 						for sector in organization.primaryBusinessSector_2 
 							p=sector 
-					h5 Year Founded
-					p=organization.yearFounded
+					if (organization.yearFounded !='' && organization.yearFounded !=null)
+						h5 Year Founded
+						p=organization.yearFounded
 		.tabing
 			ul.nav.nav-tabs
 				li.active 
@@ -72,8 +72,8 @@ block content
 								=organization.email
 					if (organization.phoneNumber)!=''
 						h5 
-						span.fa.fa-mobile 
-						|  Phone Number
+							span.fa.fa-mobile 
+							|  Phone Number
 						p=organization.phoneNumber
 					h5 
 						span.fa.fa-home 
