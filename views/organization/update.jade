@@ -45,14 +45,15 @@ block content
         .col-sm-8(id="duplicateSocialMedia")
           if (typeof(organization.socialMedia[0]) != 'undefined')
             for socialmedia,index in organization.socialMedia
-              .row
-                div(class='col-sm-8')
-                    input.form-control(type='text', name='socialMediaUrl[]', id='socialMediaUrl',placeholder='Just enter the full URL of the social media profile',data-parsley-type="url",value=socialmedia.socialMediaUrl)
-                if (index==0)
-                  div(class='col-sm-1')
-                      a(class="btn btn-primary",id="addButtonSocialMedia")
-                          span(class="ion-plus-round") 
-                          |Add
+              if (socialmedia!=null)
+                .row
+                  div(class='col-sm-8')
+                      input.form-control(type='text', name='socialMediaUrl[]', id='socialMediaUrl',placeholder='Just enter the full URL of the social media profile',data-parsley-type="url",value=socialmedia.socialMediaUrl)
+                  if (index==0)
+                    div(class='col-sm-1')
+                        a(class="btn btn-primary",id="addButtonSocialMedia")
+                            span(class="ion-plus-round") 
+                            |Add
           else
             .row
               div(class='col-sm-8')
