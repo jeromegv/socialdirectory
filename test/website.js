@@ -13,6 +13,14 @@ describe('GET / website page', function() {
   });
 });
 
+describe('GET /aboutus website page', function() {
+  it('should return 200', function(done) {
+    request(app)
+      .get('/aboutus')
+      .expect(200, done);
+  });
+});
+
 describe('GET /contactus website page', function() {
   it('should return 200', function(done) {
     request(app)
@@ -20,3 +28,33 @@ describe('GET /contactus website page', function() {
       .expect(200, done);
   });
 });
+
+describe('GET /organization/slug website page', function() {
+  it('should return 200', function(done) {
+    var name = 'Best social enterprise in Philippines';
+    var org = new Organization({
+      email: 'test@test.com',
+      name: name,
+      name_slug: utils.convertToSlug(name),
+      active: true
+    });
+    org.save(function(err,organization) {
+      if (err) {
+        return done(err)
+      } else {
+        request(app)
+          .get('/organization/'+organization.name_slug)
+          .expect(200)
+          .end(function(err, res){
+            if (err) return done(err);
+            Organization.remove({ email: 'test@test.com' }, function(err) {
+              if (err) return done(err);
+              done();
+            });
+          });
+      }
+    });
+  });
+});
+
+

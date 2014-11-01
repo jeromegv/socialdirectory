@@ -82,7 +82,7 @@ describe('Test a working /api/organization/:slug', function() {
               });
             });
         }
-      })
+      });
     });
 });
 
