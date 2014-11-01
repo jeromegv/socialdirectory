@@ -1,3 +1,31 @@
+function generateVisualization(latitude,longitude,slug){
+	var map = L.map('map', {
+        layers: MQ.mapLayer(),
+        center: [ latitude, longitude],
+        zoom: 10,
+        minZoom: 5,
+        detectRetina:true
+    });
+
+	var marker = L.marker([latitude,longitude]);
+	map.addLayer(marker);
+	var popupLoaded = false;
+	//show address when clicking on popover
+	marker.on('click',function (e) {
+		if (!popupLoaded){
+			jQuery.getJSON('/api/organization/'+slug, function(organization) {
+				marker.bindPopup("<h4>"+organization.name+"</h4>"+organization.Location.address).openPopup();
+			});
+			popupLoaded=true;
+		}
+	});
+
+	//there's a bug with leaflet when using inside a bootstrap tab, force a refresh when the tab loads
+	$('a[data-toggle="tab"]').on("shown.bs.tab", function() {
+	    L.Util.requestAnimFrame(map.invalidateSize,map,!1,map._container);
+	});
+};
+
 $(document).ready(function() {
 	//enable the autocomplete search as you type (azure suggestions) on the searchbar
     //call the internal API for the query and show results returned by API

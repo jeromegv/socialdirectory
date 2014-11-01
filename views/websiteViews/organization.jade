@@ -162,6 +162,5 @@ block content
 block javascript
 	script(src="/components/leaflet/dist/leaflet.js")
 	script(src="http://open.mapquestapi.com/sdk/leaflet/v1.s/mq-map.js?key=Fmjtd%7Cluur2h02n9%2Cb0%3Do5-9wb2da")
-	script(type="text/javascript",src="/js/loadMap.js")
 	script.
-		generateVisualization(#{organization.Location.latitude},#{organization.Location.longitude},'#{organization}');
+		generateVisualization(#{organization.Location.latitude},#{organization.Location.longitude},"#{organization.name_slug}");
