@@ -12,27 +12,31 @@ block content
 						img(src=organization.logoThumbnail,class="img-responsive",alt=organization.name+' logo')
 			.col-lg-9.col-md-9.col-sm-9.col-xs-12
 				.desc_blk
-					h5 About the organization
-					.desc_blk_inn
-						p= organization.descriptionService
-			//todo: move in the white box, same principle as social
-			//.col-lg-4.col-md-4.col-sm-4.col-xs-12
-				.whitebox
-					h5 Social Purpose Category
-					for purpose in organization.socialPurposeCategoryTags 
-						p=purpose
-					h5 Demographic Group Impact
-					for impact in organization.demographicImpact 
-						p=impact 
-					h5 Business Sector
-					p=organization.primaryBusinessSector_1
-					if typeof(organization.primaryBusinessSector_2)!=undefined
-						h5 Sub-Business Sector
-						for sector in organization.primaryBusinessSector_2 
-							p=sector 
-					if (organization.yearFounded !='' && organization.yearFounded !=null)
-						h5 Year Founded
-						p=organization.yearFounded
+					.row
+						.col-xs-12
+							h3 About the organization
+							.desc_blk_inn
+								p= organization.descriptionService
+					.row
+						.col-sm-4.col-xs-12
+							h5 Business Sector
+							.graytext
+								p=organization.primaryBusinessSector_1
+						if typeof(organization.primaryBusinessSector_2)!=undefined
+							.col-sm-4.col-xs-12
+								h5 Sub-Business Sector
+								.graytext
+									p 
+										for sector,index in organization.primaryBusinessSector_2 
+											=sector 
+											if (index!=organization.primaryBusinessSector_2.length-1)
+												|,  
+						if (organization.yearFounded !='' && organization.yearFounded !=null)
+							.col-sm-4.col-xs-12
+								h5 Year Founded
+								.graytext
+									p=organization.yearFounded
+					
 		.tabing
 			ul.nav.nav-tabs
 				li.active 
@@ -47,32 +51,23 @@ block content
 					.row
 						.col-lg-12.col-md-12.col-sm-12.col-xs-12
 							.rew_blk.clearfix
-								h5 Why is it a social enterprise
+								h5 Why is it a social enterprise?
 								p= organization.descriptionCause
 					.row
 						.col-lg-3.col-md-3.col-sm-3.col-xs-12
 							h5 What is the impact?
 							p
-							for purpose in organization.socialPurposeCategoryTags 
+							for purpose,index in organization.socialPurposeCategoryTags 
 								=purpose
-								|,  
+								if (index!=organization.socialPurposeCategoryTags.length-1)
+									|,  
 						.col-lg-3.col-md-3.col-sm-3.col-xs-12
 							h5 Who does it impact?
 							p
-							for impact in organization.demographicImpact 
+							for impact,index in organization.demographicImpact 
 								=impact 
-								|,
-					br
-					//todo move pinterest and social media in its own box		
-					.row
-						.col-lg-6.col-md-6.col-sm-6.col-xs-12
-					- var pinterestLink = _.filter(organization.socialMedia, { 'socialMediaName': 'pinterest' });
-					if (pinterestLink.length>0)
-						.row
-							.col-lg-12.col-md-12.col-sm-12.col-xs-12
-								a(data-pin-do="embedUser" href=pinterestLink[0].socialMediaUrl data-pin-scale-width="115" data-pin-scale-height="120" data-pin-board-width="1200")
-									Visit Pinterest's profile on Pinterest.
-								script(type="text/javascript" async src="//assets.pinterest.com/js/pinit.js")
+								if (index!=organization.demographicImpact.length-1)
+									|,  
 				.tab-pane(id='contactinfo')
 					.row
 						.col-lg-6.col-md-6.col-sm-6.col-xs-12
@@ -110,7 +105,60 @@ block content
 						for resource in organization.additionalResources
 							a(href=resource.resourceUrl,target="_blank")
 								p= resource.resourceName
-	
+		if organization.socialMedia.length>0
+			.desc_blk
+				.row
+					.col-xs-12
+						h3 Social Media
+						- var pinterestLink = _.filter(organization.socialMedia, { 'socialMediaName': 'pinterest' });
+						.row
+							.col-lg-6.col-md-6.col-sm-6.col-xs-12
+								.row
+									for media in organization.socialMedia
+										.col-xs-4
+											.text-capitalize.text-center
+												a(href=media.socialMediaUrl,target="_blank")
+													case media.socialMediaName
+														when 'pinterest'
+															span.fa.fa-pinterest.mediumicon
+														when 'twitter'
+															span.fa.fa-twitter.mediumicon
+														when 'facebook'
+															span.fa.fa-facebook.mediumicon
+														when 'youtube'
+															span.fa.fa-youtube.mediumicon
+														when 'linkedin'
+															span.fa.fa-linkedin.mediumicon
+														when 'tumblr'
+															span.fa.fa-tumblr.mediumicon
+														when 'instagram'
+															span.fa.fa-instagram.mediumicon
+														when 'google plus'
+															span.fa.fa-google-plus.mediumicon
+														when 'blogspot'
+															span.fa.fa-rss.mediumicon
+														when 'vimeo'
+															span.fa.fa-vimeo-square.mediumicon
+														when 'foursquare'
+															span.fa.fa-foursquare.mediumicon
+														when 'wordpress'
+															span.fa.fa-wordpress.mediumicon
+														default
+															span.fa.fa-asterisk.mediumicon
+													
+													if media.socialMediaName!='other'
+														=media.socialMediaName
+													else
+														=media.socialMediaUrl
+							.col-lg-6.col-md-6.col-sm-6.col-xs-12
+								- var pinterestLink = _.filter(organization.socialMedia, { 'socialMediaName': 'pinterest' });
+								if (pinterestLink.length>0)
+									h4
+										=organization.name
+										|'s pictures on Pinterest
+									a(data-pin-do="embedUser" href=pinterestLink[0].socialMediaUrl data-pin-scale-width="87" data-pin-scale-height="120" data-pin-board-width="1200")
+									script(type="text/javascript" async src="//assets.pinterest.com/js/pinit.js")
+			
 block javascript
 	script(src="/components/leaflet/dist/leaflet.js")
 	script(src="http://open.mapquestapi.com/sdk/leaflet/v1.s/mq-map.js?key=Fmjtd%7Cluur2h02n9%2Cb0%3Do5-9wb2da")
