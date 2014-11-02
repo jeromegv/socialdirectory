@@ -97,6 +97,8 @@ var getAndSaveFile = function(url,desiredFileName,callback) {
 	    });
 	  }, function (mimeType,filePath,optimizedFilePath,contentType,amazonUrl,callback){
 	  	var sharpObject = sharp(filePath);
+	  	console.log('mimetype of image needing to be resized is');
+	  	console.log(mimeType);
 	  	//this library do not support output in GIF, only in input, so we will convert to PNG
 	  	if (mimeType.mime=="image/gif"){
 		    sharpObject = sharpObject.png();
@@ -104,29 +106,25 @@ var getAndSaveFile = function(url,desiredFileName,callback) {
 	    }
 
 	  	//create a thumbnail (smaller size)
-	  	//354: size of a picture in a 1 grid view on iPhone6+
+	  	//354 pixels square: size of a picture in a 1 grid view on iPhone6+
 	  	sharpObject.resize(354,354).max().quality(90).background('white').embed().progressive().toBuffer(function(err, buffer) {
 	  		if (!err){
 	  			uploadToKnox(buffer,'thumbnail_'+path.basename(filePath),contentType,function( err,amazonThumbnailUrl ){
 					if (!err){
 						callback(null,filePath,optimizedFilePath,amazonUrl,amazonThumbnailUrl);
 					} else {
+						console.log('error uploading with knox');
+						console.log(err);
 						callback(err,filePath,optimizedFilePath);
 					}
 				});
 	  		} else {
+	  			console.log('Error while executing sharp')
 	  			console.log(err);
 	  			callback(err,filePath,optimizedFilePath);
 	  		}
 			//fs.writeFileSync('out.jpg', buffer);
 		});
-		//create a retina version, if size allows
-	  	/*sharp(filePath).resize(null, 500).max().withoutEnlargement().progressive().quality(90).toBuffer(function(err, buffer,info) {
-		  fs.writeFileSync('out.jpg', buffer);
-			if (info.height==500){
-				callback(null,fileData,filePath,contentType);
-			}	
-		});*/
 	  }],function (error, filePath,optimizedFilePath,amazonUrl,amazonThumbnailUrl) {
 	    //we are done with the temp file, delete it
 	    if (filePath){
