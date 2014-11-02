@@ -73,6 +73,14 @@ var csrfExclude = ['/url1', '/url2'];
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+app.use(function(req, res, next){
+  var contentParse = function (content){
+      content = content.replace(/\n?\r\n/g, '<br />' );
+      return content;
+  };
+  res.locals.contentParse = contentParse;
+  next();
+});
 app.use(compress());
 app.use(connectAssets({
   paths: [path.join(__dirname, 'public/css'), path.join(__dirname, 'public/js'),path.join(__dirname, 'public/components')],

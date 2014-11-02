@@ -9,14 +9,17 @@ block content
 			.col-lg-3.col-md-3.col-sm-3.col-xs-12
 				.text-center
 					.slider_1.clearfix
-						img(src=organization.logoThumbnail,class="img-responsive",alt=organization.name+' logo')
+						a(href=organization.website,target='_blank')
+							img(src=organization.logoThumbnail,class="img-responsive",alt=organization.name+' logo')
+							p Visit their website
+
 			.col-lg-9.col-md-9.col-sm-9.col-xs-12
 				.desc_blk
 					.row
 						.col-xs-12
-							h3 About the organization
+							h3 About the organization  
 							.desc_blk_inn
-								p= organization.descriptionService
+								p!= contentParse(organization.descriptionService)
 					.row
 						.col-sm-4.col-xs-12
 							h5 Business Sector
@@ -49,25 +52,33 @@ block content
 			.tab-content
 				.tab-pane.active(id='general')
 					.row
-						.col-lg-12.col-md-12.col-sm-12.col-xs-12
-							.rew_blk.clearfix
-								h5 Why is it a social enterprise?
-								p= organization.descriptionCause
-					.row
-						.col-lg-3.col-md-3.col-sm-3.col-xs-12
-							h5 What is the impact?
-							p
-							for purpose,index in organization.socialPurposeCategoryTags 
-								=purpose
-								if (index!=organization.socialPurposeCategoryTags.length-1)
-									|,  
-						.col-lg-3.col-md-3.col-sm-3.col-xs-12
-							h5 Who does it impact?
-							p
-							for impact,index in organization.demographicImpact 
-								=impact 
-								if (index!=organization.demographicImpact.length-1)
-									|,  
+						.col-lg-6.col-md-6.col-sm-6.col-xs-12
+							.row
+								.col-lg-12.col-md-12.col-sm-12.col-xs-12
+									.rew_blk.clearfix
+										h5 Why is it a social enterprise?
+										p!= contentParse(organization.descriptionCause)
+							.row
+								.col-lg-6.col-md-6.col-sm-6.col-xs-12
+									h5 What is the impact?
+									for purpose,index in organization.socialPurposeCategoryTags 
+										=purpose
+										if (index!=organization.socialPurposeCategoryTags.length-1)
+											|,  
+								.col-lg-6.col-md-6.col-sm-6.col-xs-12
+									h5 Who does it impact?
+									for impact,index in organization.demographicImpact 
+										=impact 
+										if (index!=organization.demographicImpact.length-1)
+											|,
+						.col-lg-6.col-md-6.col-sm-6.col-xs-12
+							if (organization.videoSource!='' && organization.videoSource!=null)
+								h5 Video
+							.embed-responsive.embed-responsive-4by3
+								if (organization.videoSource=='youtube')
+									iframe(class="embed-responsive-item",src="//www.youtube.com/embed/"+organization.videoId,allowfullscreen)
+								else if (organization.videoSource=='vimeo')
+									iframe(class="embed-responsive-item",src="//player.vimeo.com/video/"+organization.videoId,webkitallowfullscreen,mozallowfullscreen,allowfullscreen)
 				.tab-pane(id='contactinfo')
 					.row
 						.col-lg-6.col-md-6.col-sm-6.col-xs-12
@@ -91,7 +102,7 @@ block content
 							h5 
 								span.fa.fa-home 
 								|  Address
-							p=organization.Location.address
+							p!=contentParse(organization.Location.address)
 						.col-lg-6.col-md-6.col-sm-6.col-xs-12
 							if (organization.Location.latitude!=null&&organization.Location.longitude!=null)
 								h5 Where is 

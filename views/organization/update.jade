@@ -41,6 +41,16 @@ block content
           a(href=organization.logo,target="_blank",class="thumbnail")
             img(src=organization.logoThumbnail)
     .form-group
+      label(class='col-sm-2 control-label', for='video') Organization Video (Youtube or Vimeo only)
+      .col-sm-4
+        input.form-control(type='text', name='videoId', id='videoId', placeholder='ID of the video',value=organization.videoId)
+      .col-sm-4
+        select.form-control(name='videoSource', id='videoSource')
+          if (organization.videoSource==null || organization.videoSource=='')
+             option(selected hidden value='') Choose a Video Source
+          option(value='youtube',selected=(organization.videoSource=="youtube")) Youtube
+          option(value='vimeo',selected=(organization.videoSource=="vimeo")) Vimeo
+    .form-group
         label(class='col-sm-2 control-label', for='socialMediaUrl') Social Media Profile URL
         .col-sm-8(id="duplicateSocialMedia")
           if (typeof(organization.socialMedia[0]) != 'undefined')

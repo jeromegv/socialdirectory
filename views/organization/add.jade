@@ -36,6 +36,15 @@ block content
       .col-sm-4
         input.form-control(type='text', name='logo', id='logo', placeholder='URL to their logo', data-parsley-type="url")
     .form-group
+      label(class='col-sm-2 control-label', for='video') Organization Video (Youtube or Vimeo only)
+      .col-sm-4
+        input.form-control(type='text', name='videoId', id='videoId', placeholder='ID of the video')
+      .col-sm-4
+        select.form-control(name='videoSource', id='videoSource')
+          option(selected hidden value='') Choose a Video Source
+          option(value='youtube') Youtube
+          option(value='vimeo') Vimeo
+    .form-group
         label(class='col-sm-2 control-label', for='socialMediaUrl') Social Media Profile URL
         .col-sm-8(id="duplicateSocialMedia")
             .row

@@ -1121,6 +1121,10 @@ h5 {
 	#content .pro_main_c .slider_1 .slider_1_nav ul li:last-child {
 		margin:0;
 	}
+
+	#content .tabing .tab-content .rew_blk {
+		padding:0 0 10px 0;
+	}
  }
 
  /* for tablet desktop */
