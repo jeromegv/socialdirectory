@@ -79,6 +79,8 @@ block content
 									iframe(class="embed-responsive-item",src="//www.youtube.com/embed/"+organization.videoId,allowfullscreen)
 								else if (organization.videoSource=='vimeo')
 									iframe(class="embed-responsive-item",src="//player.vimeo.com/video/"+organization.videoId,webkitallowfullscreen,mozallowfullscreen,allowfullscreen)
+								else if (organization.videoSource=='custom')
+									iframe(class="embed-responsive-item",src=organization.videoId,webkitallowfullscreen,mozallowfullscreen,allowfullscreen)
 				.tab-pane(id='contactinfo')
 					.row
 						.col-lg-6.col-md-6.col-sm-6.col-xs-12
