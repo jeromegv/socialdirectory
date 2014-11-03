@@ -22,12 +22,12 @@ block content
 								p!= contentParse(organization.descriptionService)
 					.row
 						.col-sm-4.col-xs-12
-							h5 Business Sector
+							h5 Business Category
 							.graytext
 								p=organization.primaryBusinessSector_1
-						if typeof(organization.primaryBusinessSector_2)!=undefined
+						if typeof(organization.primaryBusinessSector_2)!=undefined && organization.primaryBusinessSector_2.length>0
 							.col-sm-4.col-xs-12
-								h5 Sub-Business Sector
+								h5 Business Sub-Category
 								.graytext
 									p 
 										for sector,index in organization.primaryBusinessSector_2 
@@ -43,7 +43,7 @@ block content
 		.tabing
 			ul.nav.nav-tabs
 				li.active 
-					a(href="#general",data-toggle="tab") Social Aspect
+					a(href="#general",data-toggle="tab") The Good Stuff
 				li
 					a(href='#contactinfo',data-toggle="tab") Contact and Location
 				if (organization.additionalResources.length>0)
@@ -56,11 +56,11 @@ block content
 							.row
 								.col-lg-12.col-md-12.col-sm-12.col-xs-12
 									.rew_blk.clearfix
-										h5 Why is it a social enterprise?
+										h5 What makes it a social enterprise?
 										p!= contentParse(organization.descriptionCause)
 							.row
 								.col-lg-6.col-md-6.col-sm-6.col-xs-12
-									h5 What is the impact?
+									h5 What is its social purpose?
 									for purpose,index in organization.socialPurposeCategoryTags 
 										=purpose
 										if (index!=organization.socialPurposeCategoryTags.length-1)
