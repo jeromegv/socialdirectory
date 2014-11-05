@@ -160,7 +160,8 @@ var uploadToKnox = function(fileData,filePath,contentType,callback){
       var uploadknox = knoxclient.put('logos/'+path.basename(filePath), {
         'Content-length': fileData.length,
         'Content-Type': contentType,
-        'x-amz-acl': 'public-read'
+        'x-amz-acl': 'public-read',
+        'Cache-Control': 'public,max-age=31536000'
       });
       uploadknox.on('response', function(response){
         if (200 == response.statusCode) {
