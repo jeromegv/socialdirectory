@@ -43,12 +43,12 @@ block content
 		.tabing
 			ul.nav.nav-tabs
 				li.active 
-					a(href="#general",data-toggle="tab") The Good Stuff
+					a(href="#general",data-toggle="tab",role="tab") The Good Stuff
 				li
-					a(href='#contactinfo',data-toggle="tab") Contact and Location
+					a(href='#contactinfo',data-toggle="tab",role="tab") Contact and Location
 				if (organization.additionalResources.length>0)
 					li 
-						a(href="#additionalresources",data-toggle="tab") Additional Resources
+						a(href="#additionalresources",data-toggle="tab",role="tab") Additional Resources
 			.tab-content
 				.tab-pane.active(id='general')
 					.row

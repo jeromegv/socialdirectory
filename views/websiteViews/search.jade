@@ -14,31 +14,31 @@ block content
 							if (Array.isArray(facet)&& selectedFilters[facetname]==undefined)
 								.side_box
 									if (facetname == 'primaryBusinessSector_1' && facet.length>0)
-										h5
+										h5.clickable
 											a(href='#')= fieldsName[facetname]
 												i.fa.fa-caret-down
 									else if (facetname == 'primaryBusinessSector_2' && facet.length>0 && selectedFilters['primaryBusinessSector_1']!=undefined)
-										h5
+										h5.clickable
 											a(href='#')= fieldsName[facetname]
 												i.fa.fa-caret-down
 									else if (facetname == 'socialPurposeCategoryTags' && facet.length>0)
-										h5
+										h5.clickable
 											a(href='#')= fieldsName[facetname]
 												i.fa.fa-caret-down
 									else if (facetname =='demographicImpact' && facet.length>0)
-										h5
+										h5.clickable
 											a(href='#')= fieldsName[facetname]
 												i.fa.fa-caret-down
 									else if (facetname =='active' && facet.length>0)
-										h5
+										h5.clickable
 											a(href='#')= fieldsName[facetname]
 												i.fa.fa-caret-down
 									ul.tgl_c
 										for refinement in facet
 											if (refinement.count>0 && refinement.value!=='' && (facetname != 'primaryBusinessSector_2' || selectedFilters['primaryBusinessSector_1']!=undefined))
-												li 
-													a(href=refinement.link) #{refinement.value} 
-														span.badge.pull-right #{refinement.count}
+												li
+													a(href=refinement.link).pull-left #{refinement.value} 
+													span.badge #{refinement.count}
 			.col-lg-9.col-md-9.col-sm-8.col-xs-12
 				.row
 					for organization in organizations

@@ -3,6 +3,8 @@ var secrets = require('../config/secrets');
 var _ = require('lodash');
 var request = require('request');
 var socialPurposeCategory = require('../public/json/socialPurposeCategory.json');
+var businessSector = require('../public/json/primaryBusinessSector.json');
+var demographicImpact = require('../public/json/demographicImpact.json');
 var azureSearch = require('../libs/azuresearch.js');
 var fieldsName = require('../public/json/listFields.json');
 var nodemailer = require('nodemailer');
@@ -35,7 +37,7 @@ var nodemailer = require('nodemailer');
 			});
 		});
 	} else {
-		Organization.find({active: true}).select('logoThumbnail name name_slug socialPurposeCategoryTags _id descriptionService').exec(function(error, organizations) {
+		Organization.find({active: true}).select('logoThumbnail name name_slug socialPurposeCategoryTags descriptionService').exec(function(error, organizations) {
 		    if (!error && organizations!=null){
 		        res.render('websiteViews/home', {
 					title: 'Home',
@@ -49,6 +51,57 @@ var nodemailer = require('nodemailer');
 		    }
 		});
 	}
+};
+
+
+function createRefinements(organizations,field){
+	var result = _.reduce(organizations, function (prev, current) {
+		if (Array.isArray(current[field])){
+			current[field].forEach(function(tag,index) {
+				var index = _.findIndex( prev, {'name':tag});
+				if (index=== -1 ){
+					prev.push({'name': tag, 'val': 1});
+				} else {
+					prev[index].val = prev[index].val+1;
+				}
+			});
+		} else {
+			var index = _.findIndex( prev, {'name':current[field]});
+			if (index=== -1 ){
+				prev.push({'name': current[field], 'val': 1});
+			} else {
+				prev[index].val = prev[index].val+1;
+			}
+		}
+		return prev;
+	}, []);
+	result = _.sortBy(result, 'val').reverse(); 
+
+	return result;
+}
+
+
+/**
+ * GET /explore
+ * Show Explore page
+ */
+ exports.getExplore = function(req, res) {
+ 	
+	Organization.find({active: true}).select('logoThumbnail name name_slug socialPurposeCategoryTags descriptionService primaryBusinessSector_1 demographicImpact').exec(function(error, organizations) {
+	    if (!error && organizations!=null){
+	        res.render('websiteViews/explore', {
+				title: 'Explore',
+				organizations:organizations,
+				socialPurposeRefinements:createRefinements(organizations,'socialPurposeCategoryTags'),
+				businessSectorRefinements:createRefinements(organizations,'primaryBusinessSector_1'),
+				demographicImpactRefinements:createRefinements(organizations,'demographicImpact'),
+				_ : _
+			});
+	    } else {
+	      res.status(400);
+	      return res.send(error);
+	    }
+	});
 };
 
 /**
@@ -96,7 +149,7 @@ var nodemailer = require('nodemailer');
 
 /**
  * POST /contactus
- * @param email
+ * 
  */
 exports.postContactUs = function(req, res, next) {
   req.assert('name','Please enter your name').notEmpty();
@@ -135,6 +188,9 @@ exports.postContactUs = function(req, res, next) {
   });
 };
 
+/*
+* 404 page not found
+*/
 exports.notFound = function(req, res){
   res.status(404);
   if(req.accepts('html')){

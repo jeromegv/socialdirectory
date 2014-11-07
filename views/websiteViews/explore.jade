@@ -1,0 +1,60 @@
+extends shared/layout
+
+block head
+	link(rel="stylesheet",href="/components/leaflet/dist/leaflet.css")
+
+block content
+	.title.clearfix
+		h1 Explore Social Enterprises in Philippines
+	.row
+		.col-lg-3.col-md-3.col-sm-4.col-xs-12
+			div(id='leftnav',data-spy="affix",data-offset-top="100",data-offset-bottom="420")
+				.sidebar.sidebar_1
+					div(id='accordion')
+						.panel.side_box
+							h5 
+								a(data-toggle="collapse",data-parent="#accordion",data-target='#collapse1',aria-expanded="true",aria-controls="collapse1") Business Sector
+									i.fa.fa-caret-down
+							ul.collapse(id="collapse1")
+								for refinement,index in businessSectorRefinements
+									li 
+										a(href="#",class="pull-left")=refinement.name
+										input(type="checkbox",checked)
+						.panel.side_box
+							h5 
+								a(data-toggle="collapse",data-parent="#accordion",data-target='#collapse2',aria-expanded="false",aria-controls="collapse2") Who does it impact
+									i.fa.fa-caret-down
+							ul.collapse(id="collapse2")
+								for refinement,index in socialPurposeRefinements
+									li 
+										a(href="#",class="pull-left")=refinement.name
+										input(type="checkbox",checked)
+						.panel.side_box
+							h5 
+								a(data-toggle="collapse",data-parent="#accordion",data-target='#collapse3',aria-expanded="false",aria-controls="collapse3") Who does it impact
+									i.fa.fa-caret-down
+							ul.collapse(id="collapse3")
+								for refinement,index in demographicImpactRefinements
+									li 
+										a(href="#",class="pull-left")=refinement.name
+										input(type="checkbox",checked)
+		.col-lg-9.col-md-9.col-sm-8.col-xs-12
+			.map(id='mapall')
+			.product_c
+				.row
+					for organization,index in organizations
+						.col-lg-3.col-md-4.col-sm-6.col-xs-12
+							.main_box
+								.desc_title_front_page
+									h5= organization.name
+								.box_1
+									div
+										a(href='/organization/'+organization.name_slug)
+											img(src=organization.logoThumbnail,alt=organization.name)
+										.desc
+											p= organization.descriptionService.substring(0,90)
+block javascript
+	script(src="/components/leaflet/dist/leaflet.js")
+	script(src="http://open.mapquestapi.com/sdk/leaflet/v1.s/mq-map.js?key=Fmjtd%7Cluur2h02n9%2Cb0%3Do5-9wb2da")
+	script.
+		generateAllVisualization()
