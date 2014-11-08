@@ -161,7 +161,6 @@ app.put('/admin/organization/:slug', passportConf.isAuthenticated,organizationCo
 app.delete('/admin/organization/:slug', passportConf.isAuthenticated,organizationController.deleteOrganization);
 app.get('/reloadOrganizationsInAzure',passportConf.isAuthenticated,organizationController.getReloadOrganizationsInAzure);
 //public facing views
-app.get('/map',organizationController.getMap);
 app.get('/',websiteController.getHome);
 app.get('/aboutus',websiteController.getAboutUs);
 app.get('/contactus',websiteController.getContactUs);

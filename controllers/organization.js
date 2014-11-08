@@ -138,16 +138,6 @@ exports.getOrganizationSlug = function(req, res) {
 };
 
 /**
- * GET /map
- * Show all organizations on a map
- */
- exports.getMap = function(req, res) {
-  res.render('websiteViews/map', {
-    title: 'Map of all organizations'
-  });
-};
-
-/**
  * GET /reloadOrganizationsInAzure
  * Force send every organizations directly into Azure search
  */
