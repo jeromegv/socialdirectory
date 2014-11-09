@@ -155,9 +155,12 @@ var uploadToKnox = function(fileData,filePath,contentType,callback){
       var knoxclient = knox.createClient({
           key: secrets.s3.key,
           secret: secrets.s3.secret,
-          bucket: secrets.s3.bucket
+          bucket: secrets.s3.bucket,
+          region: secrets.s3.region
       });
-      var uploadknox = knoxclient.put('logos/'+path.basename(filePath), {
+      var newFileName = 'logos/'+path.basename(filePath);
+      newFileName = newFileName.replace('?','');
+      var uploadknox = knoxclient.put(newFileName, {
         'Content-length': fileData.length,
         'Content-Type': contentType,
         'x-amz-acl': 'public-read',
@@ -166,9 +169,10 @@ var uploadToKnox = function(fileData,filePath,contentType,callback){
       uploadknox.on('response', function(response){
         if (200 == response.statusCode) {
           console.log('saved logo to %s', uploadknox.url);
-          callback(null,uploadknox.url);
+          callback(null,'/logos/'+newFileName);
         } else {
-          callback('S3 did not respond with 200, response was:'+response.statusCode);
+        	console.log(response);
+       		callback('S3 did not respond with 200, response was:'+response.statusCode);
         }
       });
       uploadknox.on('error', function(err) {

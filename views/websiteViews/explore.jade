@@ -13,7 +13,7 @@ block content
 					div(id='accordion')
 						.panel.side_box
 							h5 
-								a(data-toggle="collapse",data-parent="#accordion",data-target='#collapse1',aria-expanded="true",aria-controls="collapse1") Business Sector
+								a(data-toggle="collapse",data-parent="#accordion",data-target='#collapse1',aria-expanded="true",aria-controls="collapse1") Business Category
 									i.fa.fa-caret-down
 							ul.collapse(id="collapse1")
 								for refinement,index in businessSectorRefinements
@@ -22,7 +22,7 @@ block content
 										input(type="checkbox",checked)
 						.panel.side_box
 							h5 
-								a(data-toggle="collapse",data-parent="#accordion",data-target='#collapse2',aria-expanded="false",aria-controls="collapse2") Who does it impact
+								a(data-toggle="collapse",data-parent="#accordion",data-target='#collapse2',aria-expanded="false",aria-controls="collapse2") Social Cause
 									i.fa.fa-caret-down
 							ul.collapse(id="collapse2")
 								for refinement,index in socialPurposeRefinements
@@ -50,7 +50,7 @@ block content
 								.box_1
 									div
 										a(href='/organization/'+organization.name_slug)
-											img(src=organization.logoThumbnail,alt=organization.name)
+											img(src=fullFileHost+organization.logoThumbnail,alt=organization.name)
 										.desc
 											p= organization.descriptionService.substring(0,90)
 block javascript

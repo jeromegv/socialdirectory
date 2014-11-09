@@ -10,7 +10,7 @@ block content
 				.text-center
 					.slider_1.clearfix
 						a(href=organization.website,target='_blank')
-							img(src=organization.logoThumbnail,class="img-responsive",alt=organization.name+' logo')
+							img(src=fullFileHost+organization.logoThumbnail,class="img-responsive",alt=organization.name+' logo')
 							p Visit their website
 
 			.col-lg-9.col-md-9.col-sm-9.col-xs-12
@@ -60,7 +60,7 @@ block content
 										p!= contentParse(organization.descriptionCause)
 							.row
 								.col-lg-6.col-md-6.col-sm-6.col-xs-12
-									h5 What is its social purpose?
+									h5 What is its social cause?
 									for purpose,index in organization.socialPurposeCategoryTags 
 										=purpose
 										if (index!=organization.socialPurposeCategoryTags.length-1)

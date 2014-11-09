@@ -33,7 +33,7 @@ block content
 						h4 With Us
 	.title.clearfix
 		a(name='causes',class="anchor")
-		h1 The causes
+		h1 Social Causes
 	.product_c
 		.row
 			for socialPurpose,index in socialPurposeCategory
@@ -48,7 +48,7 @@ block content
 								for entry,index in suborg
 									div
 										a(href='/organization/'+entry.name_slug)
-											img(data-lazy=entry.logoThumbnail,alt=entry.name)
+											img(data-lazy=fullFileHost+entry.logoThumbnail,alt=entry.name)
 										.desc
 											p= entry.descriptionService.substring(0,90)
 						

@@ -346,10 +346,6 @@ exports.putOrganization = function(req, res,next) {
       req.assert('website','URL is not valid').isURL();
     }
 
-    if (req.body.logo!=''){
-      req.assert('logo','URL is not valid').isURL();
-    }
-
     if (req.body.yearFounded!=''){
       req.assert('yearFounded', 'Year Founded is not valid').isInt();
     }
@@ -382,7 +378,7 @@ exports.putOrganization = function(req, res,next) {
         },
     phoneNumber: req.body.phoneNumber,
     website: utils.saveUrl(req.body.website),
-    logo: utils.saveUrl(req.body.logo),
+    logo: req.body.logo,
     videoId: req.body.videoId,
     videoSource: req.body.videoSource,
     parentOrganization: req.body.parentOrganization,
@@ -436,9 +432,8 @@ exports.putOrganization = function(req, res,next) {
       return next(new Error('No records were updated'));
     } else {
       //save logo url to S3
-      var bucketName = secrets.s3.bucket+'.s3.amazonaws.com';
-      //we only get the logo url and save on S3 if it's NOT already a url of a local bucket S3 amazon URL (if it was done before)
-      if (urlNode.parse(resultOrg.logo).hostname!=bucketName || !resultOrg.logoThumbnail){
+      //we only get the logo url and save on S3 if it's NOT already a relative url (so if http/https is missing) of a local bucket S3 amazon URL or if the thumbnail is missing
+      if (/^(f|ht)tps?:\/\//i.test(resultOrg.logo)|| !resultOrg.logoThumbnail){
         var desiredFileName = utils.convertToSlug(resultOrg.name) + '-' + path.basename(resultOrg.logo);
         downloadImageAndUploadToS3.getAndSaveFile(resultOrg.logo,desiredFileName,function (error,amazonUrl,amazonThumbnailUrl){
           if (error){

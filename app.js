@@ -123,6 +123,7 @@ app.use(function(req, res, next) {
   // Make user object available in templates.
   res.locals.user = req.user;
   res.locals.host = 'http://localhost:'+app.get('port');
+  res.locals.fullFileHost = secrets.s3.fullFileHost;
   next();
 });
 app.use(function(req, res, next) {

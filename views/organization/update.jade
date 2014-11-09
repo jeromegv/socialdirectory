@@ -38,8 +38,8 @@ block content
         input.form-control(type='text', name='logo', id='logo', placeholder='URL to their logo', data-parsley-type="url",value=organization.logo)
       if(organization.logo)
         .col-sm-2
-          a(href=organization.logo,target="_blank",class="thumbnail")
-            img(src=organization.logoThumbnail)
+          a(href=fullFileHost+organization.logo,target="_blank",class="thumbnail")
+            img(src=fullFileHost+organization.logoThumbnail)
     .form-group
       label(class='col-sm-2 control-label', for='video') Organization Video
       .col-sm-4

@@ -28,9 +28,11 @@ module.exports = {
   },
 
   s3: {
-  	key: process.env.S3_KEY || 'S3 key goes here',
-  	secret: process.env.S3_SECRET || 'S3 secret goes here',
-  	bucket: process.env.S3_BUCKET || 'S3 bucket goes here'
+    key: process.env.S3_KEY || 'S3 key goes here',
+    secret: process.env.S3_SECRET || 'S3 secret goes here',
+    bucket: process.env.S3_BUCKET || 'S3 bucket goes here',
+    region: process.env.S3_REGION || 'S3 Region goes here',
+    fullFileHost: 'Full host to reach your image/files from the outside goes here'
   },
 
   //to send forgot password emails
