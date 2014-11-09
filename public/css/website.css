@@ -80,7 +80,7 @@ a.anchor{
 	padding-bottom: 35px;
 }
 .imagebackground {
-	background: url(/images/boats.jpg) no-repeat center center fixed; 
+	background: url(/images/boats.jpg) no-repeat center center; 
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
