@@ -244,7 +244,9 @@ i.bigicon{
 /*----------------
  Footer
 -----------------*/
-
+#footer {
+	background:white;
+}
 .fa-arrow-circle-right {	
 	color:#37bbec;
 	font-size:14px;
