@@ -3,32 +3,32 @@ extends shared/layout
 block head
 
 block content
-	.jumbotron
+	.jumbotron.imagebackground
 		h1 Explore the up-and-coming social enterprise scene in the Philippines. 
 		h2 Social enterprise:  A business committed to doing good while remaining financially sustainable
 	.row
-		.col-lg-4.col-md-4.col-sm-12.col-xs-12
+		.col-lg-4.col-md-4.col-sm-4.col-xs-12
 			.thumbnail.text-center
 				a(href='/explore')
-					span.fa.fa-globe.bigicon
-				.caption 
-					a(href='/explore')
+					img(src="images/city.jpg")
+					.blackoverlay
+					.middleoverlay
 						h3 Explore
 						h4 Social Enterprises
-		.col-lg-4.col-md-4.col-sm-12.col-xs-12
+		.col-lg-4.col-md-4.col-sm-4.col-xs-12
 			.thumbnail.text-center
 				a(href='#causes')
-					span.fa.fa-heart.bigicon
-				.caption
-					a(href='#causes')
+					img(src="images/socialworker.jpg")
+					.blackoverlay
+					.middleoverlay
 						h3 Connect
 						h4 With Causes You Care About
-		.col-lg-4.col-md-4.col-sm-12.col-xs-12
+		.col-lg-4.col-md-4.col-sm-4.col-xs-12
 			.thumbnail.text-center
 				a(href='#engage')
-					span.fa.fa-comments-o.bigicon
-				.caption
-					a(href='#engage') 
+					img(src="images/engage.jpg")
+					.blackoverlay
+					.middleoverlay
 						h3 Engage
 						h4 With Us
 	.title.clearfix
@@ -37,7 +37,7 @@ block content
 	.product_c
 		.row
 			for socialPurpose,index in socialPurposeCategory
-				.col-lg-3.col-md-4.col-sm-6.col-xs-12
+				.col-lg-3.col-md-4.col-sm-4.col-xs-12
 					.main_box
 						.desc_title_front_page
 							h5= socialPurpose
