@@ -463,13 +463,18 @@ exports.putOrganization = function(req, res,next) {
  * Update an organization
  */
 exports.deleteOrganization = function (req,res,next){
-  Organization.remove({
+  Organization.findOneAndRemove({
       name_slug:req.params.slug
     }, function(err, org) {
       if (err){
         console.log(err);
         return next(err);
       } else {
+        azureSearch.deleteRecord(org,function(error){
+            if (error){
+              console.log(error);
+            }
+        });
         return res.send('');
       }
     });

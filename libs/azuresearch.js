@@ -187,7 +187,46 @@ var uploadRecord = function(organization,callback){
 		  };
 		}
 	});
-}
+};
+
+//to make a POST query to azure search that will delete the organization
+var deleteRecord = function(organization,callback){
+	var organizationAzure = new Array();
+
+	organizationAzure[0] =  {
+		"@search.action": "delete",
+		orgId: organization._id.toString()
+	};
+
+	var options = {
+	url: 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'/docs/index?api-version='+secrets.azureSearch.apiVersion,
+	json: true,
+	method: 'POST',
+	headers: {
+	  'host': secrets.azureSearch.url,
+	  'api-key': secrets.azureSearch.apiKey,
+	  'Content-Type': 'application/json'
+	},
+		body: {"value":organizationAzure}
+	};
+	console.log(util.inspect(options.body,{  depth: null }));
+	request(options, function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+		  console.log('organization '+ organization.name + ' deleted, success');
+		  callback();
+		} else {
+		  console.log('organization '+ organization.name + ' failed to be deleted on Azure Search, query was: ');
+		  console.log(options);
+		  if (error){
+		    console.log(error);
+		    callback(error);
+		  } else if (response) {
+		    console.log('http status code was: '+response.statusCode)
+		    callback('http status code was: '+response.statusCode);
+		  };
+		}
+	});
+};
 
 var searchSuggestions = function(req,callback) {
 	var searchTerm = req.sanitize('search').trim();
@@ -489,6 +528,7 @@ function buildUrlToRemove(selectedFilters,currentUrl){
 
 exports.initIndex = initIndex;
 exports.uploadRecord = uploadRecord;
+exports.deleteRecord = deleteRecord;
 exports.searchSuggestions = searchSuggestions;
 exports.search = search;
 exports.buildFacets = buildFacets;
