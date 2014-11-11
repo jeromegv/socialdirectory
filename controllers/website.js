@@ -8,7 +8,7 @@ var demographicImpact = require('../public/json/demographicImpact.json');
 var azureSearch = require('../libs/azuresearch.js');
 var fieldsName = require('../public/json/listFields.json');
 var nodemailer = require('nodemailer');
-
+var moment = require('moment');
 
 /**
  * GET /
@@ -96,6 +96,26 @@ function createRefinements(organizations,field){
 				businessSectorRefinements:createRefinements(organizations,'primaryBusinessSector_1'),
 				demographicImpactRefinements:createRefinements(organizations,'demographicImpact'),
 				_ : _
+			});
+	    } else {
+	      res.status(400);
+	      return res.send(error);
+	    }
+	});
+};
+
+/**
+ * GET /sitemap
+ * Show sitemap page
+ */
+ exports.getSiteMap = function(req, res) {
+	Organization.find({active: true}).select('name_slug lastUpdated').exec(function(error, organizations) {
+	    if (!error && organizations!=null){
+	    	res.header('Content-Type', 'application/xml');
+	        res.render('websiteViews/sitemap', {
+				organizations:organizations,
+				moment:moment,
+				externalUrl:secrets.externalUrl
 			});
 	    } else {
 	      res.status(400);

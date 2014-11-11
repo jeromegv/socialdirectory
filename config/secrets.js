@@ -19,6 +19,7 @@
 module.exports = {
 
   db: process.env.MONGODB|| 'mongodb://localhost:27017/test',
+  externalUrl: 'URL of the website once it is being hosted (used by sitemap)',
 
   azureSearch: {
     url: '',

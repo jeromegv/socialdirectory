@@ -1,0 +1,24 @@
+doctype xml
+urlset(xmlns="http://www.sitemaps.org/schemas/sitemap/0.9")
+	url
+		loc= externalUrl+'/'
+		changefreq daily
+		priority= 0.5
+	url
+		loc= externalUrl+'/aboutus'
+		changefreq weekly
+		priority= 0.5
+	url
+		loc= externalUrl+'/explore'
+		changefreq daily
+		priority= 0.5
+	url
+		loc= externalUrl+'/contactus'
+		changefreq weekly
+		priority= 0.5
+	each org in organizations
+		url
+			loc= externalUrl+'/organization/'+org.name_slug
+			lastmod= moment(org.lastUpdated).format('YYYY-MM-DD')
+			changefreq weekly
+			priority= 0.5

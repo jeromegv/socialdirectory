@@ -100,6 +100,7 @@ app.use(methodOverride(function(req, res){
   }
 }));
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public'), { maxAge: week }));
 app.use(session({
   resave: true,
   saveUninitialized: true,
@@ -135,7 +136,7 @@ app.use(function(req, res, next) {
   req.session.returnTo = req.path;
   next();
 });
-app.use(express.static(path.join(__dirname, 'public'), { maxAge: week }));
+
 
 /**
  * Main routes. Pages
@@ -163,6 +164,7 @@ app.delete('/admin/organization/:slug', passportConf.isAuthenticated,organizatio
 app.get('/reloadOrganizationsInAzure',passportConf.isAuthenticated,organizationController.getReloadOrganizationsInAzure);
 //public facing views
 app.get('/',websiteController.getHome);
+app.get('/sitemap.xml',websiteController.getSiteMap);
 app.get('/aboutus',websiteController.getAboutUs);
 app.get('/contactus',websiteController.getContactUs);
 app.post('/contactus',websiteController.postContactUs);
