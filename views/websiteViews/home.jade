@@ -1,6 +1,14 @@
 extends shared/layout
 
 block head
+	style.
+		.imagebackground {
+			background: url(/images/boats.jpg) no-repeat center center; 
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+		}
 
 block content
 	.jumbotron.imagebackground
@@ -10,7 +18,7 @@ block content
 		.col-lg-4.col-md-4.col-sm-4.col-xs-12
 			.thumbnail.text-center
 				a(href='/explore')
-					img(src="images/city.jpg")
+					img(src="images/city.jpg",class="img-responsive")
 					.blackoverlay
 					.middleoverlay
 						h3 Explore
@@ -18,7 +26,7 @@ block content
 		.col-lg-4.col-md-4.col-sm-4.col-xs-12
 			.thumbnail.text-center
 				a(href='#causes')
-					img(src="images/socialworker.jpg")
+					img(src="images/socialworker.jpg",class="img-responsive")
 					.blackoverlay
 					.middleoverlay
 						h3 Connect
@@ -26,7 +34,7 @@ block content
 		.col-lg-4.col-md-4.col-sm-4.col-xs-12
 			.thumbnail.text-center
 				a(href='#engage')
-					img(src="images/engage.jpg")
+					img(src="images/engage.jpg",class="img-responsive")
 					.blackoverlay
 					.middleoverlay
 						h3 Engage
