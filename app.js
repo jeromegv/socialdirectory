@@ -56,10 +56,6 @@ mongoose.connection.on('error', function() {
 
 azureSearch.initIndex();
 
-var hour = 3600000;
-var day = hour * 24;
-var week = day * 7;
-
 /**
  * CSRF whitelist.
  */
@@ -100,7 +96,7 @@ app.use(methodOverride(function(req, res){
   }
 }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public'), { maxAge: week }));
+app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
 app.use(session({
   resave: true,
   saveUninitialized: true,

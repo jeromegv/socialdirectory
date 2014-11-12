@@ -6,7 +6,7 @@
     "url": "https://github.com/jeromegv/socialdirectory"
   },
   "scripts": {
-    "start": "node app.js",
+    "start": "node master.js",
     "test": "mocha",
     "postinstall": "bower install && grunt build"
   },
@@ -51,7 +51,8 @@
     "grunt-contrib-copy": "^0.6.0",
     "grunt-filerev": "^2.1.0",
     "grunt-cli": "^0.1.13",
-    "sharp": "^0.7.1"
+    "sharp": "^0.7.1",
+    "forky": "^0.1.2"
   },
   "devDependencies": {
     "chai": "^1.9.1",
