@@ -21,6 +21,14 @@ describe('GET /aboutus website page', function() {
   });
 });
 
+describe('GET /explore website page', function() {
+  it('should return 200', function(done) {
+    request(app)
+      .get('/explore')
+      .expect(200, done);
+  });
+});
+
 describe('GET /contactus website page', function() {
   it('should return 200', function(done) {
     request(app)
