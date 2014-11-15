@@ -5,6 +5,13 @@ block head
 block content
 	.title.clearfix
 		h1 #{resultCount} search results for #{searchTerm}
+	.row
+		.col-lg-12.col-md-12.col-sm-12.col-xs-12
+			for filterValue,filterName in selectedFilters
+				.whitetag
+					h5 #{filterValue.value} 
+						a(href=filterValue.removeUrl)
+							i.fa.fa-close
 	.product_c
 		.row
 			if typeof(facets)!=undefined && resultCount>1
@@ -19,7 +26,7 @@ block content
 												i.fa.fa-caret-down
 									else if (facetname == 'primaryBusinessSector_2' && facet.length>0 && selectedFilters['primaryBusinessSector_1']!=undefined)
 										h5.clickable
-											a(href='#')= fieldsName[facetname]
+											a(href='#')= selectedFilters['primaryBusinessSector_1'].value
 												i.fa.fa-caret-down
 									else if (facetname == 'socialPurposeCategoryTags' && facet.length>0)
 										h5.clickable
