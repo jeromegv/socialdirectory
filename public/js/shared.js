@@ -37,7 +37,7 @@ function generateAllVisualization(){
 	var organizationsLoaded;
 	var organizationsLoadedFiltered;
 	var currentFilters=[];
-	jQuery.getJSON('/api/organization', function(organizations) {
+	jQuery.getJSON('/api/organization?light=true', function(organizations) {
     	organizationsLoaded = organizations;
     	organizationsLoadedFiltered = organizations;
     	organizations.forEach(function(entry,index) {
@@ -343,7 +343,7 @@ $(document).ready(function() {
 	  errorTemplate: '<span></span>'
 	});
 	//smooth scrolling
-	var $root = $('html, body');
+	/*var $root = $('html, body');
 	$('a[href*=#]').click(function() {
 		var href = $.attr(this, 'href');
 		if (href!='#' && href!='#general' && href!='#additionalresources' && href!='#contactinfo' && href.substr(0,1)!='/'){
@@ -356,5 +356,5 @@ $(document).ready(function() {
 	    	return true;
 	    }
 	    return false;
-	});
+	});*/
 });

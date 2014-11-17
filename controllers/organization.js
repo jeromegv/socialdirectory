@@ -105,17 +105,29 @@ function loggedInQuery(req){
 /**
  * GET /api/organization
  * List of all organizations
+ * ?light=true to bring less fields
  */
 
 exports.getOrganization = function(req, res) {
-  Organization.find(loggedInQuery(req)).select(loggedInSelectQuery(req)).exec(function(err, organizations) {
-    if (!err && organizations!=null){
-      return res.jsonp(organizations);
-    } else {
-      res.status(400);
-      return res.send(err);
-    }
-  });
+  if (typeof(req.query.light)!='undefined' && req.query.light!=''){
+    Organization.find(loggedInQuery(req)).select('logoThumbnail name name_slug socialPurposeCategoryTags Location primaryBusinessSector_1 demographicImpact primaryBusinessSector_2').exec(function(err, organizations) {
+      if (!err && organizations!=null){
+        return res.jsonp(organizations);
+      } else {
+        res.status(400);
+        return res.send(err);
+      }
+    });
+  } else {
+    Organization.find(loggedInQuery(req)).select(loggedInSelectQuery(req)).exec(function(err, organizations) {
+      if (!err && organizations!=null){
+        return res.jsonp(organizations);
+      } else {
+        res.status(400);
+        return res.send(err);
+      }
+    });
+  }
 };
 
 /**
