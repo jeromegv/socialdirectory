@@ -16,7 +16,7 @@ block content
 					div(id='accordion')
 						div(id='primaryBusinessSector_1').panel.side_box
 								h5 
-									a(data-toggle="collapse",data-parent="#accordion",data-target='#collapse1',aria-expanded="true",aria-controls="collapse1") Business Category
+									a(data-toggle="collapse",data-parent="#accordion",href='#collapse1',aria-expanded="true",aria-controls="collapse1") Business Category
 										i.fa.fa-caret-down
 								ul.collapse(id="collapse1")
 									for refinement,index in businessSectorRefinements
@@ -25,7 +25,7 @@ block content
 											span.badge #{refinement.val}
 						div(id='socialPurposeCategoryTags').panel.side_box
 							h5 
-								a(data-toggle="collapse",data-parent="#accordion",data-target='#collapse2',aria-expanded="false",aria-controls="collapse2") Social Cause
+								a(data-toggle="collapse",data-parent="#accordion",href='#collapse2',aria-expanded="false",aria-controls="collapse2") Social Cause
 									i.fa.fa-caret-down
 							ul.collapse(id="collapse2")
 								for refinement,index in socialPurposeRefinements
@@ -34,7 +34,7 @@ block content
 										span.badge #{refinement.val}
 						div(id='demographicImpact').panel.side_box
 							h5 
-								a(data-toggle="collapse",data-parent="#accordion",data-target='#collapse3',aria-expanded="false",aria-controls="collapse3") Who does it impact
+								a(data-toggle="collapse",data-parent="#accordion",href='#collapse3',aria-expanded="false",aria-controls="collapse3") Who does it impact
 									i.fa.fa-caret-down
 							ul.collapse(id="collapse3")
 								for refinement,index in demographicImpactRefinements
