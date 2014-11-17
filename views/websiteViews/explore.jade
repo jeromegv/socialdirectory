@@ -7,37 +7,40 @@ block content
 	.title.clearfix
 		h1 Explore Social Enterprises in Philippines
 	.row
+		.col-lg-12.col-md-12.col-sm-12.col-xs-12
+			div(id="selectedTags")
+	.row
 		.col-lg-3.col-md-3.col-sm-4.col-xs-12
 			div(id='leftnav',data-spy="affix",data-offset-top="100",data-offset-bottom="420")
 				.sidebar.sidebar_1
 					div(id='accordion')
-						.panel.side_box
-							h5 
-								a(data-toggle="collapse",data-parent="#accordion",data-target='#collapse1',aria-expanded="true",aria-controls="collapse1") Business Category
-									i.fa.fa-caret-down
-							ul.collapse(id="collapse1")
-								for refinement,index in businessSectorRefinements
-									li 
-										a(href="#",class="pull-left")=refinement.name
-										input(type="checkbox",checked)
-						.panel.side_box
+						div(id='primaryBusinessSector_1').panel.side_box
+								h5 
+									a(data-toggle="collapse",data-parent="#accordion",data-target='#collapse1',aria-expanded="true",aria-controls="collapse1") Business Category
+										i.fa.fa-caret-down
+								ul.collapse(id="collapse1")
+									for refinement,index in businessSectorRefinements
+										li 
+											a(href="javascript:void(0)",class="pull-left",onclick="filterRefinement('primaryBusinessSector_1','#{refinement.name}')")=refinement.name
+											span.badge #{refinement.val}
+						div(id='socialPurposeCategoryTags').panel.side_box
 							h5 
 								a(data-toggle="collapse",data-parent="#accordion",data-target='#collapse2',aria-expanded="false",aria-controls="collapse2") Social Cause
 									i.fa.fa-caret-down
 							ul.collapse(id="collapse2")
 								for refinement,index in socialPurposeRefinements
 									li 
-										a(href="#",class="pull-left")=refinement.name
-										input(type="checkbox",checked)
-						.panel.side_box
+										a(href="javascript:void(0)",class="pull-left",onclick="filterRefinement('socialPurposeCategoryTags','#{refinement.name}')")=refinement.name
+										span.badge #{refinement.val}
+						div(id='demographicImpact').panel.side_box
 							h5 
 								a(data-toggle="collapse",data-parent="#accordion",data-target='#collapse3',aria-expanded="false",aria-controls="collapse3") Who does it impact
 									i.fa.fa-caret-down
 							ul.collapse(id="collapse3")
 								for refinement,index in demographicImpactRefinements
 									li 
-										a(href="#",class="pull-left")=refinement.name
-										input(type="checkbox",checked)
+										a(href="javascript:void(0)",class="pull-left",onclick="filterRefinement('demographicImpact','#{refinement.name}')")=refinement.name
+										span.badge #{refinement.val}
 		.col-lg-9.col-md-9.col-sm-8.col-xs-12
 			.map(id='mapall')
 			.product_c

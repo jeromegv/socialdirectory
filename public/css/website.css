@@ -1072,6 +1072,9 @@ input[type=checkbox] {
  /* Responsive Styles*/
  /* for Mobile */
  @media (max-width: 767px) {
+ 	.whitetag {
+ 		margin-bottom: 10px;
+ 	}
  	.bigicon{
 		font-size:90px;
 	}
