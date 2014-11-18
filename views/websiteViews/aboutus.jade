@@ -1,19 +1,62 @@
 extends shared/layout
 
 block head
+	style.
+		.imageaboutbackground {
+			background: url(/images/kids.jpg) no-repeat center center; 
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+			color:white;
+			padding-right:60px;
+			padding-left:60px;
+			margin-bottom:30px;
+			padding-bottom:35px;
+			padding-top:350px;
+			border-radius:6px;
+		}
+		.imageaboutbackground h2 {
+			color:white;
+			font-size:48px;
+			font-weight:bold;
+		}
+		.imageaboutbackground h3 {
+			font-weight:bold;
+			color:white;
+			font-size:28px;
+		}
+		@media (max-width: 767px) {
+		 	.imageaboutbackground {
+				padding-top:200px;
+				padding-right:15px;
+				padding-left:15px;
+				padding-bottom:5px;
+			}
+			.imageaboutbackground h2 {
+				font-size:38px;
+				font-weight:normal;
+			}
+			.imageaboutbackground h3 {
+				font-size:28px;
+				font-weight:normal;
+			}
+		}
 
 block content
 	.title.clearfix
 		h1 About Us
-	.jumbotron
+	//.jumbotron
+		img(src="images/kids.jpg",class="img-responsive")
+	.imageaboutbackground
 		h2 Mission
-		p To establish social enterprises as the most impactful way to do good. 
+		h3 To establish social enterprises as the most impactful way to do good
 	.jumbotron
-		h2 Who are we?
+		h2 Who are we? 
 		p 
 			strong ChooseSocial.PH 
 			| is your destination to discover and explore the social enterprise scene in Philippines (and the amazing people behind it!). We are a crowdsourced social directory and aim to be the most comprehensive and up-to-date resource for anyone looking to learn more about social enterprises in Philippines. 
-			br
+		p 
 			|Want to learn about a particular organization, looking for an organization to support, or maybe just feel like shopping while supporting a worthwhile cause? 
 			strong ChooseSocial.PH 
 			| has got you covered. 
