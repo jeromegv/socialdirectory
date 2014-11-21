@@ -9,6 +9,11 @@ block content
 	.row
 		.col-lg-12.col-md-12.col-sm-12.col-xs-12
 			div(id="selectedTags")
+				for refinement in selectedRefinements
+					.whitetag
+						h5= refinement.refinementValue
+							a(href="javascript:void(0)", onclick="removeRefinement('"+refinement.refinementName+"','"+refinement.refinementValue+"',this)")
+								i.fa.fa-close
 	.row
 		.col-lg-3.col-md-3.col-sm-4.col-xs-12
 			div(id='leftnav',data-spy="affix",data-offset-top="100",data-offset-bottom="420")
@@ -46,7 +51,8 @@ block content
 			.product_c
 				.row
 					for organization,index in organizations
-						.col-lg-3.col-md-4.col-sm-6.col-xs-12
+						- var style = (organization.hidden === true ? 'display: none;' : '')
+						.col-lg-3.col-md-4.col-sm-6.col-xs-12(style=style)
 							.main_box
 								.desc_title_front_page
 									h5= organization.name
@@ -59,5 +65,9 @@ block content
 block javascript
 	script(src="/components/leaflet/dist/leaflet.js")
 	script(src="//open.mapquestapi.com/sdk/leaflet/v1.s/mq-map.js?key=Fmjtd%7Cluur2h02n9%2Cb0%3Do5-9wb2da")
+	
 	script.
-		generateAllVisualization()
+		var refinementsAll = !{JSON.stringify(selectedRefinements)};
+		$(document).ready(function() {
+			generateAllVisualization(refinementsAll);
+		});

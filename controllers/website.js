@@ -9,6 +9,7 @@ var azureSearch = require('../libs/azuresearch.js');
 var fieldsName = require('../public/json/listFields.json');
 var nodemailer = require('nodemailer');
 var moment = require('moment');
+var utils = require('../libs/utils.js');
 
 /**
  * GET /
@@ -53,49 +54,128 @@ var moment = require('moment');
 	}
 };
 
-
 function createRefinements(organizations,field){
 	var result = _.reduce(organizations, function (prev, current) {
-		if (Array.isArray(current[field])){
-			current[field].forEach(function(tag,index) {
-				var index = _.findIndex( prev, {'name':tag});
+		if (current.hidden==false || current.hidden==undefined){
+			if (Array.isArray(current[field])){
+				current[field].forEach(function(tag,index) {
+					var index = _.findIndex( prev, {'name':tag});
+					if (index=== -1 ){
+						prev.push({'name': tag, 'val': 1});
+					} else {
+						prev[index].val = prev[index].val+1;
+					}
+				});
+			} else {
+				var index = _.findIndex( prev, {'name':current[field]});
 				if (index=== -1 ){
-					prev.push({'name': tag, 'val': 1});
+					prev.push({'name': current[field], 'val': 1});
 				} else {
 					prev[index].val = prev[index].val+1;
 				}
-			});
-		} else {
-			var index = _.findIndex( prev, {'name':current[field]});
-			if (index=== -1 ){
-				prev.push({'name': current[field], 'val': 1});
-			} else {
-				prev[index].val = prev[index].val+1;
 			}
 		}
 		return prev;
 	}, []);
 	result = _.sortBy(result, 'val').reverse(); 
-
 	return result;
 }
 
+//since the URL is based on slug, we convert back to real DB values
+function convertUrlToRealValue(filters){
+	//TODO: switch to more pretty name of refinementname
+	_(filters).forEach(function(filter) { 
+		if (filter.refinementName==='primaryBusinessSector_1'){
+			_(businessSector).forEach(function(subCategoryName,categoryName) { 
+				if (utils.convertToSlug(categoryName)===filter.refinementValue){
+					filter.refinementValue=categoryName;
+				}
+			});
+		} else if (filter.refinementName==='socialPurposeCategoryTags'){
+			_(socialPurposeCategory).forEach(function(socialPurpose) { 
+				if (utils.convertToSlug(socialPurpose)===filter.refinementValue){
+					filter.refinementValue=socialPurpose;
+				}
+			});
+		} else if (filter.refinementName==='demographicImpact') {
+			_(demographicImpact).forEach(function(demographic) { 
+				if (utils.convertToSlug(demographic)===filter.refinementValue){
+					filter.refinementValue=demographic;
+				}
+			});
+		}
+	});
+	return filters;
+}
+//decode URL parameters that might filter the explore page and return a list of filters selected
+function createSelectedRefinementsFromUrl(longUrl){
+ 	var currentFilters=[];
+ 	longUrl = decodeURIComponent(longUrl);
+ 	//only if there are parameters in the URL after the explore path
+ 	if (longUrl!='/explore' && longUrl!='/explore/'){
+	    var refinementsInUrl = longUrl.substring(1).split('/');
+	    refinementsInUrl.shift();
+	    var refinementFilter;
+	    for (var i=0;i<refinementsInUrl.length;i++){
+		    if (i%2==0 && refinementsInUrl[i] && refinementsInUrl[i+1]){
+			    refinementFilter = {
+					'refinementName':refinementsInUrl[i],
+					'refinementValue':refinementsInUrl[i+1]
+				};
+				currentFilters.push(refinementFilter);
+			}
+		}
+	}
+	currentFilters = convertUrlToRealValue(currentFilters);
+	console.log(currentFilters);
+	return currentFilters;
+}
+//will add a tag hidden=true or hidden=false to each organizations depending on either they should
+//be shown or not based on the filters coming from the URL
+function filterOrganizations(organizations,filters){
+	var organizationsFiltered=organizations;
+	_(filters).forEach(function(filter) { 
+		organizationsFiltered = _.forEach(organizationsFiltered, function(org) {
+			if (org.hidden===true){
+				return;
+			}
+			org.hidden=true;
+			if (Array.isArray(org[filter.refinementName])){
+				_.forEach(org[filter.refinementName],function(orgRefValue) { 
+					if (orgRefValue==filter.refinementValue){
+						org.hidden=false
+						return true;
+					}; 
+				});
+			} else {
+				if (org[filter.refinementName]==filter.refinementValue){
+					org.hidden=false;
+				}
+			}
+		});
+	});
+	return organizationsFiltered;
+}
 
 /**
  * GET /explore
  * Show Explore page
  */
  exports.getExplore = function(req, res) {
- 	
+
+ 	var selectedRefinements = createSelectedRefinementsFromUrl(req.originalUrl);
+
 	Organization.find({active: true}).select('logoThumbnail name name_slug socialPurposeCategoryTags descriptionService primaryBusinessSector_1 demographicImpact').exec(function(error, organizations) {
 	    if (!error && organizations!=null){
+	    	organizations = filterOrganizations(organizations,selectedRefinements);
 	        res.render('websiteViews/explore', {
 				title: 'Explore',
 				organizations:organizations,
 				socialPurposeRefinements:createRefinements(organizations,'socialPurposeCategoryTags'),
 				businessSectorRefinements:createRefinements(organizations,'primaryBusinessSector_1'),
 				demographicImpactRefinements:createRefinements(organizations,'demographicImpact'),
-				_ : _
+				_ : _,
+				selectedRefinements:selectedRefinements
 			});
 	    } else {
 	      res.status(400);

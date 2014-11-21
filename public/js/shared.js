@@ -26,7 +26,23 @@ function generateVisualization(latitude,longitude,slug){
 	});
 };
 
-function generateAllVisualization(){
+function generateAllVisualization(currentFilters){
+	//things to do when the page is loaded first, look at the filter selected in the URL 
+	//and hide the related refinement menus
+	_.forEach(currentFilters,function(filter) { 
+		$("#"+filter.refinementName).hide(0);
+	});
+	//expand the first navigation menu that is visible
+	if ($(window).width() >= 768 && currentFilters.length<3) {
+		$( ".collapse" ).each(function() {
+			if ($(this).parent( ".panel" ).is(":visible")){
+				$(this).collapse('show');
+				return false;
+			}
+		});
+	}
+
+	//create and display map
 	var map = L.map('mapall', {
         layers: MQ.mapLayer(),
         center: [ 12.277405, 122.665700],
@@ -36,7 +52,6 @@ function generateAllVisualization(){
     });
 	var organizationsLoaded;
 	var organizationsLoadedFiltered;
-	var currentFilters=[];
 	jQuery.getJSON('/api/organization?light=true', function(organizations) {
     	organizationsLoaded = organizations;
     	organizationsLoadedFiltered = organizations;
@@ -52,6 +67,7 @@ function generateAllVisualization(){
     	});
     });
 
+	//compile how many refinements and which refinement should be shown in navigation
 	function createRefinements(organizations,field){
 		var result = _.reduce(organizations, function (prev, current) {
 			if (Array.isArray(current[field])){
@@ -77,6 +93,8 @@ function generateAllVisualization(){
 
 		return result;
 	}
+	//function to execute once someone click on a refinement or remove a selected one
+	//this refresh all the refinements in the navigation
 	function updateRefinementList(organizations){
 		var activeRefinementBusiness = createRefinements(organizations,'primaryBusinessSector_1');
 		var activeRefinementSocial = createRefinements(organizations,'socialPurposeCategoryTags');
@@ -105,16 +123,15 @@ function generateAllVisualization(){
 		});
 		$("#demographicImpact").find("ul").append(items);
 	}
+	//filter the organization object based on all the filters currently selected
 	function filterOrganizations(organizations,filters){
 		var organizationsFiltered=organizations;
 		_(filters).forEach(function(filter) { 
-			refinementName= filter.refinementName; 
-			refinementValue = filter.refinementValue;
 			organizationsFiltered = _.filter(organizationsFiltered, function(org) { 
-				if (Array.isArray(org[refinementName])){
+				if (Array.isArray(org[filter.refinementName])){
 					var found=false;
-					_.forEach(org[refinementName],function(orgRefValue) { 
-						if (orgRefValue==refinementValue){
+					_.forEach(org[filter.refinementName],function(orgRefValue) { 
+						if (orgRefValue==filter.refinementValue){
 							found=true
 							return true;
 						}; 
@@ -123,7 +140,7 @@ function generateAllVisualization(){
 						return true;
 					}
 				} else {
-					if (org[refinementName]==refinementValue){
+					if (org[filter.refinementName]==filter.refinementValue){
 						return true;
 					}
 				}
@@ -131,6 +148,7 @@ function generateAllVisualization(){
 		})	
 		return organizationsFiltered;
 	}
+	//go over each org logo and hide or show them based on the filtered org object
 	function updateLogos(organizations){
 		var orgNamesLoaded = _.pluck(organizations, 'name');
 		//for transition sake, we want to hide everything before we start fading in
@@ -145,6 +163,23 @@ function generateAllVisualization(){
 			}
 		});
 	}
+	function convertToSlug(Text)
+	{
+	    return Text
+	        .toLowerCase()
+	        .replace(/[^\w ]+/g,'')
+	        .replace(/ +/g,'-')
+	        ;
+	}
+	//build URL when selecting refinement
+	function getSEOUrl(filters){
+		var url='/explore';
+		_(filters).forEach(function(filter) { 
+			url = url+"/"+filter.refinementName+"/"+convertToSlug(filter.refinementValue)
+		});
+		return url;
+	}
+	//action executed when someone click the X on the UI to remove a filter
 	window.removeRefinement = function (refinementName,refinementValue,currentRefinementObject){
 		if (organizationsLoaded){
 			_.remove(currentFilters,
@@ -155,15 +190,28 @@ function generateAllVisualization(){
 			organizationsLoadedFiltered = filterOrganizations(organizationsLoaded,currentFilters);
 			updateRefinementList(organizationsLoadedFiltered);
 			updateLogos(organizationsLoadedFiltered);
+			window.history.replaceState("", "title", getSEOUrl(currentFilters));
 			$(currentRefinementObject).closest(".whitetag").fadeOut(600, function(){ 
 			    $(this).remove();
 			});
 			$("#"+refinementName).slideDown();
-			$("#accordion").find(".collapse.in").removeClass("in");
+			$("#accordion").find(".collapse.in").collapse('hide');
 			$("#"+refinementName).find(".collapse").collapse('show');
 		}
-
 	}
+	//action to do to hide a refinement menu
+	function hideRefinementMenu(refinementName){
+		$("#"+refinementName).find(".collapse").collapse('hide');
+		//try to show the next refinement if there are still some left to show
+		if (currentFilters.length<3){
+			if ($("#"+refinementName).next().find(".collapse").parent( ".panel" ).is(":visible")){
+				var element = $("#"+refinementName).next().find(".collapse").collapse('show');
+			} else {
+				$("#"+refinementName).prev().find(".collapse").collapse('show');
+			}
+		}
+	}
+	//action executed from browser when someone click on a refinement
 	window.filterRefinement = function(refinementName,refinementValue) {
 		if (organizationsLoadedFiltered){
 			var refinementFilter = {
@@ -173,21 +221,19 @@ function generateAllVisualization(){
 			currentFilters.push(refinementFilter);
 			organizationsLoadedFiltered = filterOrganizations(organizationsLoaded,currentFilters);
 			updateLogos(organizationsLoadedFiltered);
-
+			window.history.replaceState("", "title", getSEOUrl(currentFilters));
 			//add selected refinements
 			$("#selectedTags").append('<div class="whitetag"><h5>'+refinementValue+'<a href="javascript:void(0)" onclick="removeRefinement(\''+refinementName+'\',\''+refinementValue+'\',this)"><i class="fa fa-close"></i></a></h5></div>').hide().fadeIn(600);
 			//hide current navigation menu + show next one available
 			$("#"+refinementName).slideUp(600);
-			$("#"+refinementName).find(".collapse").first().removeClass("in");
-			if ($("#"+refinementName).next().find(".collapse").parent( ".panel" ).is(":visible")){
-				var element = $("#"+refinementName).next().find(".collapse").first();
-				element.addClass("in");
-			} else {
-				$("#"+refinementName).prev().find(".collapse").first().addClass("in");
-			}
+			hideRefinementMenu(refinementName);
+			//update the count of refinement in each category
 			updateRefinementList(organizationsLoadedFiltered);
 		}
 	}
+
+
+
 			/*
 			var orgCross = crossfilter(organizationsLoaded);
 			var byId = orgCross.dimension(function(p) { return p._id; });
@@ -267,10 +313,6 @@ function generateAllVisualization(){
 
 $(document).ready(function() {
 
-	//sidebar click to hide navigation
-	if ($(window).width() >= 768) {
-		$("#collapse1").addClass('in');
-	}
 	//slideshow slick
 	$('.slick').each(function(i) {
 	    $(this).slick({
