@@ -175,7 +175,15 @@ function generateAllVisualization(currentFilters){
 	function getSEOUrl(filters){
 		var url='/explore';
 		_(filters).forEach(function(filter) { 
-			url = url+"/"+filter.refinementName+"/"+convertToSlug(filter.refinementValue)
+			var refinementNameBeautiful = filter.refinementName;
+			if (filter.refinementName=='primaryBusinessSector_1'){
+				refinementNameBeautiful = 'business';
+			} else if (filter.refinementName=='socialPurposeCategoryTags') {
+				refinementNameBeautiful = 'social';
+			} else if (filter.refinementName=='demographicImpact') {
+				refinementNameBeautiful = 'impact';
+			}
+			url = url+"/"+refinementNameBeautiful+"/"+convertToSlug(filter.refinementValue)
 		});
 		return url;
 	}

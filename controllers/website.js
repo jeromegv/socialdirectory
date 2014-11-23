@@ -83,7 +83,6 @@ function createRefinements(organizations,field){
 
 //since the URL is based on slug, we convert back to real DB values
 function convertUrlToRealValue(filters){
-	//TODO: switch to more pretty name of refinementname
 	_(filters).forEach(function(filter) { 
 		if (filter.refinementName==='primaryBusinessSector_1'){
 			_(businessSector).forEach(function(subCategoryName,categoryName) { 
@@ -118,8 +117,16 @@ function createSelectedRefinementsFromUrl(longUrl){
 	    var refinementFilter;
 	    for (var i=0;i<refinementsInUrl.length;i++){
 		    if (i%2==0 && refinementsInUrl[i] && refinementsInUrl[i+1]){
+		    	var refinementNameBeautiful = refinementsInUrl[i];
+		    	if (refinementsInUrl[i]=='business'){
+					refinementNameBeautiful = 'primaryBusinessSector_1';
+				} else if (refinementsInUrl[i]=='social') {
+					refinementNameBeautiful = 'socialPurposeCategoryTags';
+				} else if (refinementsInUrl[i]=='impact') {
+					refinementNameBeautiful = 'demographicImpact';
+				}
 			    refinementFilter = {
-					'refinementName':refinementsInUrl[i],
+					'refinementName':refinementNameBeautiful,
 					'refinementValue':refinementsInUrl[i+1]
 				};
 				currentFilters.push(refinementFilter);
@@ -127,7 +134,6 @@ function createSelectedRefinementsFromUrl(longUrl){
 		}
 	}
 	currentFilters = convertUrlToRealValue(currentFilters);
-	console.log(currentFilters);
 	return currentFilters;
 }
 //will add a tag hidden=true or hidden=false to each organizations depending on either they should
