@@ -48,7 +48,8 @@ block content
 				.col-lg-3.col-md-4.col-sm-4.col-xs-12
 					.main_box
 						.desc_title_front_page
-							h5= socialPurpose
+							h5
+								a(href="/explore/social/"+convertToSlug(socialPurpose))= socialPurpose
 						.box_1
 							- var suborg = _.filter(organizations, function(org) { return (_.contains(org.socialPurposeCategoryTags,socialPurpose)) });
 							- suborg = _.shuffle(suborg)

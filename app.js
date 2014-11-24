@@ -74,7 +74,15 @@ app.use(function(req, res, next){
       content = content.replace(/\n?\r\n/g, '<br />' );
       return content;
   };
+  var convertToSlug = function (Text) {
+    return Text
+        .toLowerCase()
+        .replace(/[^\w ]+/g,'')
+        .replace(/ +/g,'-')
+        ;
+  }
   res.locals.contentParse = contentParse;
+  res.locals.convertToSlug = convertToSlug;
   next();
 });
 app.use(compress());
