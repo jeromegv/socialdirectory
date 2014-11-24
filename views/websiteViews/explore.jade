@@ -11,7 +11,7 @@ block content
 			div(id="selectedTags")
 				for refinement in selectedRefinements
 					.whitetag
-						h5= refinement.refinementValue
+						h2= refinement.refinementValue
 							a(href="javascript:void(0)", onclick="removeRefinement('"+refinement.refinementName+"','"+refinement.refinementValue+"',this)")
 								i.fa.fa-close
 	.row

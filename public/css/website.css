@@ -405,60 +405,26 @@ i.bigicon{
 
 
 h1, h2, h3, h4, h5, h6 {
-	/*margin:0;
-	padding:0;
-	font-weight:normal;*/
 	font-family: 'latoregular';
 	color:#282727;
 }
 
 h1 {
-	/*color:#282727;
-	
-	font-size:34px;
-	line-height:normal;
-	
-	font-weight:normal;
-	margin:0;
-	padding:0;*/
+
 }
 h2 {
-	/*color:#282727;
-	
-	font-size:28px;
-	line-height:normal;
-	
-	font-weight:normal;
-	margin:0;
-	padding:0;*/
+
 }
 h3 {
-	/*color:#282727;
-	
-	font-size:22px;
-	line-height:normal;
-	
-	font-weight:normal;
-	margin:0;
-	padding:0;*/
+
 	font-family: 'latobold';
 }
 h4 {
-	/*font-size:18px;
-	line-height:normal;
-	color:#282727;
-	font-weight:normal;
-	margin:0;
-	padding:0;*/
+
 	font-family: 'latobold';
 }
 h5 {
-	/*font-size:14px;
-	line-height:16px;
-	font-weight:normal;
-	margin:0;
-	padding:0;
-	color:#282727;*/
+
 	text-transform:uppercase;
 	font-family: 'latoblack';
 }
@@ -644,7 +610,14 @@ input[type=checkbox] {
 	border-radius:5px;
 	display: inline-block;
 }
-.whitetag h5 a{
+.whitetag h2{
+	font-size:14px;
+	text-transform: uppercase;
+	font-family: 'latoblack';
+	margin-top:10px;
+	margin-bottom: 10px;
+}
+.whitetag h2 a{
 	padding-left: 10px;
 	font-size:17px;
 }

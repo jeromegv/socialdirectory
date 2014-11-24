@@ -231,7 +231,7 @@ function generateAllVisualization(currentFilters){
 			updateLogos(organizationsLoadedFiltered);
 			window.history.replaceState("", "title", getSEOUrl(currentFilters));
 			//add selected refinements
-			$("#selectedTags").append('<div class="whitetag"><h5>'+refinementValue+'<a href="javascript:void(0)" onclick="removeRefinement(\''+refinementName+'\',\''+refinementValue+'\',this)"><i class="fa fa-close"></i></a></h5></div>').hide().fadeIn(600);
+			$("#selectedTags").append('<div class="whitetag"><h2>'+refinementValue+'<a href="javascript:void(0)" onclick="removeRefinement(\''+refinementName+'\',\''+refinementValue+'\',this)"><i class="fa fa-close"></i></a></h2></div>').hide().fadeIn(600);
 			//hide current navigation menu + show next one available
 			$("#"+refinementName).slideUp(600);
 			hideRefinementMenu(refinementName);
