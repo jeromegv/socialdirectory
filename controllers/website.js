@@ -195,13 +195,14 @@ function filterOrganizations(organizations,filters){
  * Show sitemap page
  */
  exports.getSiteMap = function(req, res) {
-	Organization.find({active: true}).select('name_slug lastUpdated').exec(function(error, organizations) {
+	Organization.find({active: true}).select('name_slug lastUpdated socialPurposeCategoryTags').exec(function(error, organizations) {
 	    if (!error && organizations!=null){
 	    	res.header('Content-Type', 'application/xml');
 	        res.render('websiteViews/sitemap', {
 				organizations:organizations,
 				moment:moment,
-				externalUrl:secrets.externalUrl
+				externalUrl:secrets.externalUrl,
+				socialPurposeRefinements:createRefinements(organizations,'socialPurposeCategoryTags')
 			});
 	    } else {
 	      res.status(400);

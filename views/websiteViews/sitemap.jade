@@ -22,3 +22,8 @@ urlset(xmlns="http://www.sitemaps.org/schemas/sitemap/0.9")
 			lastmod= moment(org.lastUpdated).format('YYYY-MM-DD')
 			changefreq weekly
 			priority= 0.5
+	each purpose,index in socialPurposeRefinements
+		url
+			loc= externalUrl+'/explore/social/'+convertToSlug(purpose.name)
+			changefreq daily
+			priority= 0.5
