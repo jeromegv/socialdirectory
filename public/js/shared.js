@@ -46,26 +46,37 @@ function generateAllVisualization(currentFilters){
 	var map = L.map('mapall', {
         layers: MQ.mapLayer(),
         center: [ 12.277405, 122.665700],
-        zoom: 6,
+        zoom: 5,
         minZoom: 4,
         detectRetina:true
     });
 	var organizationsLoaded;
 	var organizationsLoadedFiltered;
+	var groupAllMarkers = new L.featureGroup();
 	jQuery.getJSON('/api/organization?light=true', function(organizations) {
     	organizationsLoaded = organizations;
-    	organizationsLoadedFiltered = organizations;
+    	//for the first load, based on the URL, only show the org that should be shown
+    	organizationsLoadedFiltered = filterOrganizations(organizations,currentFilters);
+    	//refresh the map
+    	refreshAllMarkers(organizationsLoadedFiltered);
+    });
+
+    function refreshAllMarkers(organizations) {
+    	groupAllMarkers.clearLayers();
     	organizations.forEach(function(entry,index) {
     		if (entry.Location.latitude!=null && entry.Location.latitude!=null){
     			var marker = L.marker([entry.Location.latitude,entry.Location.longitude]);
-    			map.addLayer(marker);
+    			groupAllMarkers.addLayer(marker);
     			marker.on('click',function (e) {
 					marker.bindPopup("<h4><a href='/organization/"+entry.name_slug+"'>"+entry.name+"</a></h4>"+entry.Location.address).openPopup();
 					//TODO add abbreviation of "About the organization"
 				});
     		}
     	});
-    });
+    	groupAllMarkers.addTo(map);
+    	//auto zoom to fit all the markers
+	    map.fitBounds(groupAllMarkers.getBounds().pad(0.5),{maxZoom:13});
+    }
 
 	//compile how many refinements and which refinement should be shown in navigation
 	function createRefinements(organizations,field){
@@ -205,6 +216,8 @@ function generateAllVisualization(currentFilters){
 			$("#"+refinementName).slideDown();
 			$("#accordion").find(".collapse.in").collapse('hide');
 			$("#"+refinementName).find(".collapse").collapse('show');
+			//refresh the map
+			refreshAllMarkers(organizationsLoadedFiltered);
 		}
 	}
 	//action to do to hide a refinement menu
@@ -237,6 +250,8 @@ function generateAllVisualization(currentFilters){
 			hideRefinementMenu(refinementName);
 			//update the count of refinement in each category
 			updateRefinementList(organizationsLoadedFiltered);
+			//refresh the map
+			refreshAllMarkers(organizationsLoadedFiltered);
 		}
 	}
 
