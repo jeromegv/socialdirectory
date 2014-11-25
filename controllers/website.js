@@ -162,6 +162,20 @@ function filterOrganizations(organizations,filters){
 	});
 	return organizationsFiltered;
 }
+//to populate the canonical URL on the explore page
+function createCanonicalUrl(selectedRefinements){
+	var canonical='';
+	if (_.find(selectedRefinements, { 'refinementName': 'primaryBusinessSector_1' })!=undefined){
+		canonical='/business/'+utils.convertToSlug(_.find(selectedRefinements, { 'refinementName': 'primaryBusinessSector_1' }).refinementValue);
+	} 
+	if (_.find(selectedRefinements, { 'refinementName': 'socialPurposeCategoryTags' })!=undefined) {
+		canonical=canonical+'/social/'+utils.convertToSlug(_.find(selectedRefinements, { 'refinementName': 'socialPurposeCategoryTags' }).refinementValue);
+	} 
+	if (_.find(selectedRefinements, { 'refinementName': 'demographicImpact' })!=undefined) {
+		canonical=canonical+'/impact/'+utils.convertToSlug(_.find(selectedRefinements, { 'refinementName': 'demographicImpact' }).refinementValue);
+	}	
+	return (secrets.externalUrl+'/explore'+canonical);
+}
 
 /**
  * GET /explore
@@ -181,7 +195,8 @@ function filterOrganizations(organizations,filters){
 				businessSectorRefinements:createRefinements(organizations,'primaryBusinessSector_1'),
 				demographicImpactRefinements:createRefinements(organizations,'demographicImpact'),
 				_ : _,
-				selectedRefinements:selectedRefinements
+				selectedRefinements:selectedRefinements,
+				canonicalUrl:createCanonicalUrl(selectedRefinements)
 			});
 	    } else {
 	      res.status(400);
