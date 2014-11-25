@@ -169,6 +169,7 @@ app.get('/reloadOrganizationsInAzure',passportConf.isAuthenticated,organizationC
 //public facing views
 app.get('/',websiteController.getHome);
 app.get('/sitemap.xml',websiteController.getSiteMap);
+//app.get('/twitter',websiteController.getTwitter);
 app.get('/aboutus',websiteController.getAboutUs);
 app.get('/contactus',websiteController.getContactUs);
 app.post('/contactus',websiteController.postContactUs);

@@ -177,6 +177,28 @@ function createCanonicalUrl(selectedRefinements){
 	return (secrets.externalUrl+'/explore'+canonical);
 }
 
+/*exports.getTwitter = function (req,res){
+	Organization.find({active: true}).select('socialMedia').exec(function(error, organizations) {
+	    organizations = _.filter(organizations,function(org) { 
+	    	var found=false;
+	    	org.socialMedia.forEach(function(media,index) {
+	    		//console.log(media.socialMediaName);
+	    		if (media.socialMediaName=='twitter'){
+	    			found=true;
+	    			return false;
+	    		} else {
+	    			org.socialMedia[index]=undefined;
+	    		}
+	    	});
+	    	if (found){
+	    		return true;
+	    	}
+	    	
+	    });
+	    organizations=_.pluck(organizations, 'socialMedia');
+	    console.log(organizations);
+	});
+}*/
 /**
  * GET /explore
  * Show Explore page
