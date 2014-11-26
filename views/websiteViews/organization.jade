@@ -4,6 +4,15 @@ block head
 	meta(property="og:description",content=organization.descriptionService)
 	meta(property="og:image",content=fullFileHost+organization.logo)
 	meta(property="og:url",content=externalUrl+'/organization/'+organization.name_slug)
+	if (organization.videoSource!='' && organization.videoSource!=null)
+		if (organization.videoSource=='youtube')
+			meta(property="og:video",content='https://www.youtube.com/watch?v='+organization.videoId)
+		else if (organization.videoSource=='vimeo')
+			meta(property="og:video",content='http://vimeo.com/'+organization.videoId)
+		else if (organization.videoSource=='custom')
+			meta(property="og:video",content=organization.videoId)
+		
+	
 block content
 	.title.clearfix
 		h1= organization.name
