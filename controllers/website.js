@@ -238,7 +238,6 @@ function createCanonicalUrl(selectedRefinements){
 	        res.render('websiteViews/sitemap', {
 				organizations:organizations,
 				moment:moment,
-				externalUrl:secrets.externalUrl,
 				socialPurposeRefinements:createRefinements(organizations,'socialPurposeCategoryTags')
 			});
 	    } else {
@@ -250,25 +249,21 @@ function createCanonicalUrl(selectedRefinements){
 
 /**
  * GET /organization/:slug
- * Show home page
+ * Show organization page
  */
  exports.getOrganization = function(req, res) {
- 	var options = {
-      url: res.locals.host+'/api/organization/'+req.params.slug,
-      json: true
- 	};
-	request(options, function (error, response, body) {
-		if (!error && response.statusCode == 200) {
-		  res.render('websiteViews/organization', {
-		    title: body.name,
-		    organization: body,
+ 	Organization.find({ name_slug: req.params.slug }).select().exec(function(err, organization) {
+	    if (!err && organization!=null && organization.length>0 ){
+	      res.render('websiteViews/organization', {
+		    title: organization[0].name,
+		    organization: organization[0],
 		    _ : _
 		  });
-		} else {
+	    } else {
 		  req.flash('errors', { msg: 'The organization requested can\'t be rendered' });
 		  return res.redirect('back');
 		}
-  	});
+	});
 };
 
 /**

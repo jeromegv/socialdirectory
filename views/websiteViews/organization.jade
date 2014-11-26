@@ -1,6 +1,9 @@
 extends shared/layout
 block head
 	link(rel="stylesheet",href="/components/leaflet/dist/leaflet.css")
+	meta(property="og:description",content=organization.descriptionService)
+	meta(property="og:image",content=fullFileHost+organization.logo)
+	meta(property="og:url",content=externalUrl+'/organization/'+organization.name_slug)
 block content
 	.title.clearfix
 		h1= organization.name

@@ -129,6 +129,7 @@ app.use(function(req, res, next) {
   res.locals.user = req.user;
   res.locals.host = 'http://localhost:'+app.get('port');
   res.locals.fullFileHost = secrets.s3.fullFileHost;
+  res.locals.externalUrl = secrets.externalUrl;
   next();
 });
 app.use(function(req, res, next) {

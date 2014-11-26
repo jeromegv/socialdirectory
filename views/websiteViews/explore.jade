@@ -3,6 +3,8 @@ extends shared/layout
 block head
 	link(rel="stylesheet",href="/components/leaflet/dist/leaflet.css")
 	link(rel="canonical",href=canonicalUrl)
+	meta(property="og:url",content=canonicalUrl)
+	meta(property="og:description",content='Explore the up-and-coming social enterprise scene in the Philippines')
 
 block content
 	.title.clearfix
