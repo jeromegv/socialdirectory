@@ -169,7 +169,7 @@ var uploadToKnox = function(fileData,filePath,contentType,callback){
       uploadknox.on('response', function(response){
         if (200 == response.statusCode) {
           console.log('saved logo to %s', uploadknox.url);
-          callback(null,'/logos/'+newFileName);
+          callback(null,'/'+newFileName);
         } else {
         	console.log(response);
        		callback('S3 did not respond with 200, response was:'+response.statusCode);

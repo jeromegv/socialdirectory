@@ -35,7 +35,7 @@ block content
     .form-group
       label(class='col-sm-2 control-label', for='logo') Logo URL
       .col-sm-4
-        input.form-control(type='text', name='logo', id='logo', placeholder='URL to their logo', data-parsley-type="url",value=organization.logo)
+        input.form-control(type='text', name='logo', id='logo', placeholder='URL to their logo',value=organization.logo)
       if(organization.logo)
         .col-sm-2
           a(href=fullFileHost+organization.logo,target="_blank",class="thumbnail")
