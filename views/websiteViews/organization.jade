@@ -14,176 +14,183 @@ block head
 		
 	
 block content
-	.title.clearfix
-		h1= organization.name
-	.pro_main_c
-		.row
-			.col-lg-3.col-md-3.col-sm-3.col-xs-12
-				.text-center
-					.slider_1.clearfix
-						a(href=organization.website,target='_blank')
-							img(src=fullFileHost+organization.logoThumbnail,class="img-responsive",alt=organization.name+' logo')
-							p Visit their website
+	div(itemscope,itemtype="http://schema.org/Organization")
+		.title.clearfix
+			h1(itemprop="name")= organization.name
+		.pro_main_c
+			.row
+				.col-lg-3.col-md-3.col-sm-3.col-xs-12
+					.text-center
+						.slider_1.clearfix
+							a(href=organization.website,target='_blank',itemprop="url")
+								img(itemprop="logo", src=fullFileHost+organization.logoThumbnail,class="img-responsive",alt=organization.name+' logo')
+								p Visit their website
 
-			.col-lg-9.col-md-9.col-sm-9.col-xs-12
-				.desc_blk
-					.row
-						.col-xs-12
-							h3 About the organization  
-							.desc_blk_inn
-								p!= contentParse(organization.descriptionService)
-					.row
-						.col-sm-4.col-xs-12
-							h5 Business Category
-							.graytext
-								p=organization.primaryBusinessSector_1
-						if typeof(organization.primaryBusinessSector_2)!=undefined && organization.primaryBusinessSector_2.length>0
+				.col-lg-9.col-md-9.col-sm-9.col-xs-12
+					.desc_blk
+						.row
+							.col-xs-12
+								h3 About the organization  
+								.desc_blk_inn
+									p(itemprop="description")!= contentParse(organization.descriptionService)
+						.row
 							.col-sm-4.col-xs-12
-								h5 Business Sub-Category
+								h5 Business Category
 								.graytext
-									p 
-										for sector,index in organization.primaryBusinessSector_2 
-											=sector 
-											if (index!=organization.primaryBusinessSector_2.length-1)
-												|,  
-						if (organization.yearFounded !='' && organization.yearFounded !=null)
-							.col-sm-4.col-xs-12
-								h5 Year Founded
-								.graytext
-									p=organization.yearFounded
-					
-		.tabing
-			ul.nav.nav-tabs
-				li.active 
-					a(href="#general",data-toggle="tab",role="tab") The Good Stuff
-				li
-					a(href='#contactinfo',data-toggle="tab",role="tab") Contact and Location
-				if (organization.additionalResources.length>0)
-					li 
-						a(href="#additionalresources",data-toggle="tab",role="tab") Additional Resources
-			.tab-content
-				.tab-pane.active(id='general')
-					.row
-						.col-lg-6.col-md-6.col-sm-6.col-xs-12
-							.row
-								.col-lg-12.col-md-12.col-sm-12.col-xs-12
-									.rew_blk.clearfix
-										h5 What makes it a social enterprise?
-										p!= contentParse(organization.descriptionCause)
-							.row
-								.col-lg-6.col-md-6.col-sm-6.col-xs-12
-									h5 What is its social cause?
-									for purpose,index in organization.socialPurposeCategoryTags 
-										=purpose
-										if (index!=organization.socialPurposeCategoryTags.length-1)
-											|,  
-								.col-lg-6.col-md-6.col-sm-6.col-xs-12
-									h5 Who does it impact?
-									for impact,index in organization.demographicImpact 
-										=impact 
-										if (index!=organization.demographicImpact.length-1)
-											|,  
-						.col-lg-6.col-md-6.col-sm-6.col-xs-12
-							if (organization.videoSource!='' && organization.videoSource!=null)
-								h5 Video
-							.embed-responsive.embed-responsive-4by3
-								if (organization.videoSource=='youtube')
-									iframe(class="embed-responsive-item",src="//www.youtube.com/embed/"+organization.videoId,allowfullscreen)
-								else if (organization.videoSource=='vimeo')
-									iframe(class="embed-responsive-item",src="//player.vimeo.com/video/"+organization.videoId,webkitallowfullscreen,mozallowfullscreen,allowfullscreen)
-								else if (organization.videoSource=='custom')
-									iframe(class="embed-responsive-item",src=organization.videoId,webkitallowfullscreen,mozallowfullscreen,allowfullscreen)
-				.tab-pane(id='contactinfo')
-					.row
-						.col-lg-6.col-md-6.col-sm-6.col-xs-12
-							h5
-								span.fa.fa-home
-								|  Website
-							p
-								a(href=organization.website,target='_blank')=organization.website
-							if (organization.email)!=''
-								h5
-									span.fa.fa-envelope 
-									|  Email
-								p
-									a(href='mailto:'+organization.email,target='_blank')
-										=organization.email
-							if (organization.phoneNumber)!=''
-								h5 
-									span.fa.fa-mobile 
-									|  Phone Number
-								p=organization.phoneNumber
-							h5 
-								span.fa.fa-home 
-								|  Address
-							p!=contentParse(organization.Location.address)
-						.col-lg-6.col-md-6.col-sm-6.col-xs-12
-							if (organization.Location.latitude!=null&&organization.Location.longitude!=null)
-								h5 Where is 
-									=organization.name
-									|  in Philippines
-								.map(id='map')
-				if (organization.additionalResources.length>0)
-					.tab-pane(id='additionalresources')
-						h4 Resources to learn more about 
-							=organization.name
-						for resource in organization.additionalResources
-							a(href=resource.resourceUrl,target="_blank")
-								p= resource.resourceName
-		if organization.socialMedia.length>0
-			.desc_blk
-				.row
-					.col-xs-12
-						h3 Social Media
-						- var pinterestLink = _.filter(organization.socialMedia, { 'socialMediaName': 'pinterest' });
+									p=organization.primaryBusinessSector_1
+							if typeof(organization.primaryBusinessSector_2)!=undefined && organization.primaryBusinessSector_2.length>0
+								.col-sm-4.col-xs-12
+									h5 Business Sub-Category
+									.graytext
+										p 
+											for sector,index in organization.primaryBusinessSector_2 
+												=sector 
+												if (index!=organization.primaryBusinessSector_2.length-1)
+													|,  
+							if (organization.yearFounded !='' && organization.yearFounded !=null)
+								.col-sm-4.col-xs-12
+									h5 Year Founded
+									.graytext
+										p(itemprop="foundingDate")=organization.yearFounded
+						
+			.tabing
+				ul.nav.nav-tabs
+					li.active 
+						a(href="#general",data-toggle="tab",role="tab") The Good Stuff
+					li
+						a(href='#contactinfo',data-toggle="tab",role="tab") Contact and Location
+					if (organization.additionalResources.length>0)
+						li 
+							a(href="#additionalresources",data-toggle="tab",role="tab") Additional Resources
+				.tab-content
+					.tab-pane.active(id='general')
 						.row
 							.col-lg-6.col-md-6.col-sm-6.col-xs-12
 								.row
-									for media in organization.socialMedia
-										.col-xs-4
-											.text-capitalize.text-center
-												a(href=media.socialMediaUrl,target="_blank")
-													case media.socialMediaName
-														when 'pinterest'
-															span.fa.fa-pinterest.mediumicon
-														when 'twitter'
-															span.fa.fa-twitter.mediumicon
-														when 'facebook'
-															span.fa.fa-facebook.mediumicon
-														when 'youtube'
-															span.fa.fa-youtube.mediumicon
-														when 'linkedin'
-															span.fa.fa-linkedin.mediumicon
-														when 'tumblr'
-															span.fa.fa-tumblr.mediumicon
-														when 'instagram'
-															span.fa.fa-instagram.mediumicon
-														when 'google plus'
-															span.fa.fa-google-plus.mediumicon
-														when 'blogspot'
-															span.fa.fa-rss.mediumicon
-														when 'vimeo'
-															span.fa.fa-vimeo-square.mediumicon
-														when 'foursquare'
-															span.fa.fa-foursquare.mediumicon
-														when 'wordpress'
-															span.fa.fa-wordpress.mediumicon
-														default
-															span.fa.fa-asterisk.mediumicon
-													
-													if media.socialMediaName!='other'
-														=media.socialMediaName
-													else
-														=media.socialMediaUrl
+									.col-lg-12.col-md-12.col-sm-12.col-xs-12
+										.rew_blk.clearfix
+											h5 What makes it a social enterprise?
+											p!= contentParse(organization.descriptionCause)
+								.row
+									.col-lg-6.col-md-6.col-sm-6.col-xs-12
+										h5 What is its social cause?
+										for purpose,index in organization.socialPurposeCategoryTags 
+											=purpose
+											if (index!=organization.socialPurposeCategoryTags.length-1)
+												|,  
+									.col-lg-6.col-md-6.col-sm-6.col-xs-12
+										h5 Who does it impact?
+										for impact,index in organization.demographicImpact 
+											=impact 
+											if (index!=organization.demographicImpact.length-1)
+												|,  
 							.col-lg-6.col-md-6.col-sm-6.col-xs-12
-								- var pinterestLink = _.filter(organization.socialMedia, { 'socialMediaName': 'pinterest' });
-								if (pinterestLink.length>0)
-									div(id="socialmediacontent")
-										h4
-											=organization.name
-											|'s pictures on Pinterest
-									a(data-pin-do="embedUser" href=pinterestLink[0].socialMediaUrl data-pin-scale-width="87" data-pin-scale-height="120" data-pin-board-width="1200")
-									script(type="text/javascript" async src="//assets.pinterest.com/js/pinit.js")
+								if (organization.videoSource!='' && organization.videoSource!=null)
+									h5 Video
+								.embed-responsive.embed-responsive-4by3
+									if (organization.videoSource=='youtube')
+										iframe(class="embed-responsive-item",src="//www.youtube.com/embed/"+organization.videoId,allowfullscreen)
+									else if (organization.videoSource=='vimeo')
+										iframe(class="embed-responsive-item",src="//player.vimeo.com/video/"+organization.videoId,webkitallowfullscreen,mozallowfullscreen,allowfullscreen)
+									else if (organization.videoSource=='custom')
+										iframe(class="embed-responsive-item",src=organization.videoId,webkitallowfullscreen,mozallowfullscreen,allowfullscreen)
+					.tab-pane(id='contactinfo')
+						.row
+							.col-lg-6.col-md-6.col-sm-6.col-xs-12
+								h5
+									span.fa.fa-home
+									|  Website
+								p
+									a(href=organization.website,target='_blank')=organization.website
+								if (organization.email)!=''
+									h5
+										span.fa.fa-envelope 
+										|  Email
+									p
+										a(href='mailto:'+organization.email,target='_blank')
+											span(itemprop="email")=organization.email
+								if (organization.phoneNumber)!=''
+									h5 
+										span.fa.fa-mobile 
+										|  Phone Number
+									p(itemprop="telephone")=organization.phoneNumber
+								h5 
+									span.fa.fa-home 
+									|  Address
+								p!=contentParse(organization.Location.address)
+							.col-lg-6.col-md-6.col-sm-6.col-xs-12
+								if (organization.Location.latitude!=null&&organization.Location.longitude!=null)
+									div(itemprop="location")
+										span(itemscope itemtype="http://schema.org/Place")
+											div(itemprop="geo")
+												span(itemscope,itemtype="http://schema.org/GeoCoordinates")
+													span(property="latitude" content=organization.Location.latitude)
+													span(property="longitude" content=organization.Location.longitude)
+									h5 Where is 
+										=organization.name
+										|  in Philippines
+									.map(id='map')
+					if (organization.additionalResources.length>0)
+						.tab-pane(id='additionalresources')
+							h4 Resources to learn more about 
+								=organization.name
+							for resource in organization.additionalResources
+								a(href=resource.resourceUrl,target="_blank")
+									p= resource.resourceName
+			if organization.socialMedia.length>0
+				.desc_blk
+					.row
+						.col-xs-12
+							h3 Social Media
+							- var pinterestLink = _.filter(organization.socialMedia, { 'socialMediaName': 'pinterest' });
+							.row
+								.col-lg-6.col-md-6.col-sm-6.col-xs-12
+									.row
+										for media in organization.socialMedia
+											.col-xs-4
+												.text-capitalize.text-center
+													a(href=media.socialMediaUrl,target="_blank")
+														case media.socialMediaName
+															when 'pinterest'
+																span.fa.fa-pinterest.mediumicon
+															when 'twitter'
+																span.fa.fa-twitter.mediumicon
+															when 'facebook'
+																span.fa.fa-facebook.mediumicon
+															when 'youtube'
+																span.fa.fa-youtube.mediumicon
+															when 'linkedin'
+																span.fa.fa-linkedin.mediumicon
+															when 'tumblr'
+																span.fa.fa-tumblr.mediumicon
+															when 'instagram'
+																span.fa.fa-instagram.mediumicon
+															when 'google plus'
+																span.fa.fa-google-plus.mediumicon
+															when 'blogspot'
+																span.fa.fa-rss.mediumicon
+															when 'vimeo'
+																span.fa.fa-vimeo-square.mediumicon
+															when 'foursquare'
+																span.fa.fa-foursquare.mediumicon
+															when 'wordpress'
+																span.fa.fa-wordpress.mediumicon
+															default
+																span.fa.fa-asterisk.mediumicon
+														
+														if media.socialMediaName!='other'
+															=media.socialMediaName
+														else
+															=media.socialMediaUrl
+								.col-lg-6.col-md-6.col-sm-6.col-xs-12
+									- var pinterestLink = _.filter(organization.socialMedia, { 'socialMediaName': 'pinterest' });
+									if (pinterestLink.length>0)
+										div(id="socialmediacontent")
+											h4
+												=organization.name
+												|'s pictures on Pinterest
+										a(data-pin-do="embedUser" href=pinterestLink[0].socialMediaUrl data-pin-scale-width="87" data-pin-scale-height="120" data-pin-board-width="1200")
+										script(type="text/javascript" async src="//assets.pinterest.com/js/pinit.js")
 
 block javascript
 	script(src="//open.mapquestapi.com/sdk/leaflet/v1.s/mq-map.js?key=Fmjtd%7Cluur2h02n9%2Cb0%3Do5-9wb2da")
