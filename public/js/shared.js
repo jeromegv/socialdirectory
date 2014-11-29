@@ -1,4 +1,5 @@
 function generateVisualization(latitude,longitude,slug){
+	
 	var map = L.map('map', {
         layers: MQ.mapLayer(),
         center: [ latitude, longitude],
@@ -6,7 +7,7 @@ function generateVisualization(latitude,longitude,slug){
         minZoom: 5,
         detectRetina:true
     });
-
+	L.Icon.Default.imagePath = '/components/leaflet/dist/images/';
 	var marker = L.marker([latitude,longitude]);
 	map.addLayer(marker);
 	var popupLoaded = false;
@@ -50,6 +51,7 @@ function generateAllVisualization(currentFilters){
         minZoom: 4,
         detectRetina:true
     });
+    L.Icon.Default.imagePath = '/components/leaflet/dist/images/';
 	var organizationsLoaded;
 	var organizationsLoadedFiltered;
 	var groupAllMarkers = new L.featureGroup();
