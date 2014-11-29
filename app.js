@@ -111,7 +111,8 @@ app.use(session({
   secret: secrets.sessionSecret,
   store: new MongoStore({
     url: secrets.db,
-    auto_reconnect: true
+    auto_reconnect: true,
+    clear_interval: 86400
   }, function () {
     console.log("mongostore db connection open");
   })
