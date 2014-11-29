@@ -254,84 +254,6 @@ function generateAllVisualization(currentFilters){
 			refreshAllMarkers(organizationsLoadedFiltered);
 		}
 	}
-
-
-
-			/*
-			var orgCross = crossfilter(organizationsLoaded);
-			var byId = orgCross.dimension(function(p) { return p._id; });
-			var byPrimaryBusinessSector_1 = orgCross.dimension(function(p) { return p.primaryBusinessSector_1; });
-			var bySocialPurposeCategoryTags = orgCross.dimension(function(p) { return p.socialPurposeCategoryTags; });
-			var byDemographicImpact = orgCross.dimension(function(p) { return p.demographicImpact; });
-			
-			//filter based on the refinement chosen
-			if (refinementName=='primaryBusinessSector_1'){
-				byPrimaryBusinessSector_1.filter(refinementValue);
-			} else if (refinementName=='socialPurposeCategoryTags'){
-				bySocialPurposeCategoryTags.filterFunction(function(tags) { 
-					return _.contains(tags,refinementValue);				
-				});
-			} else if (refinementName=='demographicImpact'){
-				byDemographicImpact.filterFunction(function(tags) { 
-					return _.contains(tags,refinementValue);				
-				});
-			}
-			//for list of org
-			byId.top(Infinity).forEach(function(org, i) {
-				console.log('org');
-				console.log(org);
-			});
-			//for guided nav
-			byPrimaryBusinessSector_1.group().top(Infinity).forEach(function(group, i) {
-				if (group.value>0){
-					console.log('group primary');
-					console.log(group.key);
-					console.log(group.value);
-				}
-			});
-			function reduceAdd(attr) {
-				return function(p,v) {
-				  v[attr].forEach (function(val, idx) {
-				     p[val] = (p[val] || 0) + 1; //increment counts
-				  });
-				  return p;
-				};
-			}
-			function reduceRemove(attr) {
-				return function(p,v) {
-				  v[attr].forEach (function(val, idx) {
-				     p[val] = (p[val] || 0) - 1; //decrement counts
-				  });
-				  return p;
-				};
-			}
-
-			function reduceInitial() {
-			  return {};  
-			}
-			//for guided nav
-
-			var group = byDemographicImpact.groupAll().reduce(reduceAdd('demographicImpact'), reduceRemove('demographicImpact'), reduceInitial).value();
-			group.all = function() {
-			  var newObject = [];
-			  for (var key in this) {
-			  	console.log(key);
-			    if (this.hasOwnProperty(key) && key != "all") {
-			      newObject.push({
-			        key: key,
-			        value: this[key]
-			      });
-			    }
-			  }
-			  return newObject;
-			}
-			group.all().forEach(function(group, i) {
-				//if (group.value>0){
-					console.log('demo refinement');
-					console.log(group.key);
-					console.log(group.value);
-				//}
-			});*/
 };
 
 $(document).ready(function() {
@@ -407,19 +329,15 @@ $(document).ready(function() {
 	  errorsWrapper: '<span class=\"help-inline\"></span>',
 	  errorTemplate: '<span></span>'
 	});
-	//smooth scrolling
-	/*var $root = $('html, body');
-	$('a[href*=#]').click(function() {
+	//smooth scrolling on home page links buttons
+	var $root = $('html, body');
+	$('.smoothscroll').click(function() {
 		var href = $.attr(this, 'href');
-		if (href!='#' && href!='#general' && href!='#additionalresources' && href!='#contactinfo' && href.substr(0,1)!='/'){
-			    $root.animate({
-		        scrollTop: $('[name="' + href.substr(1) + '"]').offset().top
-		    }, 500, function () {
-		        window.location.hash = href;
-		    });
-	    } else {
-	    	return true;
-	    }
+		$root.animate({
+	        scrollTop: $('[name="' + href.substr(1) + '"]').offset().top
+	    }, 500, function () {
+	        window.location.hash = href;
+	    });
 	    return false;
-	});*/
+	});
 });
