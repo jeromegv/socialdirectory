@@ -41,7 +41,7 @@ var utils = require('../libs/utils.js');
 		Organization.find({active: true}).select('logoThumbnail name name_slug socialPurposeCategoryTags descriptionService').exec(function(error, organizations) {
 		    if (!error && organizations!=null){
 		        res.render('websiteViews/home', {
-					title: 'Home',
+					title: 'Home of Social Enterprises in Philippines',
 					organizations:organizations,
 					socialPurposeCategory:socialPurposeCategory,
 					_ : _
