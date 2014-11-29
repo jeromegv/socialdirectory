@@ -121,11 +121,11 @@ block content
 							.col-lg-6.col-md-6.col-sm-6.col-xs-12
 								if (organization.Location.latitude!=null&&organization.Location.longitude!=null)
 									div(itemprop="location")
-										span(itemscope itemtype="http://schema.org/Place")
+										span(itemscope,itemtype="http://schema.org/Place")
 											div(itemprop="geo")
 												span(itemscope,itemtype="http://schema.org/GeoCoordinates")
-													span(property="latitude" content=organization.Location.latitude)
-													span(property="longitude" content=organization.Location.longitude)
+													span(itemprop="latitude",content=organization.Location.latitude)
+													span(itemprop="longitude",content=organization.Location.longitude)
 									h5 Where is 
 										=organization.name
 										|  in Philippines
