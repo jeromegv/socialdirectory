@@ -1,11 +1,10 @@
 extends shared/layout
 
 block head
-	link(rel="stylesheet",href="/components/leaflet/dist/leaflet.css")
 	link(rel="canonical",href=canonicalUrl)
 	meta(property="og:url",content=canonicalUrl)
 	meta(property="og:description",content='Explore the up-and-coming social enterprise scene in the Philippines')
-
+	meta(name="description",content='Explore the up-and-coming social enterprise scene in the Philippines')
 block content
 	.title.clearfix
 		h1 Explore Social Enterprises in Philippines
@@ -66,9 +65,7 @@ block content
 										.desc
 											p= organization.descriptionService.substring(0,90)
 block javascript
-	script(src="/components/leaflet/dist/leaflet.js")
-	script(src="//open.mapquestapi.com/sdk/leaflet/v1.s/mq-map.js?key=Fmjtd%7Cluur2h02n9%2Cb0%3Do5-9wb2da")
-	
+	script(src="//open.mapquestapi.com/sdk/leaflet/v1.s/mq-map.js?key=Fmjtd%7Cluur2h02n9%2Cb0%3Do5-9wb2da")	
 	script.
 		var refinementsAll = !{JSON.stringify(selectedRefinements)};
 		$(document).ready(function() {

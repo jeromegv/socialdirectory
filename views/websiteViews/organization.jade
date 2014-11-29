@@ -1,7 +1,7 @@
 extends shared/layout
 block head
-	link(rel="stylesheet",href="/components/leaflet/dist/leaflet.css")
 	meta(property="og:description",content=organization.descriptionService)
+	meta(name="description",content=organization.descriptionService)
 	meta(property="og:image",content=fullFileHost+organization.logo)
 	meta(property="og:url",content=externalUrl+'/organization/'+organization.name_slug)
 	if (organization.videoSource!='' && organization.videoSource!=null)
@@ -186,7 +186,6 @@ block content
 									script(type="text/javascript" async src="//assets.pinterest.com/js/pinit.js")
 
 block javascript
-	script(src="/components/leaflet/dist/leaflet.js")
 	script(src="//open.mapquestapi.com/sdk/leaflet/v1.s/mq-map.js?key=Fmjtd%7Cluur2h02n9%2Cb0%3Do5-9wb2da")
 	script.
 		generateVisualization(#{organization.Location.latitude},#{organization.Location.longitude},"#{organization.name_slug}");
