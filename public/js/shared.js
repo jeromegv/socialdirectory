@@ -37,7 +37,7 @@ function generateAllVisualization(currentFilters){
 	if ($(window).width() >= 768 && currentFilters.length<3) {
 		$( ".collapse" ).each(function() {
 			if ($(this).parent( ".panel" ).is(":visible")){
-				$(this).collapse('show');
+				$(this).collapse({"toggle": true, 'parent': '#accordion' });
 				return false;
 			}
 		});
@@ -216,21 +216,21 @@ function generateAllVisualization(currentFilters){
 			    $(this).remove();
 			});
 			$("#"+refinementName).slideDown();
-			$("#accordion").find(".collapse.in").collapse('hide');
-			$("#"+refinementName).find(".collapse").collapse('show');
+			$("#accordion").find(".collapse.in").collapse({"toggle": true, 'parent': '#accordion' });
+			$("#"+refinementName).find(".collapse").collapse({"toggle": true, 'parent': '#accordion' });
 			//refresh the map
 			refreshAllMarkers(organizationsLoadedFiltered);
 		}
 	}
 	//action to do to hide a refinement menu
 	function hideRefinementMenu(refinementName){
-		$("#"+refinementName).find(".collapse").collapse('hide');
+		$("#"+refinementName).find(".collapse").collapse({"toggle": true, 'parent': '#accordion' });
 		//try to show the next refinement if there are still some left to show
 		if (currentFilters.length<3){
 			if ($("#"+refinementName).next().find(".collapse").parent( ".panel" ).is(":visible")){
-				var element = $("#"+refinementName).next().find(".collapse").collapse('show');
+				var element = $("#"+refinementName).next().find(".collapse").collapse({"toggle": true, 'parent': '#accordion' });
 			} else {
-				$("#"+refinementName).prev().find(".collapse").collapse('show');
+				$("#"+refinementName).prev().find(".collapse").collapse({"toggle": true, 'parent': '#accordion' });
 			}
 		}
 	}
