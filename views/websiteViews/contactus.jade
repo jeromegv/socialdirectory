@@ -10,50 +10,65 @@ block content
 	.contact_c
 		.row
 			.col-lg-6.col-md-6.col-sm-6.col-xs-12
-				.infor_c
-					h5 Information
-					.infor_c_inn
-						p We're a crowd-sourced social directory and need your help to stay up to date. If you would like to contribute information about an organization, have a question or feedback, or just looking for ways to be involved - contact us!
-						address
-								span.fa.fa-envelope
-								strong  Email
-								br
-								a(href="mailto:info@choosesocial.ph",target="_blank") info@choosesocial.ph
-						address
-								span.fa.fa-facebook
-								strong  Facebook
-								br
-								a(href="https://facebook.com",target="_blank") https://facebook.com
-						address
-								span.fa.fa-twitter
-								strong  Twitter
-								br
-								a(href="https://twitter.com/choosesocial",target="_blank") https://twitter.com/choosesocial
+				.row
+					.col-lg-12.col-md-12.col-sm-12.col-xs-12
+						.infor_c
+							h5 Information
+							.infor_c_inn
+								p We're a crowd-sourced social directory and need your help to stay up to date. If you would like to contribute information about an organization, have a question or feedback, or just looking for ways to be involved - contact us!
+								address
+										span.fa.fa-envelope
+										strong  Email
+										br
+										a(href="mailto:info@choosesocial.ph",target="_blank") info@choosesocial.ph
+								address
+										span.fa.fa-facebook
+										strong  Facebook
+										br
+										a(href="https://facebook.com",target="_blank") https://facebook.com
+								address
+										span.fa.fa-twitter
+										strong  Twitter
+										br
+										a(href="https://twitter.com/choosesocial",target="_blank") https://twitter.com/choosesocial
+				.row
+					.col-lg-12.col-md-12.col-sm-12.col-xs-12
+						.infor_c
+							h5 Stay Connected
+							.infor_c_inn
+								p Sign up for our newsletter and we'll send you only the best and most relevant info on social enterprise news, updates to our platform, and ways you can lead change in your life!
+								form(action="",method="post",id="mc-embedded-subscribe-form",name="mc-embedded-subscribe-form",class="validate",target="_blank",novalidate)
+									input(type="email",value="",name="EMAIL",class="txtboxemail",id="mce-EMAIL",placeholder="Enter your email",required)
+									div(style="position: absolute; left: -5000px;")
+										input(type="text",name="",tabindex="-1",value="")
+									button(type="submit",name="subscribe",id="mc-embedded-subscribe",class="btn btn-primary") Sign up!
 			.col-lg-6.col-md-6.col-sm-6.col-xs-12
-				.con_frm
-					h5 Contact Form
-					form(method='POST',id='contactus')
-						input(type='hidden', name='_csrf', value=_csrf)
-						.frm.con_frm_inn
-							.row
-								.col-lg-6.col-md-6.col-sm-6.col-xs-12
-									.form-group
-										.lbltxt 
-											label(class='control-label', for='name') Name:
-										input.form-control.txtbox(type='name', name='name', id='name', placeholder='Your Name',required)
-								.col-lg-6.col-md-6.col-sm-6.col-xs-12
-									.form-group
-										.lbltxt 
-											label(class='control-label', for='email') Email:
-										input.form-control.txtbox(type='email', name='email', id='email', placeholder='Email',required)
-							.row
-								.col-lg-12.col-md-12.col-sm-12.col-xs-12
-									.form-group
-										.lbltxt 
-											label(class='control-label', for='message') Message: 
-										textarea.form-control(type='text', name='message', rows='3', id='message', placeholder='Type your message here',required)
-							.row
-								.col-lg-12.col-md-12.col-sm-12.col-xs-12
-									.clearfix.frm_bot
-										input.btn_c(type='submit')
+				.row
+					.col-lg-12.col-md-12.col-sm-12.col-xs-12
+						.con_frm
+							h5 Get in touch
+							form(method='POST',id='contactus')
+								input(type='hidden', name='_csrf', value=_csrf)
+								.frm.con_frm_inn
+									.row
+										.col-lg-6.col-md-6.col-sm-6.col-xs-12
+											.form-group
+												.lbltxt 
+													label(class='control-label', for='name') Name:
+												input.form-control.txtbox(type='name', name='name', id='name', placeholder='Your Name',required)
+										.col-lg-6.col-md-6.col-sm-6.col-xs-12
+											.form-group
+												.lbltxt 
+													label(class='control-label', for='email') Email:
+												input.form-control.txtbox(type='email', name='email', id='email', placeholder='Email',required)
+									.row
+										.col-lg-12.col-md-12.col-sm-12.col-xs-12
+											.form-group
+												.lbltxt 
+													label(class='control-label', for='message') Message: 
+												textarea.form-control(type='text', name='message', rows='3', id='message', placeholder='Type your message here',required)
+									.row
+										.col-lg-12.col-md-12.col-sm-12.col-xs-12
+											.clearfix.frm_bot
+												input.btn_c(type='submit')
 					

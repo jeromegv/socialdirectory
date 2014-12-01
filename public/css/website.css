@@ -301,10 +301,10 @@ i.bigicon{
 #footer .f_mid p a {
 	color:#37bbec;
 }
-#footer .f_mid .emial_box {
+.emial_box {
 	position:relative;
 }
-#footer .f_mid .txtbox {
+.txtboxemail {
 	height:30px;
 	border-radius:18px;
 	font-size:14px;
@@ -317,12 +317,12 @@ i.bigicon{
 #mc-embedded-subscribe {
 	padding:4px 6px 4px 6px;
 }
-#footer .f_mid .emial_box a {
+.emial_box a {
 	position:absolute;
 	right:18px;
 	top:0px;
 }
-#footer .f_mid .emial_box a span {
+.emial_box a span {
 	font-size:12px;
 	color:#d7dbdb;
 	line-height:30px;
@@ -684,7 +684,7 @@ input[type=checkbox] {
 	border-radius: 5PX;
 }
 #content .infor_c .infor_c_inn {
-	padding:25px 15px 71px 15px;
+	padding:15px 15px 5px 15px;
 }
 #content .infor_c .infor_c_inn h5 {
 	margin:0;
