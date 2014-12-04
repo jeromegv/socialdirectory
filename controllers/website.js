@@ -199,6 +199,28 @@ function createCanonicalUrl(selectedRefinements){
 	    console.log(organizations);
 	});
 }*/
+function createTitle(selectedRefinements) {
+	var title = 'Explore';
+	if (_.find(selectedRefinements, { 'refinementName': 'primaryBusinessSector_1' })!=undefined){
+		title = title +' '+(_.find(selectedRefinements, { 'refinementName': 'primaryBusinessSector_1' }).refinementValue);
+		if (_.find(selectedRefinements, { 'refinementName': 'socialPurposeCategoryTags' })!=undefined){
+			title = title + ' & ' + (_.find(selectedRefinements, { 'refinementName': 'socialPurposeCategoryTags' }).refinementValue);
+		}
+		title = title + ' social enterprises';
+		if (_.find(selectedRefinements, { 'refinementName': 'demographicImpact' })!=undefined) {
+			title = title + ' that impact '+(_.find(selectedRefinements, { 'refinementName': 'demographicImpact' }).refinementValue) ;
+		}
+	} else if (_.find(selectedRefinements, { 'refinementName': 'socialPurposeCategoryTags' })!=undefined)  {
+		title = title +' '+(_.find(selectedRefinements, { 'refinementName': 'socialPurposeCategoryTags' }).refinementValue) + ' social enterprises';
+		if (_.find(selectedRefinements, { 'refinementName': 'demographicImpact' })!=undefined) {
+			title = title + ' that impact '+(_.find(selectedRefinements, { 'refinementName': 'demographicImpact' }).refinementValue) ;
+		}
+	} else if (_.find(selectedRefinements, { 'refinementName': 'demographicImpact' })!=undefined) { 
+		title = title +' social Enterprises shat impact '+(_.find(selectedRefinements, { 'refinementName': 'demographicImpact' }).refinementValue) ;
+	}
+
+	return title;
+}
 /**
  * GET /explore
  * Show Explore page
@@ -211,7 +233,7 @@ function createCanonicalUrl(selectedRefinements){
 	    if (!error && organizations!=null){
 	    	organizations = filterOrganizations(organizations,selectedRefinements);
 	        res.render('websiteViews/explore', {
-				title: 'Explore',
+				title: createTitle(selectedRefinements),
 				organizations:organizations,
 				socialPurposeRefinements:createRefinements(organizations,'socialPurposeCategoryTags'),
 				businessSectorRefinements:createRefinements(organizations,'primaryBusinessSector_1'),
