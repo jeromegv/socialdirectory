@@ -149,6 +149,12 @@ i.bigicon{
   width: 100%; 
   height: 250px; 
 }
+.navbar-brand {
+	padding: 0px;
+}
+.navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus{
+	color:#99CA3C;
+}
 
 /*----------------
  Caroussel
@@ -1077,12 +1083,16 @@ input[type=checkbox] {
 	}
 	.navbar-toggle {
 		margin-bottom: 0px; 
+		margin-right: 5px;
+		display:inline-block;
+    	float:right
 	}
 	.navbar-nav{
 		margin-top: 0px;
 		margin-bottom: 0px;
 		display:inline-block;
 	}
+	
 	.navbar-displayed{
 		text-align:center;
 	}
@@ -1090,9 +1100,15 @@ input[type=checkbox] {
 	.navbar-form .form-group{
 		margin-bottom: 0px;
 	}
+	.navbar-brand>img {
+		display:inline-block;
+	    position: absolute;
+	    left:0;
+	    right:0;
+	}
 	.navbar-brand{
 		height:40px;
-		padding-top: 10px;
+		width:100%;
 	}
 	.nav>li {
 	    position: relative;
