@@ -75,7 +75,7 @@ a.anchor{
 }
 
 .jumbotron {
-	background:white;
+	background:rgba(0,0,0,0.15);
 	padding-top: 35px;
 	padding-bottom: 35px;
 }
