@@ -29,6 +29,14 @@ describe('GET /explore website page', function() {
   });
 });
 
+describe('GET /explore/business/retail-ecommerce website page', function() {
+  it('should return 200', function(done) {
+    request(app)
+      .get('/explore/business/retail-ecommerce')
+      .expect(200, done);
+  });
+});
+
 describe('GET /contactus website page', function() {
   it('should return 200', function(done) {
     request(app)
