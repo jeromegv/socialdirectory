@@ -275,16 +275,35 @@ function createTitle(selectedRefinements) {
  */
  exports.getOrganization = function(req, res) {
  	Organization.find({ name_slug: req.params.slug }).select().exec(function(err, organization) {
-	    if (!err && organization!=null && organization.length>0 ){
-	      res.render('websiteViews/organization', {
-		    title: organization[0].name,
-		    organization: organization[0],
-		    _ : _
-		  });
-	    } else {
-		  req.flash('errors', { msg: 'The organization requested can\'t be rendered' });
-		  return res.redirect('back');
-		}
+ 		//some logic to find similar organization that share the same business sector
+ 		var query;
+ 		if (organization[0].primaryBusinessSector_2 && organization[0].primaryBusinessSector_2.length>0){
+			query={ active:true,primaryBusinessSector_2: { $in: organization[0].primaryBusinessSector_2 } };
+ 		} else {
+ 			query={ active:true,primaryBusinessSector_1: organization[0].primaryBusinessSector_1 } ;
+ 		}
+ 		Organization.find(query).select('logoThumbnail name name_slug').exec(function(err, similarOrganizations) {		    
+	    	similarOrganizations = _.filter(similarOrganizations, function(org) { 
+	    		if (org.name_slug==organization[0].name_slug){
+	    			return 0;
+	    		} else {
+	    			return 1;
+	    		}
+	    	});
+	    	similarOrganizations = _.sample(similarOrganizations, 4);
+
+		    if (!err && organization!=null && organization.length>0 ){
+		      res.render('websiteViews/organization', {
+			    title: organization[0].name,
+			    organization: organization[0],
+			    similarOrganizations: similarOrganizations,
+			    _ : _
+			  });
+		    } else {
+			  req.flash('errors', { msg: 'The organization requested can\'t be rendered' });
+			  return res.redirect('back');
+			}
+		});
 	});
 };
 

@@ -834,7 +834,10 @@ input[type=checkbox] {
 /*----------------
   Organization page
 -----------------*/
-
+.similarorgbox {
+	width:60%;
+	padding-top:15px;
+}
 #content .pro_main_c .slider_1 {
 	padding:20px 15px;
 	background: #fff;
@@ -886,7 +889,6 @@ input[type=checkbox] {
 	padding:0;
 }
 #content .pro_main_c h3 {
-	line-height:20px;
 	padding:15px 15px;
 	border-bottom:1px solid #efefef;
 	margin: 0;

@@ -197,7 +197,21 @@ block content
 												|'s pictures on Pinterest
 										a(data-pin-do="embedUser" href=pinterestLink[0].socialMediaUrl data-pin-scale-width="87" data-pin-scale-height="120" data-pin-board-width="1200")
 										script(type="text/javascript" async src="//assets.pinterest.com/js/pinit.js")
-
+			if similarOrganizations.length>0
+				.desc_blk
+					.row
+						.col-xs-12
+							h3 Similar organizations in the same business sector
+							for similarOrg in similarOrganizations
+								.col-lg-3.col-md-4.col-sm-6.col-xs-12
+									.similarorgbox.center-block.text-center
+										.box_1
+											div
+												a(href='/organization/'+similarOrg.name_slug)
+													img(src=fullFileHost+similarOrg.logoThumbnail,alt=similarOrg.name,class="img-responsive")
+											.desc
+												h5
+													a(href='/organization/'+similarOrg.name_slug)= similarOrg.name
 block javascript
 	script(src="//open.mapquestapi.com/sdk/leaflet/v1.s/mq-map.js?key=Fmjtd%7Cluur2h02n9%2Cb0%3Do5-9wb2da")
 	script.
