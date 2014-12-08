@@ -837,6 +837,7 @@ input[type=checkbox] {
 .similarorgbox {
 	width:60%;
 	padding-top:15px;
+	padding-bottom:15px;
 }
 #content .pro_main_c .slider_1 {
 	padding:20px 15px;
