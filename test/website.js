@@ -45,7 +45,15 @@ describe('GET /contactus website page', function() {
   });
 });
 
-describe('GET /organization/slug website page', function() {
+describe('GET /organization/:slug website page that does not exist', function() {
+  it('should return 404', function(done) {
+    request(app)
+      .get('/organization/wrongorgthatdoesnotexist')
+      .expect(404, done);
+  });
+});
+
+describe('GET /organization/:slug website page', function() {
   it('should return 200', function(done) {
     var name = 'Best social enterprise in Philippines';
     var org = new Organization({

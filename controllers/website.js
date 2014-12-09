@@ -277,6 +277,11 @@ function createTitle(selectedRefinements) {
  	Organization.find({ name_slug: req.params.slug }).select().exec(function(err, organization) {
  		//some logic to find similar organization that share the same business sector
  		var query;
+ 		if (err || organization==null || organization.length==0 ){
+ 			res.status(404);
+			return res.render('websiteViews/404', {title: '404: Not Found', url: req.url });
+ 		};
+
  		if (organization[0].primaryBusinessSector_2 && organization[0].primaryBusinessSector_2.length>0){
 			query={ active:true,primaryBusinessSector_2: { $in: organization[0].primaryBusinessSector_2 } };
  		} else {
@@ -291,18 +296,13 @@ function createTitle(selectedRefinements) {
 	    		}
 	    	});
 	    	similarOrganizations = _.sample(similarOrganizations, 4);
-
-		    if (!err && organization!=null && organization.length>0 ){
-		      res.render('websiteViews/organization', {
-			    title: organization[0].name,
-			    organization: organization[0],
-			    similarOrganizations: similarOrganizations,
-			    _ : _
-			  });
-		    } else {
-			  req.flash('errors', { msg: 'The organization requested can\'t be rendered' });
-			  return res.redirect('back');
-			}
+			res.render('websiteViews/organization', {
+				title: organization[0].name,
+				organization: organization[0],
+				similarOrganizations: similarOrganizations,
+				_ : _
+			});
+		    
 		});
 	});
 };
