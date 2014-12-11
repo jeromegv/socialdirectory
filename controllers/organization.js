@@ -52,6 +52,9 @@ function getSocialMediaName(parsedUrl){
         case 'facebook':
             socialMediaName='facebook';
             break;
+        case 'soundcloud':
+            socialMediaName='soundcloud';
+            break;
         case 'youtube':
             socialMediaName='youtube';
             break;
