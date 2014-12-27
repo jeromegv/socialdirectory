@@ -183,6 +183,7 @@ var uploadRecord = function(organization,callback){
 		    callback(error);
 		  } else if (response) {
 		    console.log('http status code was: '+response.statusCode)
+		    console.log(util.inspect(response.body,{  depth: null }));
 		    callback('http status code was: '+response.statusCode);
 		  };
 		}

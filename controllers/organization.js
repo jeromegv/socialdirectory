@@ -301,6 +301,12 @@ exports.postOrganization = function(req, res,next) {
   req.body.resourceName.forEach(function(entry,index) {
       additionalResources[index]={resourceName:entry,resourceUrl:utils.saveUrl(req.body.resourceUrl[index])};
   });
+  //clean empty resources
+  _.remove(additionalResources, function(resource) { 
+    if (!resource.resourceName && !resource.resourceUrl) {
+      return true;
+    }
+  });
 
   organization.additionalResources = additionalResources;
 
@@ -425,6 +431,12 @@ exports.putOrganization = function(req, res,next) {
   var additionalResources = new Array();
   req.body.resourceName.forEach(function(entry,index) {
       additionalResources[index]={resourceName:entry,resourceUrl:utils.saveUrl(req.body.resourceUrl[index])};
+  });
+  //clean empty resources
+  _.remove(additionalResources, function(resource) { 
+    if (!resource.resourceName && !resource.resourceUrl) {
+      return true;
+    }
   });
   organization.additionalResources = additionalResources;
 
