@@ -143,6 +143,7 @@ var getAndSaveFile = function(url,desiredFileName,callback) {
 	    }
 	    if (error){
 		    console.log(error);
+		    callback(error);
 	    } else {
 	    	callback(null,amazonUrl,amazonThumbnailUrl);
 	    }

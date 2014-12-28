@@ -12,6 +12,7 @@ var demographicImpact = require('../public/json/demographicImpact.json');
 var downloadImageAndUploadToS3 = require("../libs/downloadImageAndUploadToS3.js");
 var azureSearch = require('../libs/azuresearch.js');
 var utils = require('../libs/utils.js');
+var async = require('async');
 
 //Get root name of website based on hostname (without TLD)
 //From: http://stackoverflow.com/questions/8253136/how-to-get-domain-name-only-using-javascript
@@ -314,42 +315,88 @@ exports.postOrganization = function(req, res,next) {
   req.body.socialMediaUrl.forEach(function(entry,index) {
       if (req.body.socialMediaUrl[index]!=''){
         var parsedUrl = urlNode.parse(utils.saveUrl(req.body.socialMediaUrl[index])).hostname;
-        socialMedia[index]={socialMediaName:getSocialMediaName(parsedUrl),socialMediaUrl:utils.saveUrl(req.body.socialMediaUrl[index])};
+        var socialMediaNameParsed = getSocialMediaName(parsedUrl);
+        socialMedia[index]={socialMediaName:socialMediaNameParsed,socialMediaUrl:utils.saveUrl(req.body.socialMediaUrl[index])};
       }
   });
   organization.socialMedia = socialMedia;
 
-  Organization.findOne({ name: req.sanitize('name').trim() }, function(err, existingOrganization) {
-    if (existingOrganization) {
-      req.flash('errors', { msg: 'Organization with that name already exists.' });
-      return res.redirect('/admin/organization');
-    }
-    organization.save(function(err,organization) {
-      if (err) { 
+  async.waterfall([
+    function(callback){
+      Organization.findOne({ name: req.sanitize('name').trim() }, function(err, existingOrganization) {
+        if (existingOrganization) {
+          callback(new Error('Organization with that name already exists.'));
+        } else {
+          organization.save(function(err,organization) {
+            if (err) { 
+              console.log(err);
+              callback(err);
+            } else {
+              azureSearch.uploadRecord(organization,function(error){
+                if (error){
+                  console.log(error);
+                }
+              });
+
+              //save logo url to S3
+              var desiredFileName = utils.convertToSlug(organization.name) + '-' + path.basename(organization.logo);
+              downloadImageAndUploadToS3.getAndSaveFile(organization.logo,desiredFileName,function (error,amazonUrl,amazonThumbnailUrl){
+                if (error){
+                  console.log(error);
+                  callback(null);
+                } else {
+                  //update specific field in organization
+                  organization.logo=amazonUrl;
+                  organization.logoThumbnail = amazonThumbnailUrl;
+                  organization.save(function(err) {
+                    if (err) {
+                      console.log(err);
+                    }
+                    callback(null);
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
+    },function(callback){
+      //get instagram username from url and then get the userid associated with it
+      Organization.findOneAndUpdate({ name_slug: req.sanitize('name').trim() }, organization, function(err, resultOrg){
+        if (err) {
+          console.log(err);
+          callback(err);
+        } else if (!resultOrg) {
+          console.log('No records were updated');
+          callback(new Error('No records were updated'));
+        } else {
+          utils.getInstagramId(resultOrg.socialMedia,function(error,instagramId,index){
+            if (error){
+              console.log('instagram-node error');
+              console.log(error);
+              callback(null);
+            } else if (instagramId) {
+              _.assign(resultOrg.socialMedia[index], { 'id': instagramId });
+              resultOrg.save(function(err) {
+                if (err) {
+                  console.log(err);
+                }
+                callback(null);
+              });
+            } else {
+              callback(null);
+            }
+          });
+        }  
+      });
+    }],function(err, results){
+      if (err){
         return next(err);
       } else {
-        //save logo url to S3
-        var desiredFileName = utils.convertToSlug(organization.name) + '-' + path.basename(organization.logo);
-        downloadImageAndUploadToS3.getAndSaveFile(organization.logo,desiredFileName,function (error,amazonUrl,amazonThumbnailUrl){
-          if (error){
-            console.log(error);
-          } else {
-            //update specific field in organization
-            organization.logo=amazonUrl;
-            organization.logoThumbnail = amazonThumbnailUrl;
-            organization.save();
-          }
-        });
-        
-        azureSearch.uploadRecord(organization,function(error){
-          if (error){
-            console.log(error);
-          }
-        });
         return res.redirect('/admin');
       }
-    });
-  });
+    }
+  );
 };
 
 
@@ -443,46 +490,91 @@ exports.putOrganization = function(req, res,next) {
   var socialMedia = new Array();
   req.body.socialMediaUrl.forEach(function(entry,index) {
       if (req.body.socialMediaUrl[index]!=''){
-        var parsedUrl = urlNode.parse(utils.saveUrl(req.body.socialMediaUrl[index])).hostname;      
-        socialMedia[index]={socialMediaName:getSocialMediaName(parsedUrl),socialMediaUrl:utils.saveUrl(req.body.socialMediaUrl[index])};
+        var parsedUrl = urlNode.parse(utils.saveUrl(req.body.socialMediaUrl[index])).hostname;  
+        var socialMediaNameParsed = getSocialMediaName(parsedUrl);
+        socialMedia[index]={socialMediaName:socialMediaNameParsed,socialMediaUrl:utils.saveUrl(req.body.socialMediaUrl[index])};
       }
   });
   organization.socialMedia = socialMedia;
 
-  //todo: createdby
-  Organization.findOneAndUpdate({ name_slug: req.params.slug }, organization, function(err, resultOrg){
-    if (err) {
-      console.log(err);
-      return next(err);
-    } else if (!resultOrg) {
-      console.log('No records were updated');
-      return next(new Error('No records were updated'));
-    } else {
-      //save logo url to S3
-      //we only get the logo url and save on S3 if it's NOT already a relative url (so if http/https is missing) of a local bucket S3 amazon URL or if the thumbnail is missing
-      if (/^(f|ht)tps?:\/\//i.test(resultOrg.logo)|| !resultOrg.logoThumbnail){
-        var desiredFileName = utils.convertToSlug(resultOrg.name) + '-' + path.basename(resultOrg.logo);
-        downloadImageAndUploadToS3.getAndSaveFile(resultOrg.logo,desiredFileName,function (error,amazonUrl,amazonThumbnailUrl){
-          if (error){
-            console.log(error);
+  async.waterfall([
+    function(callback){
+      Organization.findOneAndUpdate({ name_slug: req.params.slug }, organization, function(err, resultOrg){
+        if (err) {
+          console.log(err);
+          callback(err);
+        } else if (!resultOrg) {
+          console.log('No records were updated');
+          callback(new Error('No records were updated'));
+        } else {
+          azureSearch.uploadRecord(resultOrg,function(error){
+            if (error){
+              console.log(error);
+            }
+          });
+          //save logo url to S3
+          //we only get the logo url and save on S3 if it's NOT already a relative url (so if http/https is missing) of a local bucket S3 amazon URL or if the thumbnail is missing
+          if (/^(f|ht)tps?:\/\//i.test(resultOrg.logo)|| !resultOrg.logoThumbnail) {
+            var desiredFileName = utils.convertToSlug(resultOrg.name) + '-' + path.basename(resultOrg.logo);
+            downloadImageAndUploadToS3.getAndSaveFile(resultOrg.logo,desiredFileName,function (error,amazonUrl,amazonThumbnailUrl){
+              if (error) {
+                console.log(error);
+                callback(null);
+              } else {
+                //update specific field in organization
+                resultOrg.logo=amazonUrl;
+                resultOrg.logoThumbnail = amazonThumbnailUrl;
+                resultOrg.save(function(err) {
+                  if (err) {
+                    console.log(err);
+                  }
+                  callback(null);
+                });
+              }
+            });
           } else {
-            //update specific field in organization
-            resultOrg.logo=amazonUrl;
-            resultOrg.logoThumbnail = amazonThumbnailUrl;
-            resultOrg.save();
+            callback(null);
           }
-        });
-      }
-
-      azureSearch.uploadRecord(resultOrg,function(error){
-          if (error){
-            console.log(error);
-          }
+          
+        }
       });
-      return res.redirect('/admin');
+    },function(callback){
+      //get instagram username from url and then get the userid associated with it
+      Organization.findOneAndUpdate({ name_slug: req.params.slug }, organization, function(err, resultOrg){
+        if (err) {
+          console.log(err);
+          callback(err);
+        } else if (!resultOrg) {
+          console.log('No records were updated');
+          callback(new Error('No records were updated'));
+        } else {
+          utils.getInstagramId(resultOrg.socialMedia,function(error,instagramId,index){
+            if (error){
+              console.log('instagram-node error');
+              console.log(error);
+              callback(null);
+            } else if (instagramId) {
+              _.assign(resultOrg.socialMedia[index], { 'id': instagramId });
+              resultOrg.save(function(err) {
+                if (err) {
+                  console.log(err);
+                }
+                callback(null);
+              });
+            } else {
+              callback(null);
+            }
+          });
+        }  
+      });
+    }],function(err, results){
+      if (err){
+        return next(err);
+      } else {
+        return res.redirect('/admin');
+      }
     }
-    
-  });
+  );
 };
 
 /**

@@ -36,6 +36,11 @@ module.exports = {
     fullFileHost: 'Full host to reach your image/files from the outside goes here'
   },
 
+  instagram: {
+    client_id: '',
+    client_secret: ''
+  },
+
   //to send forgot password emails
   sendgrid: {
     user: 'Your SendGrid Username',
