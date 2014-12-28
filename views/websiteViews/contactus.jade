@@ -74,3 +74,16 @@ block content
 												input.btn_c(type='submit')
 block javascript
 	script(type="text/javascript",src="/components/parsleyjs/dist/parsley.min.js")
+	script.
+		var refinementsAll = !{JSON.stringify(selectedRefinements)};
+		$(document).ready(function() {
+		    $('#contactus').parsley({
+			  successClass: 'success',
+			  errorClass: 'error',
+			  classHandler: function(el) {
+			    return el.$element.closest(".form-group");
+			  },
+			  errorsWrapper: '<span class=\"help-inline\"></span>',
+			  errorTemplate: '<span></span>'
+			});
+		});

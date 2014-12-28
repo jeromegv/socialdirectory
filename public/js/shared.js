@@ -322,16 +322,6 @@ $(document).ready(function() {
             $(this).find("i").addClass("fa-caret-up");
         }
     });
-    //form validation on contact us page
-    $('#contactus').parsley({
-	  successClass: 'success',
-	  errorClass: 'error',
-	  classHandler: function(el) {
-	    return el.$element.closest(".form-group");
-	  },
-	  errorsWrapper: '<span class=\"help-inline\"></span>',
-	  errorTemplate: '<span></span>'
-	});
 	//smooth scrolling on home page links buttons
 	var $root = $('html, body');
 	$('.smoothscroll').click(function() {
