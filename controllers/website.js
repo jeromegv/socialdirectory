@@ -229,7 +229,7 @@ function createTitle(selectedRefinements) {
 
  	var selectedRefinements = createSelectedRefinementsFromUrl(req.originalUrl);
 
-	Organization.find({active: true}).select('logoThumbnail name name_slug socialPurposeCategoryTags descriptionService primaryBusinessSector_1 demographicImpact').exec(function(error, organizations) {
+	Organization.find({active: true}).select('logoThumbnail name name_slug socialPurposeCategoryTags descriptionService primaryBusinessSector_1 demographicImpact').sort([['name', 'ascending']]).exec(function(error, organizations) {
 	    if (!error && organizations!=null){
 	    	organizations = filterOrganizations(organizations,selectedRefinements);
 	        res.render('websiteViews/explore', {
