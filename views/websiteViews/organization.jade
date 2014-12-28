@@ -148,7 +148,6 @@ block content
 					.row
 						.col-xs-12
 							h3 Social Media
-							- var pinterestLink = _.filter(organization.socialMedia, { 'socialMediaName': 'pinterest' });
 							.row
 								.col-lg-6.col-md-6.col-sm-6.col-xs-12
 									.row
@@ -191,19 +190,28 @@ block content
 														else
 															=media.socialMediaUrl
 								.col-lg-6.col-md-6.col-sm-6.col-xs-12
+									- var instagramCount = _.filter(organization.socialMedia, { 'socialMediaName': 'instagram' });
+									if (instagramCount.length>0)
+										.row
+											div(id="socialmediacontent")
+												h4.col-xs-12
+													=organization.name
+													|'s pictures on Instagram
+											div(id="instafeed")
 									- var pinterestLink = _.filter(organization.socialMedia, { 'socialMediaName': 'pinterest' });
 									if (pinterestLink.length>0)
-										div(id="socialmediacontent")
-											h4
-												=organization.name
-												|'s pictures on Pinterest
+										.row
+											div(id="socialmediacontent")
+												h4.col-xs-12
+													=organization.name
+													|'s pins on Pinterest
 										a(data-pin-do="embedUser" href=pinterestLink[0].socialMediaUrl data-pin-scale-width="87" data-pin-scale-height="120" data-pin-board-width="1200")
 										script(type="text/javascript" async src="//assets.pinterest.com/js/pinit.js")
 			if similarOrganizations.length>0
 				.desc_blk
 					.row
 						.col-xs-12
-							h3 Similar organizations in the same business sector
+							h3 Similar organizations
 							for similarOrg in similarOrganizations
 								.col-lg-3.col-md-4.col-sm-6.col-xs-12
 									.similarorgbox.center-block.text-center
@@ -218,3 +226,14 @@ block javascript
 	script(src="//open.mapquestapi.com/sdk/leaflet/v1.s/mq-map.js?key=Fmjtd%7Cluur2h02n9%2Cb0%3Do5-9wb2da")
 	script.
 		generateVisualization(#{organization.Location.latitude},#{organization.Location.longitude},"#{organization.name_slug}");
+	if (instagramCount.length>0)
+		script.
+			var userFeed = new Instafeed({
+				get: 'user',
+				userId: #{instagramCount[0].id},
+				clientId: '8e6886644e684a299e5203ac9a0925fa',
+				sortBy: 'most-recent',
+				limit: 9,
+				template: '<div class="col-md-4 col-xs-6"><a href="{{link}}" target="_blank"><img src="{{image}}" alt="{{caption}}" class="img-responsive image-instagram"/></a></div>'
+			});
+			userFeed.run();
