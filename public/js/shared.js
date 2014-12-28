@@ -45,12 +45,13 @@ function generateAllVisualization(currentFilters){
 
 	//create and display map
 	var map = L.map('mapall', {
-        layers: MQ.mapLayer(),
-        center: [ 12.277405, 122.665700],
-        zoom: 5,
-        minZoom: 4,
-        detectRetina:true
+        minZoom: 4
     });
+    map.setView([ 12.277405, 122.665700], 5);
+    L.tileLayer('http://{s}.tiles.mapbox.com/v3/jeromegv.kk20fege/{z}/{x}/{y}.png', {
+	    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+	    detectRetina: true
+	}).addTo(map);
     L.Icon.Default.imagePath = '/components/leaflet/dist/images/';
 	var organizationsLoaded;
 	var organizationsLoadedFiltered;
