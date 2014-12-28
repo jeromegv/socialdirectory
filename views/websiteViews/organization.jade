@@ -199,7 +199,7 @@ block content
 													|'s pictures on Instagram
 											div(id="instafeed")
 									- var pinterestLink = _.filter(organization.socialMedia, { 'socialMediaName': 'pinterest' });
-									if (pinterestLink.length>0)
+									if (pinterestLink.length>0 && instagramCount.length<1)
 										.row
 											div(id="socialmediacontent")
 												h4.col-xs-12
