@@ -248,7 +248,7 @@ i.bigicon{
 	background:white;
 }
 .fa-arrow-circle-right {	
-	color:#37bbec;
+	color: #1485CC;
 	font-size:14px;
 	margin-left:6px;
 	line-height:27px;
@@ -284,6 +284,7 @@ i.bigicon{
 }
 #footer .f_mid h4 {
 	padding:0 0 22px 0;
+	color: #1485CC;
 }
 #footer .f_mid .desc {
 	font-size:14px;
@@ -305,7 +306,7 @@ i.bigicon{
 	font-family: 'latobold';
 }
 #footer .f_mid p a {
-	color:#37bbec;
+	color: #1485CC;
 }
 .emial_box {
 	position:relative;
@@ -322,6 +323,7 @@ i.bigicon{
 }
 #mc-embedded-subscribe {
 	padding:4px 6px 4px 6px;
+	background-color: #1485CC;;
 }
 .emial_box a {
 	position:absolute;
@@ -1008,7 +1010,7 @@ input[type=checkbox] {
 		margin-bottom: 0px;
 	}
  	body {
-	  padding-top: 135px;
+	  /*padding-top: 135px;*/
 	}
 	a.anchor{
 		top: -140px;
@@ -1038,7 +1040,7 @@ input[type=checkbox] {
 	.navbar-form .form-group{
 		margin-bottom: 0px;
 	}
-	.navbar-brand>img {
+	.navbar-brand>a>img {
 		display:inline-block;
 	    position: absolute;
 	    left:0;
