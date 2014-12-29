@@ -160,7 +160,11 @@ var uploadToKnox = function(fileData,filePath,contentType,callback){
           region: secrets.s3.region
       });
       var newFileName = 'logos/'+path.basename(filePath);
-      newFileName = newFileName.replace('?','');
+      //remove ? from URL to help caching of image
+      if (newFileName.indexOf('?')){
+      	newFileName = newFileName.substring(0,newFileName.indexOf('?'));
+      	console.log('new filename:'+newFileName);
+      }
       var uploadknox = knoxclient.put(newFileName, {
         'Content-length': fileData.length,
         'Content-Type': contentType,

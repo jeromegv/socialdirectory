@@ -343,7 +343,7 @@ exports.postOrganization = function(req, res,next) {
               downloadImageAndUploadToS3.getAndSaveFile(organization.logo,desiredFileName,function (error,amazonUrl,amazonThumbnailUrl){
                 if (error){
                   console.log(error);
-                  callback(null);
+                  callback(null,organization);
                 } else {
                   //update specific field in organization
                   organization.logo=amazonUrl;
@@ -352,7 +352,7 @@ exports.postOrganization = function(req, res,next) {
                     if (err) {
                       console.log(err);
                     }
-                    callback(null);
+                    callback(null,organization);
                   });
                 }
               });
@@ -360,24 +360,23 @@ exports.postOrganization = function(req, res,next) {
           });
         }
       });
-    },function(callback){
+    },function(organization,callback){
       //get instagram username from url and then get the userid associated with it
-      Organization.findOneAndUpdate({ name_slug: req.sanitize('name').trim() }, organization, function(err, resultOrg){
         if (err) {
           console.log(err);
           callback(err);
-        } else if (!resultOrg) {
+        } else if (!organization) {
           console.log('No records were updated');
           callback(new Error('No records were updated'));
         } else {
-          utils.getInstagramId(resultOrg.socialMedia,function(error,instagramId,index){
+          utils.getInstagramId(organization.socialMedia,function(error,instagramId,index){
             if (error){
               console.log('instagram-node error');
               console.log(error);
               callback(null);
             } else if (instagramId) {
-              _.assign(resultOrg.socialMedia[index], { 'id': instagramId });
-              resultOrg.save(function(err) {
+              _.assign(organization.socialMedia[index], { 'id': instagramId });
+              organization.save(function(err) {
                 if (err) {
                   console.log(err);
                 }
@@ -388,7 +387,6 @@ exports.postOrganization = function(req, res,next) {
             }
           });
         }  
-      });
     }],function(err, results){
       if (err){
         return next(err);
@@ -519,8 +517,9 @@ exports.putOrganization = function(req, res,next) {
             downloadImageAndUploadToS3.getAndSaveFile(resultOrg.logo,desiredFileName,function (error,amazonUrl,amazonThumbnailUrl){
               if (error) {
                 console.log(error);
-                callback(null);
+                callback(null,resultOrg);
               } else {
+                console.log('S3 upload worked, update the record');
                 //update specific field in organization
                 resultOrg.logo=amazonUrl;
                 resultOrg.logoThumbnail = amazonThumbnailUrl;
@@ -528,34 +527,27 @@ exports.putOrganization = function(req, res,next) {
                   if (err) {
                     console.log(err);
                   }
-                  callback(null);
+                  callback(null,resultOrg);
                 });
               }
             });
           } else {
-            callback(null);
+            callback(null,resultOrg);
           }
           
         }
       });
-    },function(callback){
+    },function(result,callback){
       //get instagram username from url and then get the userid associated with it
-      Organization.findOneAndUpdate({ name_slug: req.params.slug }, organization, function(err, resultOrg){
-        if (err) {
-          console.log(err);
-          callback(err);
-        } else if (!resultOrg) {
-          console.log('No records were updated');
-          callback(new Error('No records were updated'));
-        } else {
-          utils.getInstagramId(resultOrg.socialMedia,function(error,instagramId,index){
+        if (result){
+          utils.getInstagramId(result.socialMedia,function(error,instagramId,index){
             if (error){
               console.log('instagram-node error');
               console.log(error);
               callback(null);
             } else if (instagramId) {
-              _.assign(resultOrg.socialMedia[index], { 'id': instagramId });
-              resultOrg.save(function(err) {
+              _.assign(result.socialMedia[index], { 'id': instagramId });
+              result.save(function(err) {
                 if (err) {
                   console.log(err);
                 }
@@ -566,7 +558,6 @@ exports.putOrganization = function(req, res,next) {
             }
           });
         }  
-      });
     }],function(err, results){
       if (err){
         return next(err);

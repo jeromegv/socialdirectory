@@ -226,7 +226,7 @@ block javascript
 	script(src="//open.mapquestapi.com/sdk/leaflet/v1.s/mq-map.js?key=Fmjtd%7Cluur2h02n9%2Cb0%3Do5-9wb2da")
 	script.
 		generateVisualization(#{organization.Location.latitude},#{organization.Location.longitude},"#{organization.name_slug}");
-	if (instagramCount.length>0)
+	if (instagramCount && instagramCount.length>0)
 		script.
 			var userFeed = new Instafeed({
 				get: 'user',
