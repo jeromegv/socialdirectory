@@ -17,7 +17,7 @@
 body {
 	margin:0;
 	padding:0;
-	font-family: 'latoregular';
+	font-family: 'Lato', sans-serif; font-weight: 400;
 }
 :focus {
 	outline:none;
@@ -303,7 +303,7 @@ i.bigicon{
 }
 #footer .f_mid p strong {
 	font-weight:normal;
-	font-family: 'latobold';
+	font-family: 'Lato', sans-serif; font-weight: 700;
 }
 #footer .f_mid p a {
 	color: #1485CC;
@@ -375,7 +375,7 @@ i.bigicon{
 	float:left;
 }
 #footer .f_bot .f_bot_left strong {
-	font-family: 'latobold';
+	font-family: 'Lato', sans-serif; font-weight: 700;
 	font-weight:normal;
 }
 #footer .f_bot .f_bot_right {
@@ -414,22 +414,22 @@ i.bigicon{
 
 
 h1, h2, h3, h4, h5, h6 {
-	font-family: 'latoregular';
+	font-family: 'Lato', sans-serif; font-weight: 400;
 	color:#282727;
 }
 
 h3 {
 
-	font-family: 'latobold';
+	font-family: 'Lato', sans-serif; font-weight: 700;
 }
 h4 {
 
-	font-family: 'latobold';
+	font-family: 'Lato', sans-serif; font-weight: 700;
 }
 h5 {
 
 	text-transform:uppercase;
-	font-family: 'latoblack';
+	font-family: 'Lato', sans-serif; font-weight: 900;
 }
 
 /*----------------
@@ -506,7 +506,7 @@ input[type=checkbox] {
 }
 .sidebar .side_box_2 ul li a {
 	font-weight:normal;
-	font-family: 'latobold';
+	font-family: 'Lato', sans-serif; font-weight: 700;
 	overflow:hidden;
 }
 .sidebar .side_box_3 ul {
@@ -616,7 +616,7 @@ input[type=checkbox] {
 .whitetag h2{
 	font-size:14px;
 	text-transform: uppercase;
-	font-family: 'latoblack';
+	font-family: 'Lato', sans-serif; font-weight: 900;
 	margin-top:10px;
 	margin-bottom: 10px;
 }
@@ -699,7 +699,7 @@ input[type=checkbox] {
 	padding:0 0 12px 0;
 	border:none;
 	font-weight:normal;
-	font-family: 'latobold';
+	font-family: 'Lato', sans-serif; font-weight: 700;
 	text-transform:none;
 	font-size:14px;
 }
@@ -716,7 +716,7 @@ input[type=checkbox] {
 }
 #content .infor_c .infor_c_inn .add_c strong {
 	font-weight:normal;
-	font-family: 'latobold';
+	font-family: 'Lato', sans-serif; font-weight: 700;
 	color:#282727;
 }
 #content .infor_c .infor_c_inn p a {
@@ -730,7 +730,7 @@ input[type=checkbox] {
 	font-size:14px;
 	line-height:16px;
 	padding:24px 0 13px 0;
-	font-family: 'latobold';
+	font-family: 'Lato', sans-serif; font-weight: 700;
 	font-weight:normal;
 }
 #content .frm .txtbox {
@@ -743,7 +743,7 @@ input[type=checkbox] {
 	margin:0;
 	font-size:14px;
 	color:#898989;
-	font-family: 'latoregular';
+	font-family: 'Lato', sans-serif; font-weight: 400;
 }
 #content .frm textarea {
 	width:100%;
@@ -755,12 +755,12 @@ input[type=checkbox] {
 	margin:0 0 24px 0;
 	font-size:14px;
 	color:#898989;
-	font-family: 'latoregular';
+	font-family: 'Lato', sans-serif; font-weight: 400;
 }
 #content .frm .req {
 	color:#fb5700;
 	font-size:14px;
-	font-family: 'latobold';
+	font-family: 'Lato', sans-serif; font-weight: 700;
 	font-weight:normal;
 	margin-left:4px;
 }
@@ -782,7 +782,7 @@ input[type=checkbox] {
 	display:block;
 	float:left;
 	cursor:pointer;
-	font-family: 'latoblack';
+	font-family: 'Lato', sans-serif; font-weight: 900;
 }
 .clear_btn {
 	background:#fff;
@@ -796,7 +796,7 @@ input[type=checkbox] {
 #content .frm .reqired {
 	color:#fb5700;
 	font-size:14px;
-	font-family: 'latobold';
+	font-family: 'Lato', sans-serif; font-weight: 700;
 	font-weight:normal;
 	line-height:40px;
 	float:right;
@@ -813,7 +813,7 @@ input[type=checkbox] {
 	font-weight:normal;
 	display:block;
 	margin:30px auto 0;
-	font-family: 'latoblack';
+	font-family: 'Lato', sans-serif; font-weight: 700;
 	background:#37bbec;
 	border-radius:18px;
 	text-shadow:-1px -1px 1px #2f8aab;
@@ -881,7 +881,7 @@ input[type=checkbox] {
 	border:none;
 	text-transform:none;
 	font-weight:normal;
-	font-family: 'latobold';
+	font-family: 'Lato', sans-serif; font-weight: 700;
 }
 #content .pro_main_c .desc_blk .desc_blk_inn p {
 	font-size:14px;
@@ -925,7 +925,7 @@ input[type=checkbox] {
 	line-height:20px;
 	color:#898989;
 	font-weight:normal;
-	font-family: 'latoblack';
+	font-family: 'Lato', sans-serif; font-weight: 900;
 	padding: 15px 15px;
 	text-transform:uppercase;
 	border-radius:0;
