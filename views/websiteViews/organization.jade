@@ -224,8 +224,6 @@ block content
 													a(href='/organization/'+similarOrg.name_slug)= similarOrg.name
 block javascript
 	script(src="//open.mapquestapi.com/sdk/leaflet/v1.s/mq-map.js?key=Fmjtd%7Cluur2h02n9%2Cb0%3Do5-9wb2da")
-	script.
-		generateVisualization(#{organization.Location.latitude},#{organization.Location.longitude},"#{organization.name_slug}");
 	if (instagramCount && instagramCount.length>0)
 		script.
 			var userFeed = new Instafeed({
@@ -237,3 +235,7 @@ block javascript
 				template: '<div class="col-md-4 col-xs-6"><a href="{{link}}" target="_blank"><img src="{{image}}" alt="{{caption}}" class="img-responsive image-instagram"/></a></div>'
 			});
 			userFeed.run();
+	script.
+		$(document).ready(function() {
+			generateVisualization(#{organization.Location.latitude},#{organization.Location.longitude},"#{organization.name_slug}");
+		});
