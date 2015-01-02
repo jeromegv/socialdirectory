@@ -161,9 +161,9 @@ var uploadToKnox = function(fileData,filePath,contentType,callback){
       });
       var newFileName = 'logos/'+path.basename(filePath);
       //remove ? from URL to help caching of image
-      if (newFileName.indexOf('?')){
+      if (newFileName.indexOf('?')!='-1'){
       	newFileName = newFileName.substring(0,newFileName.indexOf('?'));
-      	console.log('new filename:'+newFileName);
+      	console.log('new filename since there is a ? in the url:'+newFileName);
       }
       var uploadknox = knoxclient.put(newFileName, {
         'Content-length': fileData.length,
