@@ -62,7 +62,7 @@ block content
 								.box_1
 									div
 										a(href='/organization/'+organization.name_slug)
-											img(src=fullFileHost+organization.logoThumbnail,alt=organization.name)
+											img(src=fullFileHost+organization.logoThumbnail,alt=organization.name,style="width:100%")
 										.desc
 											p= organization.descriptionService.substring(0,90)
 block javascript
