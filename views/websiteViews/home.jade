@@ -64,9 +64,9 @@ block content
 								for entry,index in suborg
 									div
 										a(href='/organization/'+entry.name_slug)
-											img(data-lazy=fullFileHost+entry.logoThumbnail,alt=entry.name)
+											img(data-lazy=fullFileHost+entry.logoThumbnail,alt=entry.name,class="center-block")
 										.desc
-											p= entry.descriptionService.substring(0,90)
+											p= entry.descriptionService.substring(0,110)
 						
 		.row
 			.col-lg-12.col-md-12.col-sm-12.col-xs-12
