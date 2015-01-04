@@ -12,14 +12,12 @@ function generateVisualization(latitude,longitude,slug){
 	map.addLayer(marker);
 	var popupLoaded = false;
 	//show address when clicking on popover
-	marker.on('click',function (e) {
-		if (!popupLoaded){
-			jQuery.getJSON('/api/organization/'+slug, function(organization) {
-				marker.bindPopup("<h4>"+organization.name+"</h4>"+organization.Location.address).openPopup();
-			});
-			popupLoaded=true;
-		}
-	});
+	if (!popupLoaded){
+		jQuery.getJSON('/api/organization/'+slug, function(organization) {
+			marker.bindPopup("<h4>"+organization.name+"</h4>"+organization.Location.address).openPopup();
+		});
+		popupLoaded=true;
+	}
 
 	//there's a bug with leaflet when using inside a bootstrap tab, force a refresh when the tab loads
 	$('a[data-toggle="tab"]').on("shown.bs.tab", function() {
@@ -70,10 +68,7 @@ function generateAllVisualization(currentFilters){
     		if (entry.Location.latitude!=null && entry.Location.latitude!=null){
     			var marker = L.marker([entry.Location.latitude,entry.Location.longitude]);
     			groupAllMarkers.addLayer(marker);
-    			marker.on('click',function (e) {
-					marker.bindPopup("<h4><a href='/organization/"+entry.name_slug+"'>"+entry.name+"</a></h4>"+entry.Location.address).openPopup();
-					//TODO add abbreviation of "About the organization"
-				});
+    			marker.bindPopup("<h4><a href='/organization/"+entry.name_slug+"'>"+entry.name+"</a></h4>"+entry.Location.address).openPopup();
     		}
     	});
     	groupAllMarkers.addTo(map);
