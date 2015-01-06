@@ -1,3 +1,5 @@
+'use strict';
+
 var mongoose = require('mongoose');
 
 var organizationSchema = new mongoose.Schema({
@@ -5,9 +7,9 @@ var organizationSchema = new mongoose.Schema({
   name_slug: { type: String, required: true, unique: true },
   email: { type: String, lowercase: true },
   Location: {
-        address: { type: String, default: '' }
-      , latitude: { type: Number, default: ''  }
-      , longitude: { type: Number, default: '' }
+        address: { type: String, default: '' },
+        latitude: { type: Number, default: ''  },
+        longitude: { type: Number, default: '' }
       },
   phoneNumber: { type: String, lowercase: true, default: ''},
   website: { type: String, default: '' },

@@ -1,3 +1,5 @@
+'use strict';
+
 $(document).ready(function() {
 
 	$('#addOrganization').parsley({
@@ -18,7 +20,7 @@ $(document).ready(function() {
 	  errorsWrapper: '<span class=\"help-inline\"></span>',
 	  errorTemplate: '<span></span>'
 	});
-	$("#delete").click(function(){
+	$('#delete').click(function(){
 		var confirm = window.confirm("Are you sure you want to delete permanently this organization?");
 		
 		if (confirm===false){

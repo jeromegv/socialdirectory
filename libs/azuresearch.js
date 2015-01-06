@@ -1,3 +1,5 @@
+'use strict';
+
 var secrets = require('../config/secrets');
 var request = require('request');
 var Organization = require('../models/Organization');
@@ -5,7 +7,7 @@ var moment = require('moment');
 var util = require('util');
 var utils = require ('./utils.js');
 var _ = require('lodash');
-var parser = require("odata-parser");
+var parser = require('odata-parser');
 
 //check if the index configured for azuresearch is present, if not create the model for this new index
 var initIndex = function() {
@@ -29,40 +31,40 @@ var initIndex = function() {
 				options.url= 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'?api-version='+secrets.azureSearch.apiVersion;
 				options.method= 'PUT';
 				options.body ={ 
-				  "name": secrets.azureSearch.indexName, 
-				  "fields": [
-				    {"name": "orgId", "type": "Edm.String", "key":true, "searchable": false},
-				    {"name": "name", "type": "Edm.String", "suggestions": true}, 
-				    {"name": "name_slug", "type": "Edm.String", "filterable": false,"facetable": false,"searchable": false}, 
-				    {"name": "email", "type": "Edm.String","filterable": false,"facetable": false}, 
-				    {"name": "logo", "type": "Edm.String", "filterable": false,"facetable": false,"searchable": false},
-				    {"name": "logoThumbnail", "type": "Edm.String", "filterable": false,"facetable": false,"searchable": false},
-				    {"name": "locationAddress", "type": "Edm.String","filterable": false,"facetable": false}, 
-				    {"name": "location", "type": "Edm.GeographyPoint"},
-				    {"name": "phoneNumber", "type": "Edm.String","filterable": false,"facetable": false}, 
-				    {"name": "website", "type": "Edm.String","filterable": false,"facetable": false}, 
-				    {"name": "parentOrganization", "type": "Edm.String"}, 
-					{"name": "yearFounded", "type": "Edm.Int32"}, 
-				    {"name": "descriptionService", "type": "Edm.String","filterable": false,"facetable": false}, 
-				    {"name": "primaryBusinessSector_1", "type": "Edm.String"}, 
-				    {"name": "primaryBusinessSector_2", "type": "Collection(Edm.String)"}, 
-				    {"name": "descriptionCause", "type": "Edm.String","filterable": false,"facetable": false}, 
-				    {"name": "socialPurposeCategoryTags", "type": "Collection(Edm.String)"},
-				    {"name": "demographicImpact", "type": "Collection(Edm.String)"},
-				    {"name": "organizationalStructure", "type": "Edm.String"}, 
-				    {"name": "active", "type": "Edm.Boolean"},
-				    {"name": "isSocialEnterprise", "type": "Edm.Boolean"}, 
-				    {"name": "dateCreated", "type": "Edm.DateTimeOffset"}, 
-				    {"name": "lastUpdated", "type": "Edm.DateTimeOffset"},     
-				    {"name": "additionalResourcesNameList", "type": "Collection(Edm.String)"}  
+				  'name': secrets.azureSearch.indexName, 
+				  'fields': [
+				    {'name': 'orgId', 'type': 'Edm.String', 'key':true, 'searchable': false},
+				    {'name': 'name', 'type': 'Edm.String', 'suggestions': true}, 
+				    {'name': 'name_slug', 'type': 'Edm.String', 'filterable': false,'facetable': false,'searchable': false}, 
+				    {'name': 'email', 'type': 'Edm.String','filterable': false,'facetable': false}, 
+				    {'name': 'logo', 'type': 'Edm.String', 'filterable': false,'facetable': false,'searchable': false},
+				    {'name': 'logoThumbnail', 'type': 'Edm.String', 'filterable': false,'facetable': false,'searchable': false},
+				    {'name': 'locationAddress', 'type': 'Edm.String','filterable': false,'facetable': false}, 
+				    {'name': 'location', 'type': 'Edm.GeographyPoint'},
+				    {'name': 'phoneNumber', 'type': 'Edm.String','filterable': false,'facetable': false}, 
+				    {'name': 'website', 'type': 'Edm.String','filterable': false,'facetable': false}, 
+				    {'name': 'parentOrganization', 'type': 'Edm.String'}, 
+					{'name': 'yearFounded', 'type': 'Edm.Int32'}, 
+				    {'name': 'descriptionService', 'type': 'Edm.String','filterable': false,'facetable': false}, 
+				    {'name': 'primaryBusinessSector_1', 'type': 'Edm.String'}, 
+				    {'name': 'primaryBusinessSector_2', 'type': 'Collection(Edm.String)'}, 
+				    {'name': 'descriptionCause', 'type': 'Edm.String','filterable': false,'facetable': false}, 
+				    {'name': 'socialPurposeCategoryTags', 'type': 'Collection(Edm.String)'},
+				    {'name': 'demographicImpact', 'type': 'Collection(Edm.String)'},
+				    {'name': 'organizationalStructure', 'type': 'Edm.String'}, 
+				    {'name': 'active', 'type': 'Edm.Boolean'},
+				    {'name': 'isSocialEnterprise', 'type': 'Edm.Boolean'}, 
+				    {'name': 'dateCreated', 'type': 'Edm.DateTimeOffset'}, 
+				    {'name': 'lastUpdated', 'type': 'Edm.DateTimeOffset'},     
+				    {'name': 'additionalResourcesNameList', 'type': 'Collection(Edm.String)'}  
 				     ],
-				    "scoringProfiles":[
+				    'scoringProfiles':[
 				    {
-				    	"name": "normalSearchBoost",
-				    	"text":{
-					    	"weights": { 
+				    	'name': 'normalSearchBoost',
+				    	'text':{
+					    	'weights': { 
 					    		//default value is 1, any number above 1 will increase boosting of the field, higher number = higher boost
-		   						"name": 2
+		   						'name': 2
 		   					}
 	   					}
 				    }]
@@ -88,7 +90,7 @@ var initIndex = function() {
 var buildAzureOrganizationObject = function(organization){
 	//was able to update mongo, now update azure search
 	var organizationAzure = {
-		"@search.action": "upload",
+		'@search.action': 'upload',
 		orgId: organization._id.toString(),
 		name: organization.name,
 		name_slug: utils.convertToSlug(organization.name),
@@ -138,8 +140,8 @@ var buildAzureOrganizationObject = function(organization){
 	}
 	if (organization.Location.longitude!=null && organization.Location.latitude!=null){
 		organizationAzure.location={ 
-		  "type": "Point", 
-		  "coordinates": [parseFloat(organization.Location.longitude), parseFloat(organization.Location.latitude)]
+		  'type': 'Point', 
+		  'coordinates': [parseFloat(organization.Location.longitude), parseFloat(organization.Location.latitude)]
 		};
 	}
 	return organizationAzure;
@@ -168,7 +170,7 @@ var uploadRecord = function(organization,callback){
 	  'api-key': secrets.azureSearch.apiKey,
 	  'Content-Type': 'application/json'
 	},
-		body: {"value":organizationAzure}
+		body: {'value':organizationAzure}
 	};
 	console.log(util.inspect(options.body,{  depth: null }));
 	request(options, function (error, response, body) {
@@ -195,7 +197,7 @@ var deleteRecord = function(organization,callback){
 	var organizationAzure = new Array();
 
 	organizationAzure[0] =  {
-		"@search.action": "delete",
+		'@search.action': 'delete',
 		orgId: organization._id.toString()
 	};
 
@@ -208,7 +210,7 @@ var deleteRecord = function(organization,callback){
 	  'api-key': secrets.azureSearch.apiKey,
 	  'Content-Type': 'application/json'
 	},
-		body: {"value":organizationAzure}
+		body: {'value':organizationAzure}
 	};
 	console.log(util.inspect(options.body,{  depth: null }));
 	request(options, function (error, response, body) {
@@ -273,7 +275,7 @@ var searchSuggestions = function(req,callback) {
 var search = function(req,callback) {
 	var searchTerm = req.sanitize('search').trim();
 	//we add start to every result, helps to bring back more results
-	if (searchTerm.indexOf("*") == -1){
+	if (searchTerm.indexOf('*') == -1){
 		searchTerm = searchTerm + '*';
 	}
 	var filter ='';
@@ -286,14 +288,14 @@ var search = function(req,callback) {
 	}
 
     //define the fields we want as facet and how to present the refinement values
-	var facetFields = ["primaryBusinessSector_1,sort:count","primaryBusinessSector_2,sort:count","socialPurposeCategoryTags,sort:count","demographicImpact,sort:count"];
+	var facetFields = ['primaryBusinessSector_1,sort:count','primaryBusinessSector_2,sort:count','socialPurposeCategoryTags,sort:count','demographicImpact,sort:count'];
 
-	var highlighFields=["descriptionService","descriptionCause","demographicImpact",
-	"primaryBusinessSector_1","primaryBusinessSector_2","socialPurposeCategoryTags",
-	"additionalResourcesNameList","name","parentOrganization","locationAddress",
-	"organizationalStructure,website,email"];
+	var highlighFields=['descriptionService','descriptionCause','demographicImpact',
+	'primaryBusinessSector_1','primaryBusinessSector_2','socialPurposeCategoryTags',
+	'additionalResourcesNameList','name','parentOrganization','locationAddress',
+	'organizationalStructure,website,email'];
 
-	var scoringProfile = "normalSearchBoost";
+	var scoringProfile = 'normalSearchBoost';
 
 	//maximum of 1000 results in the search results
 	var topNumberResults = 1000;
@@ -381,7 +383,7 @@ function removeParam(key, sourceURL) {
     var rtn = sourceURL.split("?")[0],
         param,
         params_arr = [],
-        queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
+        queryString = (sourceURL.indexOf('?') !== -1) ? sourceURL.split("?")[1] : "";
     if (queryString !== "") {
         params_arr = queryString.split("&");
         for (var i = params_arr.length - 1; i >= 0; i -= 1) {
@@ -431,19 +433,19 @@ var buildSelectedFilters = function(filterQueryString,currentUrl){
 	//if there was a filter defined
 	if (filterQueryString){
 		//manually parse url if there are tag-style (/any) parameters
-		if (filterQueryString.indexOf("/any") > -1){
+		if (filterQueryString.indexOf('/any') > -1){
 			//match on " and " when not located between single quotes
 			//to avoid issue with values that can have |and| as part of their value
 			var re = new RegExp(" and (?=(?:[^']*'[^']*')*[^']*$)");
 			var filterArray = filterQueryString.split(re);
 			var filterArrayForForeach = new Array();
 			filterArray.forEach(function(entry,index) {
-				if (entry.indexOf("/any")>-1){
+				if (entry.indexOf('/any')>-1){
 					//remove the element that is a tag selector from the filterQueryString
 					filterArrayForForeach.push(entry);
 					//add the selected filter to our array of selectedFilters
 					var positionLastApostrophe=entry.lastIndexOf("'");
-					selectedFilters[entry.substring(0,entry.indexOf("/any"))]={value:entry.substring(entry.lastIndexOf("'",positionLastApostrophe-1)+1,positionLastApostrophe)};
+					selectedFilters[entry.substring(0,entry.indexOf('/any'))]={value:entry.substring(entry.lastIndexOf("'",positionLastApostrophe-1)+1,positionLastApostrophe)};
 				}
 			});
 			filterArrayForForeach.forEach(function(entry,index) {

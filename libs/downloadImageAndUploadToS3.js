@@ -1,3 +1,5 @@
+'use strict';
+
 var secrets = require('../config/secrets');
 var request = require('request');
 var fs = require('fs');
@@ -6,8 +8,47 @@ var path = require('path');
 var knox = require('knox');
 var Imagemin = require('imagemin');
 var fs = require('fs');
-var mimeMagic = require( "node-ee-mime-magic" );
+var mimeMagic = require('node-ee-mime-magic');
 var sharp = require('sharp');
+
+var uploadToKnox = function(fileData,filePath,contentType,callback){
+	if (fileData.length>0){
+      //upload image S3 with Knox
+      var knoxclient = knox.createClient({
+          key: secrets.s3.key,
+          secret: secrets.s3.secret,
+          bucket: secrets.s3.bucket,
+          region: secrets.s3.region
+      });
+      var newFileName = 'logos/'+path.basename(filePath);
+      //remove ? from URL to help caching of image
+      if (newFileName.indexOf('?')!==-1){
+      	newFileName = newFileName.substring(0,newFileName.indexOf('?'));
+      	console.log('new filename since there is a ? in the url:'+newFileName);
+      }
+      var uploadknox = knoxclient.put(newFileName, {
+        'Content-length': fileData.length,
+        'Content-Type': contentType,
+        'x-amz-acl': 'public-read',
+        'Cache-Control': 'public,max-age=31536000'
+      });
+      uploadknox.on('response', function(response){
+        if (200 == response.statusCode) {
+          console.log('saved logo to %s', uploadknox.url);
+          callback(null,'/'+newFileName);
+        } else {
+        	console.log(response);
+       		callback('S3 did not respond with 200, response was:'+response.statusCode);
+        }
+      });
+      uploadknox.on('error', function(err) {
+        callback(err);
+      });
+      uploadknox.end(fileData);  
+    } else {
+      callback('File size was 0, no upload occured');
+    } 
+};
 
 var getAndSaveFile = function(url,desiredFileName,callback) {
 	if (!secrets.s3.key || !secrets.s3.secret || !secrets.s3.bucket){
@@ -59,11 +100,11 @@ var getAndSaveFile = function(url,desiredFileName,callback) {
   		//we take the image and optimize it (reduce the size)
 	    var imagemin = new Imagemin().src(filePath).dest('/tmp/optimized');
 	    var optimizedFilePath = '/tmp/optimized/'+path.basename(filePath);
-	    if (mimeType.mime=="image/gif"){
+	    if (mimeType.mime==='image/gif'){
 		    imagemin = imagemin.use(Imagemin.gifsicle({ interlaced: true }));
-	    } else if (mimeType.mime=="image/jpeg"){
+	    } else if (mimeType.mime==='image/jpeg'){
 	    	imagemin = imagemin.use(Imagemin.jpegtran({ progressive: true }));
-	    } else if (mimeType.mime == "image/png"){
+	    } else if (mimeType.mime === 'image/png'){
 	    	imagemin = imagemin.use(Imagemin.optipng({ optimizationLevel: 3 }));
 	    } else {
         	return callback(null,mimeType,fileData,filePath,'',contentType);
@@ -100,9 +141,9 @@ var getAndSaveFile = function(url,desiredFileName,callback) {
 	  	console.log('mimetype of image needing to be resized is');
 	  	console.log(mimeType);
 	  	//this library do not support output in GIF, only in input, so we will convert to PNG
-	  	if (mimeType.mime=="image/gif"){
+	  	if (mimeType.mime==='image/gif'){
 		    sharpObject = sharpObject.png();
-		    contentType == 'image/png';
+		    contentType = 'image/png';
 	    }
 
 	  	//create a thumbnail (smaller size)
@@ -119,7 +160,7 @@ var getAndSaveFile = function(url,desiredFileName,callback) {
 					}
 				});
 	  		} else {
-	  			console.log('Error while executing sharp')
+	  			console.log('Error while executing sharp');
 	  			console.log(err);
 	  			callback(err,filePath,optimizedFilePath);
 	  		}
@@ -149,43 +190,5 @@ var getAndSaveFile = function(url,desiredFileName,callback) {
 	    }
 	  }
 	);
-};
-var uploadToKnox = function(fileData,filePath,contentType,callback){
-	if (fileData.length>0){
-      //upload image S3 with Knox
-      var knoxclient = knox.createClient({
-          key: secrets.s3.key,
-          secret: secrets.s3.secret,
-          bucket: secrets.s3.bucket,
-          region: secrets.s3.region
-      });
-      var newFileName = 'logos/'+path.basename(filePath);
-      //remove ? from URL to help caching of image
-      if (newFileName.indexOf('?')!='-1'){
-      	newFileName = newFileName.substring(0,newFileName.indexOf('?'));
-      	console.log('new filename since there is a ? in the url:'+newFileName);
-      }
-      var uploadknox = knoxclient.put(newFileName, {
-        'Content-length': fileData.length,
-        'Content-Type': contentType,
-        'x-amz-acl': 'public-read',
-        'Cache-Control': 'public,max-age=31536000'
-      });
-      uploadknox.on('response', function(response){
-        if (200 == response.statusCode) {
-          console.log('saved logo to %s', uploadknox.url);
-          callback(null,'/'+newFileName);
-        } else {
-        	console.log(response);
-       		callback('S3 did not respond with 200, response was:'+response.statusCode);
-        }
-      });
-      uploadknox.on('error', function(err) {
-        callback(err);
-      });
-      uploadknox.end(fileData);  
-    } else {
-      callback('File size was 0, no upload occured');
-    } 
 };
 exports.getAndSaveFile = getAndSaveFile;

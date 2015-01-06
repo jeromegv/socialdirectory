@@ -1,3 +1,5 @@
+'use strict';
+
 var _ = require('lodash');
 var async = require('async');
 var crypto = require('crypto');
@@ -318,7 +320,7 @@ exports.postForgot = function(req, res, next) {
         if (!user) {
           //we do not want to tell if the user email exists in the database or not, so same generic message as if the forgot form worked
           req.flash('info', { msg: 'An email has been sent to ' + req.body.email.toLowerCase() + ' with further instructions.' });
-          console.log("Someone tried to reset a password on a non existing email: "+ req.body.email.toLowerCase());
+          console.log('Someone tried to reset a password on a non existing email: '+ req.body.email.toLowerCase());
           return res.redirect('/forgot');
         }
 

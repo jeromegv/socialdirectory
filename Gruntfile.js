@@ -1,4 +1,15 @@
+'use strict';
+
 module.exports = function(grunt) {
+  // Unified Watch Object
+  var watchFiles = {
+    serverViews: ['views/**/*.*'],
+    serverJS: ['Gruntfile.js', 'app.js', 'config/*.js','controllers/*.js','libs/*.js','models/*.js'],
+    clientJS: ['public/js/*.js'],
+    clientCSS: ['public/css/*.css'],
+    mochaTests: ['test/*.js']
+  };
+
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
@@ -56,6 +67,21 @@ module.exports = function(grunt) {
         }
       ]
     }
+    },
+    jshint: {
+      all: {
+        src: watchFiles.clientJS.concat(watchFiles.serverJS),
+        options: {
+          jshintrc: true
+        }
+      }
+    },csslint: {
+      options: {
+        csslintrc: '.csslintrc'
+      },
+      all: {
+        src: watchFiles.clientCSS
+      }
     }
   });
 
@@ -65,5 +91,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-filerev');
   grunt.loadNpmTasks('grunt-jade-usemin');
+  grunt.loadNpmTasks('grunt-contrib-csslint');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  // Default task(s).
   grunt.registerTask('default', ['jadeUsemin','copy']);
+  // Lint task(s).
+  grunt.registerTask('lint', ['jshint','csslint']);
+  grunt.registerTask('build', ['jadeUsemin','copy']);
 };

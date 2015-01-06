@@ -52,7 +52,9 @@
     "grunt-filerev": "^2.1.0",
     "grunt-cli": "^0.1.13",
     "sharp": "^0.7.1",
-    "instagram-node": "^0.5.4"
+    "instagram-node": "^0.5.4",
+    "grunt-contrib-csslint": "^0.3.1",
+    "grunt-contrib-jshint": "^0.10.0"
   },
   "devDependencies": {
     "chai": "^1.9.1",

@@ -1,3 +1,5 @@
+'use strict';
+
 var Organization = require('../models/Organization');
 var secrets = require('../config/secrets');
 var _ = require('lodash');

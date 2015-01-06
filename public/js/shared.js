@@ -1,3 +1,5 @@
+'use strict';
+
 function generateVisualization(latitude,longitude,slug){
 	
 	var map = L.map('map', {

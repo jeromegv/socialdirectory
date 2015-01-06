@@ -1,3 +1,5 @@
+'use strict';
+
 var Organization = require('../models/Organization');
 var moment = require('moment');
 var request = require('request');
@@ -55,7 +57,7 @@ exports.index = function(req, res) {
 				});
 			} else {
 				if (error){console.log(error);}
-				if (response) {console.log('http status code was: '+response.statusCode)};
+				if (response) {console.log('http status code was: '+response.statusCode);}
 				res.render('organization/adminHome', {
 					title: 'Home',
 					organizations: new Array(),
