@@ -363,11 +363,8 @@ exports.postOrganization = function(req, res,next) {
         }
       });
     },function(organization,callback){
-      //get instagram username from url and then get the userid associated with it
-        if (err) {
-          console.log(err);
-          callback(err);
-        } else if (!organization) {
+        //get instagram username from url and then get the userid associated with it
+        if (!organization) {
           console.log('No records were updated');
           callback(new Error('No records were updated'));
         } else {
