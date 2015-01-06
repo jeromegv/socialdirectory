@@ -16,7 +16,7 @@ function generateVisualization(latitude,longitude,slug){
 	//show address when clicking on popover
 	if (!popupLoaded){
 		jQuery.getJSON('/api/organization/'+slug, function(organization) {
-			marker.bindPopup("<h4>"+organization.name+"</h4>"+organization.Location.address).openPopup();
+			marker.bindPopup("<h4>"+organization.name+"</h4>"+organization.Location.address);
 		});
 		popupLoaded=true;
 	}
@@ -70,7 +70,7 @@ function generateAllVisualization(currentFilters){
     		if (entry.Location.latitude!=null && entry.Location.latitude!=null){
     			var marker = L.marker([entry.Location.latitude,entry.Location.longitude]);
     			groupAllMarkers.addLayer(marker);
-    			marker.bindPopup("<h4><a href='/organization/"+entry.name_slug+"'>"+entry.name+"</a></h4>"+entry.Location.address).openPopup();
+    			marker.bindPopup("<h4><a href='/organization/"+entry.name_slug+"'>"+entry.name+"</a></h4>"+entry.Location.address);
     		}
     	});
     	groupAllMarkers.addTo(map);
