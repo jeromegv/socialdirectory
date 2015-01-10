@@ -16,28 +16,28 @@ function generateVisualization(latitude,longitude,slug){
 	//show address when clicking on popover
 	if (!popupLoaded){
 		jQuery.getJSON('/api/organization/'+slug, function(organization) {
-			marker.bindPopup("<h4>"+organization.name+"</h4>"+organization.Location.address);
+			marker.bindPopup('<h4>'+organization.name+'</h4>'+organization.Location.address);
 		});
 		popupLoaded=true;
 	}
 
 	//there's a bug with leaflet when using inside a bootstrap tab, force a refresh when the tab loads
-	$('a[data-toggle="tab"]').on("shown.bs.tab", function() {
+	$('a[data-toggle="tab"]').on('shown.bs.tab', function() {
 	    L.Util.requestAnimFrame(map.invalidateSize,map,!1,map._container);
 	});
-};
+}
 
 function generateAllVisualization(currentFilters){
 	//things to do when the page is loaded first, look at the filter selected in the URL 
 	//and hide the related refinement menus
 	_.forEach(currentFilters,function(filter) { 
-		$("#"+filter.refinementName).hide(0);
+		$('#'+filter.refinementName).hide(0);
 	});
 	//expand the first navigation menu that is visible
 	if ($(window).width() >= 768 && currentFilters.length<3) {
-		$( ".collapse" ).each(function() {
-			if ($(this).parent( ".panel" ).is(":visible")){
-				$(this).collapse({"toggle": true, 'parent': '#accordion' });
+		$( '.collapse' ).each(function() {
+			if ($(this).parent( '.panel' ).is(':visible')){
+				$(this).collapse({'toggle': true, 'parent': '#accordion' });
 				return false;
 			}
 		});
@@ -70,7 +70,7 @@ function generateAllVisualization(currentFilters){
     		if (entry.Location.latitude!=null && entry.Location.latitude!=null){
     			var marker = L.marker([entry.Location.latitude,entry.Location.longitude]);
     			groupAllMarkers.addLayer(marker);
-    			marker.bindPopup("<h4><a href='/organization/"+entry.name_slug+"'>"+entry.name+"</a></h4>"+entry.Location.address);
+    			marker.bindPopup('<h4><a href="/organization/'+entry.name_slug+'">'+entry.name+'</a></h4>'+entry.Location.address);
     		}
     	});
     	groupAllMarkers.addTo(map);
@@ -81,9 +81,10 @@ function generateAllVisualization(currentFilters){
 	//compile how many refinements and which refinement should be shown in navigation
 	function createRefinements(organizations,field){
 		var result = _.reduce(organizations, function (prev, current) {
+			var index;
 			if (Array.isArray(current[field])){
 				current[field].forEach(function(tag,index) {
-					var index = _.findIndex( prev, {'name':tag});
+					index = _.findIndex( prev, {'name':tag});
 					if (index=== -1 ){
 						prev.push({'name': tag, 'val': 1});
 					} else {
@@ -91,7 +92,7 @@ function generateAllVisualization(currentFilters){
 					}
 				});
 			} else {
-				var index = _.findIndex( prev, {'name':current[field]});
+				index = _.findIndex( prev, {'name':current[field]});
 				if (index=== -1 ){
 					prev.push({'name': current[field], 'val': 1});
 				} else {
@@ -113,26 +114,26 @@ function generateAllVisualization(currentFilters){
 
 		var items = [];
 		//update list of refinements in each section
-		$("#primaryBusinessSector_1").find("li").remove();
+		$('#primaryBusinessSector_1').find('li').remove();
 		items = [];
 		$.each( activeRefinementBusiness, function( key, val ) {
 			items.push('<li> <a href="javascript:void(0)" onclick="filterRefinement(\'primaryBusinessSector_1\',\''+val.name+'\')" class="pull-left">'+val.name+'</a><span class="badge">'+val.val+'</span></li>');
 		});
-		$("#primaryBusinessSector_1").find("ul").append(items);
+		$('#primaryBusinessSector_1').find('ul').append(items);
 
-		$("#socialPurposeCategoryTags").find("li").remove();
+		$('#socialPurposeCategoryTags').find('li').remove();
 		items = [];
 		$.each( activeRefinementSocial, function( key, val ) {
 			items.push('<li> <a href="javascript:void(0)" onclick="filterRefinement(\'socialPurposeCategoryTags\',\''+val.name+'\')" class="pull-left">'+val.name+'</a><span class="badge">'+val.val+'</span></li>');
 		});
-		$("#socialPurposeCategoryTags").find("ul").append(items);
+		$('#socialPurposeCategoryTags').find('ul').append(items);
 
-		$("#demographicImpact").find("li").remove();
+		$('#demographicImpact').find('li').remove();
 		items = [];
 		$.each( activeRefinementDemographic, function( key, val ) {
 			items.push('<li> <a href="javascript:void(0)" onclick="filterRefinement(\'demographicImpact\',\''+val.name+'\')" class="pull-left">'+val.name+'</a><span class="badge">'+val.val+'</span></li>');
 		});
-		$("#demographicImpact").find("ul").append(items);
+		$('#demographicImpact').find('ul').append(items);
 	}
 	//filter the organization object based on all the filters currently selected
 	function filterOrganizations(organizations,filters){
@@ -143,9 +144,9 @@ function generateAllVisualization(currentFilters){
 					var found=false;
 					_.forEach(org[filter.refinementName],function(orgRefValue) { 
 						if (orgRefValue==filter.refinementValue){
-							found=true
+							found=true;
 							return true;
-						}; 
+						} 
 					});
 					if (found){
 						return true;
@@ -156,21 +157,21 @@ function generateAllVisualization(currentFilters){
 					}
 				}
 			});
-		})	
+		});
 		return organizationsFiltered;
 	}
 	//go over each org logo and hide or show them based on the filtered org object
 	function updateLogos(organizations){
 		var orgNamesLoaded = _.pluck(organizations, 'name');
 		//for transition sake, we want to hide everything before we start fading in
-		$( ".product_c h5" ).each(function() {
+		$( '.product_c h5' ).each(function() {
 			if (!(_.contains(orgNamesLoaded,$( this ).text()))){
-				$( this ).closest(".col-md-4").hide();
+				$( this ).closest('.col-md-4').hide();
 			}
 		});
-		$( ".product_c h5" ).each(function() {
+		$( '.product_c h5' ).each(function() {
 			if (_.contains(orgNamesLoaded,$( this ).text())){
-				$( this ).closest(".col-md-4").fadeIn();
+				$( this ).closest('.col-md-4').fadeIn();
 			}
 		});
 	}
@@ -194,7 +195,7 @@ function generateAllVisualization(currentFilters){
 			} else if (filter.refinementName=='demographicImpact') {
 				refinementNameBeautiful = 'impact';
 			}
-			url = url+"/"+refinementNameBeautiful+"/"+convertToSlug(filter.refinementValue)
+			url = url+'/'+refinementNameBeautiful+'/'+convertToSlug(filter.refinementValue)
 		});
 		return url;
 	}
@@ -209,26 +210,26 @@ function generateAllVisualization(currentFilters){
 			organizationsLoadedFiltered = filterOrganizations(organizationsLoaded,currentFilters);
 			updateRefinementList(organizationsLoadedFiltered);
 			updateLogos(organizationsLoadedFiltered);
-			window.history.replaceState("", "title", getSEOUrl(currentFilters));
-			$(currentRefinementObject).closest(".whitetag").fadeOut(600, function(){ 
+			window.history.replaceState('', 'title', getSEOUrl(currentFilters));
+			$(currentRefinementObject).closest('.whitetag').fadeOut(600, function(){ 
 			    $(this).remove();
 			});
-			$("#"+refinementName).slideDown();
-			$("#accordion").find(".collapse.in").collapse({"toggle": true, 'parent': '#accordion' });
-			$("#"+refinementName).find(".collapse").collapse({"toggle": true, 'parent': '#accordion' });
+			$('#'+refinementName).slideDown();
+			$('#accordion').find('.collapse.in').collapse({'toggle': true, 'parent': '#accordion' });
+			$('#'+refinementName).find('.collapse').collapse({'toggle': true, 'parent': '#accordion' });
 			//refresh the map
 			refreshAllMarkers(organizationsLoadedFiltered);
 		}
-	}
+	};
 	//action to do to hide a refinement menu
 	function hideRefinementMenu(refinementName){
-		$("#"+refinementName).find(".collapse").collapse({"toggle": true, 'parent': '#accordion' });
+		$('#'+refinementName).find('.collapse').collapse({'toggle': true, 'parent': '#accordion' });
 		//try to show the next refinement if there are still some left to show
 		if (currentFilters.length<3){
-			if ($("#"+refinementName).next().find(".collapse").parent( ".panel" ).is(":visible")){
-				var element = $("#"+refinementName).next().find(".collapse").collapse({"toggle": true, 'parent': '#accordion' });
+			if ($('#'+refinementName).next().find('.collapse').parent( '.panel' ).is(':visible')){
+				var element = $('#'+refinementName).next().find('.collapse').collapse({'toggle': true, 'parent': '#accordion' });
 			} else {
-				$("#"+refinementName).prev().find(".collapse").collapse({"toggle": true, 'parent': '#accordion' });
+				$('#'+refinementName).prev().find('.collapse').collapse({'toggle': true, 'parent': '#accordion' });
 			}
 		}
 	}
@@ -242,19 +243,19 @@ function generateAllVisualization(currentFilters){
 			currentFilters.push(refinementFilter);
 			organizationsLoadedFiltered = filterOrganizations(organizationsLoaded,currentFilters);
 			updateLogos(organizationsLoadedFiltered);
-			window.history.replaceState("", "title", getSEOUrl(currentFilters));
+			window.history.replaceState('', 'title', getSEOUrl(currentFilters));
 			//add selected refinements
-			$("#selectedTags").append('<div class="whitetag"><h2>'+refinementValue+'<a href="javascript:void(0)" onclick="removeRefinement(\''+refinementName+'\',\''+refinementValue+'\',this)"><i class="fa fa-close"></i></a></h2></div>').hide().fadeIn(600);
+			$('#selectedTags').append('<div class="whitetag"><h2>'+refinementValue+'<a href="javascript:void(0)" onclick="removeRefinement(\''+refinementName+'\',\''+refinementValue+'\',this)"><i class="fa fa-close"></i></a></h2></div>').hide().fadeIn(600);
 			//hide current navigation menu + show next one available
-			$("#"+refinementName).slideUp(600);
+			$('#'+refinementName).slideUp(600);
 			hideRefinementMenu(refinementName);
 			//update the count of refinement in each category
 			updateRefinementList(organizationsLoadedFiltered);
 			//refresh the map
 			refreshAllMarkers(organizationsLoadedFiltered);
 		}
-	}
-};
+	};
+}
 
 $(document).ready(function() {
 
@@ -268,10 +269,10 @@ $(document).ready(function() {
 
 	//enable the autocomplete search as you type (azure suggestions) on the searchbar
     //call the internal API for the query and show results returned by API
-	$( "#search" ).autocomplete({
+	$( '#search' ).autocomplete({
 		source: function( request, response ) {
 			$.ajax({
-			  url: "/searchorganization",
+			  url: '/searchorganization',
 			  data: {
 			    search: request.term
 			  },
@@ -281,9 +282,9 @@ $(document).ready(function() {
 			});
 		},
 		minLength: 3,
-		appendTo: $("#search").parent(),
+		appendTo: $('#search').parent(),
 		select: function( event, ui ) {
-			window.location.href = '/organization/'+ui.item.name_slug
+			window.location.href = '/organization/'+ui.item.name_slug;
 		},
 		focus: function (event, ui) {
 			this.value = ui.item['@search.text'];
@@ -291,32 +292,32 @@ $(document).ready(function() {
 		}
 
     })
-    .autocomplete( "instance" )._renderItem = function( ul, item ) {
-      return $( "<li>" )
-        .append( "<a href='/organization/"+item.name_slug+"'>" + item['@search.text'] + "</a>" )
+    .autocomplete( 'instance' )._renderItem = function( ul, item ) {
+      return $( '<li>')
+        .append( '<a href="/organization/'+item.name_slug+'">' + item['@search.text'] + '</a>' )
         .appendTo( ul );
     };
     //switch arrows up/down on explore navigation
     $('.panel').on('hide.bs.collapse', function () {
-		$(this).find("i").removeClass("fa-caret-down");
-		$(this).find("i").addClass("fa-caret-up");
+		$(this).find('i').removeClass('fa-caret-down');
+		$(this).find('i').addClass('fa-caret-up');
 	});
 	$('.panel').on('show.bs.collapse', function () {
-		$(this).find("i").addClass("fa-caret-down");
-		$(this).find("i").removeClass("fa-caret-up");
+		$(this).find('i').addClass('fa-caret-down');
+		$(this).find('i').removeClass('fa-caret-up');
 	});
 
-	$(".clickable").click(function (e) {
+	$('.clickable').click(function (e) {
         e.preventDefault();
-        $(this).parent().find(".tgl_c").slideToggle(300);
-        if ($(this).hasClass("active")) {
+        $(this).parent().find('.tgl_c').slideToggle(300);
+        if ($(this).hasClass('active')) {
             $(this).removeClass('active');
-            $(this).find("i").addClass("fa-caret-down");
-            $(this).find("i").removeClass("fa-caret-up");
+            $(this).find('i').addClass('fa-caret-down');
+            $(this).find('i').removeClass('fa-caret-up');
         } else {
             $(this).addClass('active');
-            $(this).find("i").removeClass("fa-caret-down");
-            $(this).find("i").addClass("fa-caret-up");
+            $(this).find('i').removeClass('fa-caret-down');
+            $(this).find('i').addClass('fa-caret-up');
         }
     });
 	//smooth scrolling on home page links buttons

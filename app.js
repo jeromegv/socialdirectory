@@ -82,7 +82,7 @@ app.use(function(req, res, next){
         .replace(/[^\w ]+/g,'')
         .replace(/ +/g,'-')
         ;
-  }
+  };
   res.locals.contentParse = contentParse;
   res.locals.convertToSlug = convertToSlug;
   next();
@@ -100,9 +100,9 @@ app.use(methodOverride(function(req, res){
   //config of method override to be able to use a POST form to make a PUT query to the API
   if (req.body && typeof req.body === 'object' && '_method' in req.body) {
     // look in urlencoded POST bodies and delete it
-    var method = req.body._method
-    delete req.body._method
-    return method
+    var method = req.body._method;
+    delete req.body._method;
+    return method;
   }
 }));
 app.use(cookieParser());
@@ -116,7 +116,7 @@ app.use(session({
     auto_reconnect: true,
     clear_interval: 86400
   }, function () {
-    console.log("mongostore db connection open");
+    console.log('mongostore db connection open');
   })
 }));
 app.use(passport.initialize());
@@ -177,7 +177,7 @@ app.get('/sitemap.xml',websiteController.getSiteMap);
 app.get('/aboutus',websiteController.getAboutUs);
 app.get('/contactus',websiteController.getContactUs);
 app.post('/contactus',websiteController.postContactUs);
-app.get(["/explore","/explore/*"],websiteController.getExplore);
+app.get(['/explore','/explore/*'],websiteController.getExplore);
 app.get('/organization/:slug',websiteController.getOrganization);
 
 /**

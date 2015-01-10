@@ -6,6 +6,7 @@
 	"camelcase": false, // Permit only camelcase for `var` and `object indexes`.
 	"curly": false, // Require {} for every new block or scope.
 	"eqeqeq": true, // Require triple equals i.e. `===`.
+	"jquery": true,
 	"immed": true, // Require immediate invocations to be wrapped in parens e.g. `( function(){}() );`
 	"latedef": true, // Prohibit variable use before definition.
 	"newcap": true, // Require capitalization of all constructor functions e.g. `new F()`.
@@ -20,7 +21,10 @@
 	"globals": { // Globals variables.
 		"jasmine": true,
 		"angular": true,
-		"ApplicationConfiguration": true
+		"ApplicationConfiguration": true,
+		"_": true,
+		"L": false,
+		"MQ": false
 	},
 	"predef": [ // Extra globals.
 		"define",

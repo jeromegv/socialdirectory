@@ -11,7 +11,7 @@ var businessSector = require('../public/json/primaryBusinessSector.json');
 var socialPurposeCategory = require('../public/json/socialPurposeCategory.json');
 var demographicImpact = require('../public/json/demographicImpact.json');
 //local dependencies
-var downloadImageAndUploadToS3 = require("../libs/downloadImageAndUploadToS3.js");
+var downloadImageAndUploadToS3 = require('../libs/downloadImageAndUploadToS3.js');
 var azureSearch = require('../libs/azuresearch.js');
 var utils = require('../libs/utils.js');
 var async = require('async');
