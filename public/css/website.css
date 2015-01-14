@@ -202,6 +202,7 @@ i.bigicon{
 	background:#ffffff;
 	text-align:center;
 	border-top:1px solid #efefef;
+	
 }
 
 .main_box .desc_title_front_page {
@@ -213,7 +214,7 @@ i.bigicon{
 .main_box .desc h5 {
 	margin:0;
 	padding:0;
-	font-weight:normal;
+	font-weight:bold;
 }
 .main_box .desc h5 a {
 	color:#282727;
@@ -372,33 +373,6 @@ i.bigicon{
 	font-size:18px;
 	color:#898989;
 	line-height:40px;
-}
-#footer .f_bot {
-	padding:30px 0;
-	background:url(../images/footer_bg.png) repeat-x #f3f6f6;
-}
-#footer .f_bot .f_bot_left {
-	font-size:14px;
-	line-height:20px;
-	color:#898989;
-	margin:0;
-	padding:0;
-	float:left;
-}
-#footer .f_bot .f_bot_left strong {
-	font-family: 'Lato', sans-serif; font-weight: 700;
-	font-weight:normal;
-}
-#footer .f_bot .f_bot_right {
-	font-size:14px;
-	line-height:20px;
-	color:#898989;
-	margin:0;
-	padding:0;
-	float:right;
-}
-#footer .f_bot .f_bot_right a {
-	color:#37bbec;
 }
 .social li.facebook a:hover {
 	background-color: #325c94;
@@ -1145,7 +1119,7 @@ input[type=checkbox] {
 		margin-bottom: 8px; 
 	}
 	.main_box {
-		height:340px;
+		height:300px;
 	}
 	.main_box .box_1 {
 		height:220px;
@@ -1168,6 +1142,13 @@ input[type=checkbox] {
 	}
 }
 
+ /* for tablet landscape mode */
+@media (min-width: 992px) {
+	.main_box {
+		height:320px;
+	}
+}
+
 /* for desktop */
 @media (min-width: 1200px) {
 	body {
@@ -1181,7 +1162,7 @@ input[type=checkbox] {
 	}
 
 	.main_box {
-		height: 320px;
+		height: 300px;
 	}
 	.main_box .box_1 {
 		height:200px;
