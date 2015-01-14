@@ -825,7 +825,7 @@ input[type=checkbox] {
 	display:block;
 	margin:30px auto 0;
 	font-family: 'Lato', sans-serif; font-weight: 700;
-	background:#37bbec;
+	background:#1485CC;
 	border-radius:18px;
 	text-shadow:-1px -1px 1px #2f8aab;
 	border:none;
@@ -834,12 +834,12 @@ input[type=checkbox] {
 	position:relative;
 }
 .btn_c:hover {
-	background-color:#48c3ee;
+	background-color:#23527c;
 	text-decoration:none;
 	color:#fff;
 }
 .btn_c:active {
-	background-color:#2caee7;
+	background-color:#23527c;
 	text-decoration:none;
 	color:#fff;
 }
