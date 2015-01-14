@@ -55,7 +55,7 @@ function generateAllVisualization(currentFilters){
     L.Icon.Default.imagePath = '/components/leaflet/dist/images/';
 	var organizationsLoaded;
 	var organizationsLoadedFiltered;
-	var groupAllMarkers = new L.featureGroup();
+	var markers = L.markerClusterGroup({showCoverageOnHover:false,maxClusterRadius:40});
 	jQuery.getJSON('/api/organization?light=true', function(organizations) {
     	organizationsLoaded = organizations;
     	//for the first load, based on the URL, only show the org that should be shown
@@ -65,17 +65,17 @@ function generateAllVisualization(currentFilters){
     });
 
     function refreshAllMarkers(organizations) {
-    	groupAllMarkers.clearLayers();
+    	markers.clearLayers();
     	organizations.forEach(function(entry,index) {
     		if (entry.Location.latitude!=null && entry.Location.latitude!=null){
     			var marker = L.marker([entry.Location.latitude,entry.Location.longitude]);
-    			groupAllMarkers.addLayer(marker);
+    			markers.addLayer(marker);
     			marker.bindPopup('<h4><a href="/organization/'+entry.name_slug+'">'+entry.name+'</a></h4>'+entry.Location.address);
     		}
     	});
-    	groupAllMarkers.addTo(map);
+    	map.addLayer(markers);
     	//auto zoom to fit all the markers
-	    map.fitBounds(groupAllMarkers.getBounds().pad(0.5),{maxZoom:13});
+	    map.fitBounds(markers.getBounds().pad(0.5),{maxZoom:13});
     }
 
 	//compile how many refinements and which refinement should be shown in navigation
