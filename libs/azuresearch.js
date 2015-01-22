@@ -81,7 +81,9 @@ var initIndex = function() {
 				if (error){console.log(error);}
 				console.log('Connection to Azure Search failed, query was: ');
 				console.log(options);
-		        if (response) {console.log('http status code was: '+response.statusCode)};
+		        if (response) {
+		        	console.log('http status code was: '+response.statusCode);
+		        }
 			}
 		}
 	});
@@ -112,7 +114,7 @@ var buildAzureOrganizationObject = function(organization){
 		lastUpdated: moment.utc(Date.now()).toISOString()
 	};
 	//		
-	var additionalResourcesName = new Array();
+	var additionalResourcesName = [];
 	organization.additionalResources.forEach(function(entry,index) {
 		if (entry.resourceName!=''){
 	    	additionalResourcesName[index]=entry.resourceName;
@@ -135,20 +137,20 @@ var buildAzureOrganizationObject = function(organization){
 	} else {
 		organizationAzure.primaryBusinessSector_2 = new Array(organization.primaryBusinessSector_2.toString());
 	}
-	if (organization.yearFounded!=null){
+	if (organization.yearFounded!==null){
 		organizationAzure.yearFounded=parseInt(organization.yearFounded);
 	}
-	if (organization.Location.longitude!=null && organization.Location.latitude!=null){
+	if (organization.Location.longitude!==null && organization.Location.latitude!==null){
 		organizationAzure.location={ 
 		  'type': 'Point', 
 		  'coordinates': [parseFloat(organization.Location.longitude), parseFloat(organization.Location.latitude)]
 		};
 	}
 	return organizationAzure;
-}
+};
 //to make a POST query to azure search that will upsert the organization
 var uploadRecord = function(organization,callback){
-	var organizationAzure = new Array();
+	var organizationAzure = [];
 	if (!Array.isArray(organization)){
 		organizationAzure[0] = buildAzureOrganizationObject(organization);
 	} else {
@@ -184,17 +186,17 @@ var uploadRecord = function(organization,callback){
 		    console.log(error);
 		    callback(error);
 		  } else if (response) {
-		    console.log('http status code was: '+response.statusCode)
+		    console.log('http status code was: '+response.statusCode);
 		    console.log(util.inspect(response.body,{  depth: null }));
 		    callback('http status code was: '+response.statusCode);
-		  };
+		  }
 		}
 	});
 };
 
 //to make a POST query to azure search that will delete the organization
 var deleteRecord = function(organization,callback){
-	var organizationAzure = new Array();
+	var organizationAzure = [];
 
 	organizationAzure[0] =  {
 		'@search.action': 'delete',
@@ -224,9 +226,9 @@ var deleteRecord = function(organization,callback){
 		    console.log(error);
 		    callback(error);
 		  } else if (response) {
-		    console.log('http status code was: '+response.statusCode)
+		    console.log('http status code was: '+response.statusCode);
 		    callback('http status code was: '+response.statusCode);
-		  };
+		  }
 		}
 	});
 };
@@ -241,9 +243,9 @@ var searchSuggestions = function(req,callback) {
 	}
 	   
     //if someone is not authenticated, we hide inactive organization from typeahead results
-    var filter = "";
+    var filter = '';
     if (!req.isAuthenticated() && (req.get('secretkey')!=secrets.internalAPIKey)) {
-      filter = "&$filter=active eq true";
+      filter = '&$filter=active eq true';
     }
     var options = {
       url: 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'/docs/suggest?search='+searchTerm+filter+'&$select=name_slug&fuzzy=true&api-version='+secrets.azureSearch.apiVersion,
@@ -265,17 +267,17 @@ var searchSuggestions = function(req,callback) {
           console.log('search failed to execute on Azure Search, query was:');
           console.log(options);
           if (response) {
-            console.log('http status code was: '+response.statusCode)
-          };
+            console.log('http status code was: '+response.statusCode);
+          }
         return callback('Search suggestion failed');
        }
     });
-}
+};
 
 var search = function(req,callback) {
 	var searchTerm = req.sanitize('search').trim();
 	//we add start to every result, helps to bring back more results
-	if (searchTerm.indexOf('*') == -1){
+	if (searchTerm.indexOf('*') === -1){
 		searchTerm = searchTerm + '*';
 	}
 	var filter ='';
@@ -303,25 +305,25 @@ var search = function(req,callback) {
 	//if someone is not authenticated, we hide inactive organization from typeahead results
     if (!req.isAuthenticated() && (req.get('secretkey')!=secrets.internalAPIKey)) {
       if (!filter){
-      	filter = "active eq true";
+      	filter = 'active eq true';
       } else {
-      	filter = filter+" and active eq true";
+      	filter = filter+' and active eq true';
       }
     } else {
-    	facetFields.push("active,sort:-value");
+    	facetFields.push('active,sort:-value');
     }
 
 	//build the URL for the query
 	var url = 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'/docs?search='+searchTerm;
 	
 	facetFields.forEach(function(entry,index) {
-		url+="&facet="+entry;
+		url+='&facet='+entry;
 	});
 
-	url+="&highlight=";
+	url+='&highlight=';
 	highlighFields.forEach(function(entry,index) {
 		if (typeof(highlighFields[index+1])!='undefined'){
-			url+=entry+",";
+			url+=entry+',';
 		} else {
 			url+=entry;
 		}
@@ -353,16 +355,15 @@ var search = function(req,callback) {
             console.log('search failed to execute on Azure Search, query was:');
             console.log(options);
             if (response) {
-            	console.log('http status code was: '+response.statusCode)
-            };
+            	console.log('http status code was: '+response.statusCode);
+            }
          	return callback('Search failed');
          }
 	});
-}
+};
 
 //To add/replace a parameter to an existing URL
-function insertParam(key, value,sourceURL)
-{
+function insertParam(key, value,sourceURL) {
     key = encodeURI(key); value = encodeURIComponent(value);
     var kvp = sourceURL.split('&');
     var i=kvp.length; var x; while(i--) 
@@ -378,21 +379,22 @@ function insertParam(key, value,sourceURL)
     if(i<0) {kvp[kvp.length] = [key,value].join('=');}
     return kvp.join('&'); 
 }
+
 //to remove a parameter from an url
 function removeParam(key, sourceURL) {
-    var rtn = sourceURL.split("?")[0],
+    var rtn = sourceURL.split('?')[0],
         param,
         params_arr = [],
-        queryString = (sourceURL.indexOf('?') !== -1) ? sourceURL.split("?")[1] : "";
-    if (queryString !== "") {
-        params_arr = queryString.split("&");
+        queryString = (sourceURL.indexOf('?') !== -1) ? sourceURL.split('?')[1] : '';
+    if (queryString !== '') {
+        params_arr = queryString.split('&');
         for (var i = params_arr.length - 1; i >= 0; i -= 1) {
-            param = params_arr[i].split("=")[0];
+            param = params_arr[i].split('=')[0];
             if (param === key) {
                 params_arr.splice(i, 1);
             }
         }
-        rtn = rtn + "?" + params_arr.join("&");
+        rtn = rtn + '?' + params_arr.join('&');
     }
     return rtn;
 }
@@ -421,7 +423,7 @@ var buildFacets = function(facets,currentUrl){
 		}
 	}
 	return facets;
-}
+};
 
 //function is being used to show in the UI the list of filters selected (after someone clicked a facet)
 //the search response coming back from azure does not contain this information
@@ -438,7 +440,7 @@ var buildSelectedFilters = function(filterQueryString,currentUrl){
 			//to avoid issue with values that can have |and| as part of their value
 			var re = new RegExp(" and (?=(?:[^']*'[^']*')*[^']*$)");
 			var filterArray = filterQueryString.split(re);
-			var filterArrayForForeach = new Array();
+			var filterArrayForForeach = [];
 			filterArray.forEach(function(entry,index) {
 				if (entry.indexOf('/any')>-1){
 					//remove the element that is a tag selector from the filterQueryString
@@ -452,7 +454,7 @@ var buildSelectedFilters = function(filterQueryString,currentUrl){
 				_.pull(filterArray, entry);
 			});
 			//rebuild the query string without the tag selector
-			filterQueryString=filterArray.join(" and ");
+			filterQueryString=filterArray.join(' and ');
 		}
 		//if there is a value left that was not removed from original filterquerystring, parse it
 		if (filterQueryString){
@@ -478,9 +480,7 @@ var buildSelectedFilters = function(filterQueryString,currentUrl){
 	//to allow removing the filter from the query when clicking on X button next to selected filter
 	selectedFilters = buildUrlToRemove(selectedFilters,currentUrl);
 	return selectedFilters;
-}
-
-
+};
 
 function buildUrlFromFacet(facetName,facetValue,currentUrl){
 	var link;
@@ -490,22 +490,22 @@ function buildUrlFromFacet(facetName,facetValue,currentUrl){
 
 	if (facetName=='primaryBusinessSector_1'){
 		if (!filterQueryString){
-			link=insertParam("filter",facetName+" eq '"+facetValue+"'",currentUrl);
+			link=insertParam('filter',facetName+" eq '"+facetValue+"'",currentUrl);
 		} else {
 			//if there is already a refinement selected, add the existing refinement first + add new refinement
-			link=insertParam("filter",filterQueryString+' and '+facetName+" eq '"+facetValue+"'",currentUrl);							
+			link=insertParam('filter',filterQueryString+' and '+facetName+" eq '"+facetValue+"'",currentUrl);							
 		}
 	} else if (facetName=='active'){
 		if (!filterQueryString){
-			link=insertParam("filter",facetName+" eq "+facetValue,currentUrl);
+			link=insertParam('filter',facetName+" eq "+facetValue,currentUrl);
 		} else {
-			link=insertParam("filter",filterQueryString+' and '+facetName+" eq "+facetValue,currentUrl);
+			link=insertParam('filter',filterQueryString+' and '+facetName+" eq "+facetValue,currentUrl);
 		}
 	} else {
 		if (!filterQueryString){
-			link=insertParam("filter",facetName+"/any(t: t eq '"+facetValue+"')",currentUrl);
+			link=insertParam('filter',facetName+"/any(t: t eq '"+facetValue+"')",currentUrl);
 		} else {
-			link=insertParam("filter",filterQueryString+' and '+facetName+"/any(t: t eq '"+facetValue+"')",currentUrl);						
+			link=insertParam('filter',filterQueryString+' and '+facetName+"/any(t: t eq '"+facetValue+"')",currentUrl);						
 		}
 	}
 	return link;
@@ -516,7 +516,7 @@ function buildUrlToRemove(selectedFilters,currentUrl){
 	//so we go over every selected filters
 	for (var key in selectedFilters) {
 		//we remove the filter parameter from the URL of the current page, and we rebuild it
-		var cleanUrl = removeParam("filter",currentUrl);
+		var cleanUrl = removeParam('filter',currentUrl);
 		//the removed url will basically be a list of refinements of every selected filters
 		//EXCEPT for the current selected filters (since this one gets removed)
 		for (var key2 in selectedFilters) {

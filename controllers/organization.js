@@ -24,12 +24,12 @@ function getDomain(url){
 
     var parts = url.split('.');
     if (parts[0] === 'www' && parts[1] !== 'com'){
-        parts.shift()
+        parts.shift();
     }
-    var ln = parts.length
-      , i = ln
-      , minLength = parts[parts.length-1].length
-      , part
+    var ln = parts.length,
+      i = ln,
+      minLength = parts[parts.length-1].length,
+      part;
 
     // iterate backwards
     while(part = parts[--i]){
@@ -96,13 +96,13 @@ function loggedInSelectQuery(req){
   if (req.isAuthenticated()|| (req.get('secretkey')==secrets.internalAPIKey)) {
     return ('+privateNote');
   } else {
-    return ("");
+    return ('');
   }
 }
 //when user is not logged in, we don't want to show unpublished organizations
 function loggedInQuery(req){
   if (req.isAuthenticated()|| (req.get('secretkey')==secrets.internalAPIKey)) {
-    return ("");
+    return ('');
   } else {
     return ({active: true});
   }
@@ -117,7 +117,7 @@ function loggedInQuery(req){
 exports.getOrganization = function(req, res) {
   if (typeof(req.query.light)!='undefined' && req.query.light!=''){
     Organization.find(loggedInQuery(req)).select('logoThumbnail name name_slug socialPurposeCategoryTags Location primaryBusinessSector_1 demographicImpact primaryBusinessSector_2').exec(function(err, organizations) {
-      if (!err && organizations!=null){
+      if (!err && organizations!==null){
         return res.jsonp(organizations);
       } else {
         res.status(400);
@@ -126,7 +126,7 @@ exports.getOrganization = function(req, res) {
     });
   } else {
     Organization.find(loggedInQuery(req)).select(loggedInSelectQuery(req)).exec(function(err, organizations) {
-      if (!err && organizations!=null){
+      if (!err && organizations!==null){
         return res.jsonp(organizations);
       } else {
         res.status(400);
@@ -143,7 +143,7 @@ exports.getOrganization = function(req, res) {
 
 exports.getOrganizationSlug = function(req, res) {
   Organization.find({ name_slug: req.params.slug }).select(loggedInSelectQuery(req)).exec(function(err, organization) {
-    if (!err && organization!=null && organization.length>0 && (organization[0].active===true || req.isAuthenticated() || req.get('secretkey')==secrets.internalAPIKey)){
+    if (!err && organization!==null && organization.length>0 && (organization[0].active===true || req.isAuthenticated() || req.get('secretkey')==secrets.internalAPIKey)){
       return res.jsonp(organization[0]);
     } else if (!err && (organization[0]==null || organization.length<1)){
       res.status(404);
@@ -161,7 +161,7 @@ exports.getOrganizationSlug = function(req, res) {
  */
  exports.getReloadOrganizationsInAzure = function(req, res) {
   Organization.find(loggedInQuery(req)).select(loggedInSelectQuery(req)).exec(function(err, organizations) {
-    if (!err && organizations!=null){
+    if (!err && organizations!==null){
       azureSearch.uploadRecord(organizations,function(error){
         if (error){
           console.log(error);
@@ -286,21 +286,21 @@ exports.postOrganization = function(req, res,next) {
   if (typeof(req.body.demographicImpact)!='undefined'){
     organization.demographicImpact = req.body.demographicImpact;
   } else {
-    organization.demographicImpact = new Array();
+    organization.demographicImpact = [];
   }
   if (typeof(req.body.socialPurposeCategoryTags)!='undefined'){
     organization.socialPurposeCategoryTags = req.body.socialPurposeCategoryTags;
   } else {
-    organization.socialPurposeCategoryTags = new Array();
+    organization.socialPurposeCategoryTags = [];
   }
 
   if (typeof(req.body.primaryBusinessSector_2)!='undefined'){
     organization.primaryBusinessSector_2 = req.body.primaryBusinessSector_2;
   } else {
-    organization.primaryBusinessSector_2 = new Array();
+    organization.primaryBusinessSector_2 = [];
   }
 
-  var additionalResources = new Array();
+  var additionalResources = [];
   req.body.resourceName.forEach(function(entry,index) {
       additionalResources[index]={resourceName:entry,resourceUrl:utils.saveUrl(req.body.resourceUrl[index])};
   });
@@ -313,7 +313,7 @@ exports.postOrganization = function(req, res,next) {
 
   organization.additionalResources = additionalResources;
 
-  var socialMedia = new Array();
+  var socialMedia = [];
   req.body.socialMediaUrl.forEach(function(entry,index) {
       if (req.body.socialMediaUrl[index]!=''){
         var parsedUrl = urlNode.parse(utils.saveUrl(req.body.socialMediaUrl[index])).hostname;
@@ -460,19 +460,19 @@ exports.putOrganization = function(req, res,next) {
   if (typeof(req.body.demographicImpact)!='undefined'){
     organization.demographicImpact = req.body.demographicImpact;
   } else {
-    organization.demographicImpact = new Array();
+    organization.demographicImpact = [];
   }
   if (typeof(req.body.socialPurposeCategoryTags)!='undefined'){
     organization.socialPurposeCategoryTags = req.body.socialPurposeCategoryTags;
   } else {
-    organization.socialPurposeCategoryTags = new Array();
+    organization.socialPurposeCategoryTags = [];
   }
     if (typeof(req.body.primaryBusinessSector_2)!='undefined'){
     organization.primaryBusinessSector_2 = req.body.primaryBusinessSector_2;
   } else {
-    organization.primaryBusinessSector_2 = new Array();
+    organization.primaryBusinessSector_2 = [];
   }
-  var additionalResources = new Array();
+  var additionalResources = [];
   req.body.resourceName.forEach(function(entry,index) {
       additionalResources[index]={resourceName:entry,resourceUrl:utils.saveUrl(req.body.resourceUrl[index])};
   });
@@ -484,7 +484,7 @@ exports.putOrganization = function(req, res,next) {
   });
   organization.additionalResources = additionalResources;
 
-  var socialMedia = new Array();
+  var socialMedia = [];
   req.body.socialMediaUrl.forEach(function(entry,index) {
       if (req.body.socialMediaUrl[index]!=''){
         var parsedUrl = urlNode.parse(utils.saveUrl(req.body.socialMediaUrl[index])).hostname;  
@@ -587,7 +587,7 @@ exports.deleteOrganization = function (req,res,next){
         return res.send('');
       }
     });
-}
+};
 
 /**
  * GET /searchorganization/
@@ -603,4 +603,4 @@ exports.searchOrganization = function (req,res,next){
       res.json(response);
     }
   });
-}
+};

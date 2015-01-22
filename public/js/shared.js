@@ -67,7 +67,7 @@ function generateAllVisualization(currentFilters){
     function refreshAllMarkers(organizations) {
     	markers.clearLayers();
     	organizations.forEach(function(entry,index) {
-    		if (entry.Location.latitude!=null && entry.Location.latitude!=null){
+    		if (entry.Location.latitude!==null && entry.Location.latitude!==null){
     			var marker = L.marker([entry.Location.latitude,entry.Location.longitude]);
     			markers.addLayer(marker);
     			marker.bindPopup('<h4><a href="/organization/'+entry.name_slug+'">'+entry.name+'</a></h4>'+entry.Location.address);
@@ -143,7 +143,7 @@ function generateAllVisualization(currentFilters){
 				if (Array.isArray(org[filter.refinementName])){
 					var found=false;
 					_.forEach(org[filter.refinementName],function(orgRefValue) { 
-						if (orgRefValue==filter.refinementValue){
+						if (orgRefValue===filter.refinementValue){
 							found=true;
 							return true;
 						} 
@@ -152,7 +152,7 @@ function generateAllVisualization(currentFilters){
 						return true;
 					}
 				} else {
-					if (org[filter.refinementName]==filter.refinementValue){
+					if (org[filter.refinementName]===filter.refinementValue){
 						return true;
 					}
 				}
@@ -188,14 +188,14 @@ function generateAllVisualization(currentFilters){
 		var url='/explore';
 		_(filters).forEach(function(filter) { 
 			var refinementNameBeautiful = filter.refinementName;
-			if (filter.refinementName=='primaryBusinessSector_1'){
+			if (filter.refinementName==='primaryBusinessSector_1'){
 				refinementNameBeautiful = 'business';
-			} else if (filter.refinementName=='socialPurposeCategoryTags') {
+			} else if (filter.refinementName==='socialPurposeCategoryTags') {
 				refinementNameBeautiful = 'social';
-			} else if (filter.refinementName=='demographicImpact') {
+			} else if (filter.refinementName==='demographicImpact') {
 				refinementNameBeautiful = 'impact';
 			}
-			url = url+'/'+refinementNameBeautiful+'/'+convertToSlug(filter.refinementValue)
+			url = url+'/'+refinementNameBeautiful+'/'+convertToSlug(filter.refinementValue);
 		});
 		return url;
 	}

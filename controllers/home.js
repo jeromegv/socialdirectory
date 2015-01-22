@@ -13,7 +13,7 @@ var azureSearch = require('../libs/azuresearch.js');
  */
 exports.index = function(req, res) {
 	//if there is a search url parameter, we query azure search using that term and render the results
-	if (typeof(req.query.search)!='undefined' && req.query.search!=''){
+	if (typeof(req.query.search)!='undefined' && req.query.search!==''){
 		var searchTerm = req.sanitize('search').trim();
 		var filter ='';
 		if (typeof(req.query.filter)!='undefined'){
@@ -57,7 +57,9 @@ exports.index = function(req, res) {
 				});
 			} else {
 				if (error){console.log(error);}
-				if (response) {console.log('http status code was: '+response.statusCode);}
+				if (response) {
+					console.log('http status code was: '+response.statusCode);
+				}
 				res.render('organization/adminHome', {
 					title: 'Home',
 					organizations: new Array(),

@@ -41,7 +41,7 @@ var utils = require('../libs/utils.js');
 		});
 	} else {
 		Organization.find({active: true}).select('logoThumbnail name name_slug socialPurposeCategoryTags descriptionService').exec(function(error, organizations) {
-		    if (!error && organizations!=null){
+		    if (!error && organizations!==null){
 		        res.render('websiteViews/home', {
 					title: 'Home of Social Enterprises in Philippines',
 					organizations:organizations,
@@ -151,9 +151,9 @@ function filterOrganizations(organizations,filters){
 			if (Array.isArray(org[filter.refinementName])){
 				_.forEach(org[filter.refinementName],function(orgRefValue) { 
 					if (orgRefValue==filter.refinementValue){
-						org.hidden=false
+						org.hidden=false;
 						return true;
-					}; 
+					} 
 				});
 			} else {
 				if (org[filter.refinementName]==filter.refinementValue){
@@ -232,7 +232,7 @@ function createTitle(selectedRefinements) {
  	var selectedRefinements = createSelectedRefinementsFromUrl(req.originalUrl);
 
 	Organization.find({active: true}).select('logoThumbnail name name_slug socialPurposeCategoryTags descriptionService primaryBusinessSector_1 demographicImpact').sort([['name', 'ascending']]).exec(function(error, organizations) {
-	    if (!error && organizations!=null){
+	    if (!error && organizations!==null){
 	    	organizations = filterOrganizations(organizations,selectedRefinements);
 	        res.render('websiteViews/explore', {
 				title: createTitle(selectedRefinements),
@@ -257,7 +257,7 @@ function createTitle(selectedRefinements) {
  */
  exports.getSiteMap = function(req, res) {
 	Organization.find({active: true}).select('name_slug lastUpdated socialPurposeCategoryTags').exec(function(error, organizations) {
-	    if (!error && organizations!=null){
+	    if (!error && organizations!==null){
 	    	res.header('Content-Type', 'application/xml');
 	        res.render('websiteViews/sitemap', {
 				organizations:organizations,
@@ -282,7 +282,7 @@ function createTitle(selectedRefinements) {
  		if (err || organization==null || organization.length==0 ){
  			res.status(404);
 			return res.render('websiteViews/404', {title: '404: Not Found', url: req.url });
- 		};
+ 		}
 
  		if (organization[0].primaryBusinessSector_2 && organization[0].primaryBusinessSector_2.length>0){
 			query={ active:true,primaryBusinessSector_2: { $in: organization[0].primaryBusinessSector_2 } };
