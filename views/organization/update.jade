@@ -29,9 +29,13 @@ block content
       .col-sm-2
         input.form-control(type='text', name='phoneNumber', id='phoneNumber', placeholder='Phone Number',value=organization.phoneNumber)
     .form-group
-      label(class='col-sm-2 control-label', for='website') Website
+      label(class='col-sm-2 control-label', for='website') Website URL
       .col-sm-4
-        input.form-control(type='text', name='website', id='website', placeholder='Website', data-parsley-type="url",value=organization.website)
+        input.form-control(type='text', name='website', id='website', placeholder='Website URL', data-parsley-type="url",value=organization.website)
+    .form-group
+      label(class='col-sm-2 control-label', for='store') Store URL
+      .col-sm-4
+        input.form-control(type='text', name='store', id='store', placeholder='Store URL', data-parsley-type="url",value=organization.store)
     .form-group
       label(class='col-sm-2 control-label', for='logo') Logo URL
       .col-sm-4

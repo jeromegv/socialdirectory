@@ -5,6 +5,7 @@
     "location" : "Longitude/Latitude",
     "phoneNumber" : "Phone Number",
     "website":"Website",
+    "store":"Store",
     "parentOrganization": "Parent Organization",
     "yearFounded":"Year Founded",
     "descriptionService" : "About the Organization",

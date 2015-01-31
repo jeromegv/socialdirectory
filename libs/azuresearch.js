@@ -43,6 +43,7 @@ var initIndex = function() {
 				    {'name': 'location', 'type': 'Edm.GeographyPoint'},
 				    {'name': 'phoneNumber', 'type': 'Edm.String','filterable': false,'facetable': false}, 
 				    {'name': 'website', 'type': 'Edm.String','filterable': false,'facetable': false}, 
+				    {'name': 'store', 'type': 'Edm.String','filterable': false,'facetable': false}, 
 				    {'name': 'parentOrganization', 'type': 'Edm.String'}, 
 					{'name': 'yearFounded', 'type': 'Edm.Int32'}, 
 				    {'name': 'descriptionService', 'type': 'Edm.String','filterable': false,'facetable': false, 'analyzer':'en.lucene'}, 
@@ -107,6 +108,7 @@ var buildAzureOrganizationObject = function(organization){
 		locationAddress: organization.Location.address,
 		phoneNumber: organization.phoneNumber,
 		website: organization.website,
+		store: organization.store,
 		parentOrganization: organization.parentOrganization,
 		descriptionService: organization.descriptionService,
 		primaryBusinessSector_1: organization.primaryBusinessSector_1,
@@ -300,7 +302,7 @@ var search = function(req,callback) {
 	var highlighFields=['descriptionService','descriptionCause','demographicImpact',
 	'primaryBusinessSector_1','primaryBusinessSector_2','socialPurposeCategoryTags',
 	'additionalResourcesNameList','name','parentOrganization','locationAddress',
-	'organizationalStructure,website,email'];
+	'organizationalStructure,website,store,email'];
 
 	var scoringProfile = 'normalSearchBoost';
 

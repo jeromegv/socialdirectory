@@ -13,6 +13,7 @@ var organizationSchema = new mongoose.Schema({
       },
   phoneNumber: { type: String, lowercase: true, default: ''},
   website: { type: String, default: '' },
+  store: { type: String, default: '' },
   videoId: { type: String, default: '' },
   videoSource: { type: String, default: '' },
   logo: { type: String, default: '' },

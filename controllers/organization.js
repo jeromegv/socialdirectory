@@ -233,6 +233,11 @@ exports.postOrganization = function(req, res,next) {
   if (req.body.website!=''){
     req.assert('website','URL is not valid').isURL();
   }
+
+  if (req.body.store!=''){
+    req.assert('store','URL is not valid').isURL();
+  }
+
   if (req.body.logo!=''){
     req.assert('logo','URL is not valid').isURL();
   }
@@ -268,6 +273,7 @@ exports.postOrganization = function(req, res,next) {
         },
     phoneNumber: req.body.phoneNumber,
     website: utils.saveUrl(req.body.website),
+    store: utils.saveUrl(req.body.store),
     logo: utils.saveUrl(req.body.logo),
     videoId: req.body.videoId,
     videoSource: req.body.videoSource,
@@ -411,6 +417,10 @@ exports.putOrganization = function(req, res,next) {
       req.assert('website','URL is not valid').isURL();
     }
 
+    if (req.body.store!=''){
+      req.assert('store','URL is not valid').isURL();
+    }
+
     if (req.body.yearFounded!=''){
       req.assert('yearFounded', 'Year Founded is not valid').isInt();
     }
@@ -443,6 +453,7 @@ exports.putOrganization = function(req, res,next) {
         },
     phoneNumber: req.body.phoneNumber,
     website: utils.saveUrl(req.body.website),
+    store: utils.saveUrl(req.body.store),
     logo: req.body.logo,
     videoId: req.body.videoId,
     videoSource: req.body.videoSource,
