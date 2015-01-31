@@ -4,10 +4,12 @@ var urlNode = require('url');
 var _ = require('lodash');
 var secrets = require('../config/secrets');
 var ig = require('instagram-node').instagram();
-ig.use({
-  client_id: secrets.instagram.client_id,
-  client_secret: secrets.instagram.client_secret
-});
+if (secrets.instagram.client_id && secrets.instagram.client_secret){
+  ig.use({
+    client_id: secrets.instagram.client_id,
+    client_secret: secrets.instagram.client_secret
+  });
+}
 
 function convertToSlug(Text)
 {
