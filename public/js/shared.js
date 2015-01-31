@@ -281,7 +281,7 @@ $(document).ready(function() {
 			  }
 			});
 		},
-		minLength: 3,
+		minLength: 2,
 		appendTo: $('#search').parent(),
 		select: function( event, ui ) {
 			window.location.href = '/organization/'+ui.item.name_slug;

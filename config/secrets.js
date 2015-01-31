@@ -27,7 +27,7 @@ module.exports = {
     url: '',
     apiKey: '',
     indexName: 'social',
-    apiVersion: '2014-07-31-Preview'
+    apiVersion: '2014-10-20-Preview'
   },
 
   s3: {

@@ -34,7 +34,7 @@ var initIndex = function() {
 				  'name': secrets.azureSearch.indexName, 
 				  'fields': [
 				    {'name': 'orgId', 'type': 'Edm.String', 'key':true, 'searchable': false},
-				    {'name': 'name', 'type': 'Edm.String', 'suggestions': true}, 
+				    {'name': 'name', 'type': 'Edm.String'}, 
 				    {'name': 'name_slug', 'type': 'Edm.String', 'filterable': false,'facetable': false,'searchable': false}, 
 				    {'name': 'email', 'type': 'Edm.String','filterable': false,'facetable': false}, 
 				    {'name': 'logo', 'type': 'Edm.String', 'filterable': false,'facetable': false,'searchable': false},
@@ -45,13 +45,13 @@ var initIndex = function() {
 				    {'name': 'website', 'type': 'Edm.String','filterable': false,'facetable': false}, 
 				    {'name': 'parentOrganization', 'type': 'Edm.String'}, 
 					{'name': 'yearFounded', 'type': 'Edm.Int32'}, 
-				    {'name': 'descriptionService', 'type': 'Edm.String','filterable': false,'facetable': false}, 
-				    {'name': 'primaryBusinessSector_1', 'type': 'Edm.String'}, 
-				    {'name': 'primaryBusinessSector_2', 'type': 'Collection(Edm.String)'}, 
-				    {'name': 'descriptionCause', 'type': 'Edm.String','filterable': false,'facetable': false}, 
-				    {'name': 'socialPurposeCategoryTags', 'type': 'Collection(Edm.String)'},
-				    {'name': 'demographicImpact', 'type': 'Collection(Edm.String)'},
-				    {'name': 'organizationalStructure', 'type': 'Edm.String'}, 
+				    {'name': 'descriptionService', 'type': 'Edm.String','filterable': false,'facetable': false, 'analyzer':'en.lucene'}, 
+				    {'name': 'primaryBusinessSector_1', 'type': 'Edm.String','analyzer':'en.lucene'}, 
+				    {'name': 'primaryBusinessSector_2', 'type': 'Collection(Edm.String)','analyzer':'en.lucene'}, 
+				    {'name': 'descriptionCause', 'type': 'Edm.String','filterable': false,'facetable': false, 'analyzer':'en.lucene'}, 
+				    {'name': 'socialPurposeCategoryTags', 'type': 'Collection(Edm.String)','analyzer':'en.lucene'},
+				    {'name': 'demographicImpact', 'type': 'Collection(Edm.String)','analyzer':'en.lucene'},
+				    {'name': 'organizationalStructure', 'type': 'Edm.String','analyzer':'en.lucene'}, 
 				    {'name': 'active', 'type': 'Edm.Boolean'},
 				    {'name': 'isSocialEnterprise', 'type': 'Edm.Boolean'}, 
 				    {'name': 'dateCreated', 'type': 'Edm.DateTimeOffset'}, 
@@ -67,7 +67,12 @@ var initIndex = function() {
 		   						'name': 2
 		   					}
 	   					}
-				    }]
+				    }],
+				    suggesters: [
+
+					{ "name": "suggestion", "searchMode": "analyzingInfixMatching", "sourceFields": ["name"] }
+
+					]
 				};
 				request(options, function (error, response, body) {
 					if (!error && (response.statusCode == 201 || response.statusCode==204)) {
@@ -238,8 +243,8 @@ var searchSuggestions = function(req,callback) {
 	if (typeof(searchTerm)=='undefined'){
 		return callback('Search term is undefined');
 	}
-	if (searchTerm.length<3 || searchTerm.length>100){
-		return callback('Suggestion length must be between 3 and 100 characters');
+	if (searchTerm.length<2 || searchTerm.length>100){
+		return callback('Suggestion length must be between 2 and 100 characters');
 	}
 	   
     //if someone is not authenticated, we hide inactive organization from typeahead results
@@ -248,7 +253,7 @@ var searchSuggestions = function(req,callback) {
       filter = '&$filter=active eq true';
     }
     var options = {
-      url: 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'/docs/suggest?search='+searchTerm+filter+'&$select=name_slug&fuzzy=true&api-version='+secrets.azureSearch.apiVersion,
+      url: 'https://'+secrets.azureSearch.url+'/indexes/'+secrets.azureSearch.indexName+'/docs/suggest?search='+searchTerm+filter+'&$select=name_slug&fuzzy=true&suggesterName=suggestion&api-version='+secrets.azureSearch.apiVersion,
           json: true,
           method: 'GET',
           headers: {

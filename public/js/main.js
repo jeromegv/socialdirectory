@@ -76,7 +76,7 @@ $(document).ready(function() {
           }
         });
       },
-	  	minLength: 3,
+	  	minLength: 2,
 	    select: function( event, ui ) {
 				window.location.href = '/admin/organization/'+ui.item.name_slug;
 			},
