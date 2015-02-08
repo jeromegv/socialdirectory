@@ -259,14 +259,6 @@ function generateAllVisualization(currentFilters){
 
 $(document).ready(function() {
 
-	//slideshow slick
-	$('.slick').each(function(i) {
-	    $(this).slick({
-		  	lazyLoad: 'ondemand',
-		  	infinite:true
-		});
-	});
-
 	//enable the autocomplete search as you type (azure suggestions) on the searchbar
     //call the internal API for the query and show results returned by API
 	$( '#search' ).autocomplete({

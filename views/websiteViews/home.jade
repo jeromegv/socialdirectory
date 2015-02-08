@@ -60,7 +60,7 @@ block content
 						.box_1
 							- var suborg = _.filter(organizations, function(org) { return (_.contains(org.socialPurposeCategoryTags,socialPurpose)) });
 							- suborg = _.shuffle(suborg)
-							.slick
+							.slick(data-slick='{"lazyLoad": "ondemand", "infinite": true}')
 								for entry,index in suborg
 									div
 										a(href='/organization/'+entry.name_slug)
