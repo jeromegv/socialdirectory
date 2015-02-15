@@ -212,6 +212,35 @@ function generateAllVisualization(currentFilters){
 		});
 		return url;
 	}
+	function createTitle(selectedRefinements) {
+		var title = 'Explore';
+		if (_.find(selectedRefinements, { 'refinementName': 'primaryBusinessSector_1' })!==undefined){
+			title = title +' '+(_.find(selectedRefinements, { 'refinementName': 'primaryBusinessSector_1' }).refinementValue);
+			if (_.find(selectedRefinements, { 'refinementName': 'socialPurposeCategoryTags' })!==undefined){
+				title = title + ' & ' + (_.find(selectedRefinements, { 'refinementName': 'socialPurposeCategoryTags' }).refinementValue);
+			}
+			title = title + ' social enterprises';
+			if (_.find(selectedRefinements, { 'refinementName': 'demographicImpact' })!==undefined) {
+				title = title + ' that impact '+(_.find(selectedRefinements, { 'refinementName': 'demographicImpact' }).refinementValue) ;
+			}
+		} else if (_.find(selectedRefinements, { 'refinementName': 'socialPurposeCategoryTags' })!==undefined)  {
+			title = title +' '+(_.find(selectedRefinements, { 'refinementName': 'socialPurposeCategoryTags' }).refinementValue) + ' social enterprises';
+			if (_.find(selectedRefinements, { 'refinementName': 'demographicImpact' })!==undefined) {
+				title = title + ' that impact '+(_.find(selectedRefinements, { 'refinementName': 'demographicImpact' }).refinementValue) ;
+			}
+		} else if (_.find(selectedRefinements, { 'refinementName': 'demographicImpact' })!==undefined) { 
+			title = title +' social Enterprises that impact '+(_.find(selectedRefinements, { 'refinementName': 'demographicImpact' }).refinementValue) ;
+		}
+
+		if (_.find(selectedRefinements, { 'refinementName': 'islandGroup' })!==undefined) { 
+			if (title!=='Explore'){
+				title = title +' in '+(_.find(selectedRefinements, { 'refinementName': 'islandGroup' }).refinementValue) ;
+			} else {
+				title = 'Explore social enterprises'+' in '+(_.find(selectedRefinements, { 'refinementName': 'islandGroup' }).refinementValue) ;
+			}
+		}
+		return title+' | ChooseSocial.PH';
+	}
 	//action executed when someone click the X on the UI to remove a filter
 	window.removeRefinement = function (refinementName,refinementValue,currentRefinementObject){
 		if (organizationsLoaded){
@@ -223,6 +252,7 @@ function generateAllVisualization(currentFilters){
 			organizationsLoadedFiltered = filterOrganizations(organizationsLoaded,currentFilters);
 			updateRefinementList(organizationsLoadedFiltered);
 			updateLogos(organizationsLoadedFiltered);
+			document.title = createTitle(currentFilters);
 			window.history.replaceState('', 'title', getSEOUrl(currentFilters));
 			$(currentRefinementObject).closest('.whitetag').fadeOut(600, function(){ 
 			    $(this).remove();
@@ -256,6 +286,7 @@ function generateAllVisualization(currentFilters){
 			currentFilters.push(refinementFilter);
 			organizationsLoadedFiltered = filterOrganizations(organizationsLoaded,currentFilters);
 			updateLogos(organizationsLoadedFiltered);
+			document.title = createTitle(currentFilters);
 			window.history.replaceState('', 'title', getSEOUrl(currentFilters));
 			//add selected refinements
 			$('#selectedTags').append('<div class="whitetag"><h2>'+refinementValue+'<a href="javascript:void(0)" onclick="removeRefinement(\''+refinementName+'\',\''+refinementValue+'\',this)"><i class="fa fa-close"></i></a></h2></div>').hide().fadeIn(600);
