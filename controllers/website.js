@@ -213,24 +213,33 @@ function createCanonicalUrl(selectedRefinements){
 	    console.log(organizations);
 	});
 }*/
+//function that creates the html page title based on what refinements were preselected
 function createTitle(selectedRefinements) {
 	var title = 'Explore';
-	if (_.find(selectedRefinements, { 'refinementName': 'primaryBusinessSector_1' })!=undefined){
+	if (_.find(selectedRefinements, { 'refinementName': 'primaryBusinessSector_1' })!==undefined){
 		title = title +' '+(_.find(selectedRefinements, { 'refinementName': 'primaryBusinessSector_1' }).refinementValue);
-		if (_.find(selectedRefinements, { 'refinementName': 'socialPurposeCategoryTags' })!=undefined){
+		if (_.find(selectedRefinements, { 'refinementName': 'socialPurposeCategoryTags' })!==undefined){
 			title = title + ' & ' + (_.find(selectedRefinements, { 'refinementName': 'socialPurposeCategoryTags' }).refinementValue);
 		}
 		title = title + ' social enterprises';
-		if (_.find(selectedRefinements, { 'refinementName': 'demographicImpact' })!=undefined) {
+		if (_.find(selectedRefinements, { 'refinementName': 'demographicImpact' })!==undefined) {
 			title = title + ' that impact '+(_.find(selectedRefinements, { 'refinementName': 'demographicImpact' }).refinementValue) ;
 		}
-	} else if (_.find(selectedRefinements, { 'refinementName': 'socialPurposeCategoryTags' })!=undefined)  {
+	} else if (_.find(selectedRefinements, { 'refinementName': 'socialPurposeCategoryTags' })!==undefined)  {
 		title = title +' '+(_.find(selectedRefinements, { 'refinementName': 'socialPurposeCategoryTags' }).refinementValue) + ' social enterprises';
-		if (_.find(selectedRefinements, { 'refinementName': 'demographicImpact' })!=undefined) {
+		if (_.find(selectedRefinements, { 'refinementName': 'demographicImpact' })!==undefined) {
 			title = title + ' that impact '+(_.find(selectedRefinements, { 'refinementName': 'demographicImpact' }).refinementValue) ;
 		}
-	} else if (_.find(selectedRefinements, { 'refinementName': 'demographicImpact' })!=undefined) { 
-		title = title +' social Enterprises shat impact '+(_.find(selectedRefinements, { 'refinementName': 'demographicImpact' }).refinementValue) ;
+	} else if (_.find(selectedRefinements, { 'refinementName': 'demographicImpact' })!==undefined) { 
+		title = title +' social Enterprises that impact '+(_.find(selectedRefinements, { 'refinementName': 'demographicImpact' }).refinementValue) ;
+	}
+
+	if (_.find(selectedRefinements, { 'refinementName': 'islandGroup' })!==undefined) { 
+		if (title!=='Explore'){
+			title = title +' in '+(_.find(selectedRefinements, { 'refinementName': 'islandGroup' }).refinementValue) ;
+		} else {
+			title = 'Explore social enterprises'+' in '+(_.find(selectedRefinements, { 'refinementName': 'islandGroup' }).refinementValue) ;
+		}
 	}
 
 	return title;
