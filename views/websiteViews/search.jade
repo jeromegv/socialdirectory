@@ -41,6 +41,10 @@ block content
 										h5.clickable
 											a(href='#')= fieldsName[facetname]
 												i.fa.fa-caret-down
+									else if (facetname =='islandGroup' && facet.length>0)
+										h5.clickable
+											a(href='#')= fieldsName[facetname]
+												i.fa.fa-caret-down
 									else if (facetname =='active' && facet.length>0)
 										h5.clickable
 											a(href='#')= fieldsName[facetname]

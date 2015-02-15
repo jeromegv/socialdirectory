@@ -18,6 +18,8 @@ block content
       label(class='col-sm-2 control-label', for='address') Location
       .col-sm-4
         textarea.form-control(type='text', name='address', rows='3', id='address', placeholder='Type physical address if you have it, if not just city name is OK. To be used to determine location on a map')=organization.Location.address
+      label(class='col-sm-1 control-label') Island Group
+      span(class='col-sm-1 control-label') #{organization.islandGroup}
     .form-group
         label(class='col-sm-2 control-label', for='longitude') Longitude/Latitude
         div(class='col-sm-2')

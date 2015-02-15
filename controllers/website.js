@@ -85,23 +85,30 @@ function createRefinements(organizations,field){
 
 //since the URL is based on slug, we convert back to real DB values
 function convertUrlToRealValue(filters){
-	_(filters).forEach(function(filter) { 
+	_.forEach(filters,function(filter) { 
 		if (filter.refinementName==='primaryBusinessSector_1'){
-			_(businessSector).forEach(function(subCategoryName,categoryName) { 
+			_.forEach(businessSector,function(subCategoryName,categoryName) { 
 				if (utils.convertToSlug(categoryName)===filter.refinementValue){
 					filter.refinementValue=categoryName;
 				}
 			});
 		} else if (filter.refinementName==='socialPurposeCategoryTags'){
-			_(socialPurposeCategory).forEach(function(socialPurpose) { 
+			_.forEach(socialPurposeCategory,function(socialPurpose) { 
 				if (utils.convertToSlug(socialPurpose)===filter.refinementValue){
 					filter.refinementValue=socialPurpose;
 				}
 			});
 		} else if (filter.refinementName==='demographicImpact') {
-			_(demographicImpact).forEach(function(demographic) { 
+			_.forEach(demographicImpact,function(demographic) { 
 				if (utils.convertToSlug(demographic)===filter.refinementValue){
 					filter.refinementValue=demographic;
+				}
+			});
+		} else if (filter.refinementName==='islandGroup') {
+			var islandGroup = ['Luzon','Visayas','Mindanao'];
+			_.forEach(islandGroup,function(island) { 
+				if (utils.convertToSlug(island)===filter.refinementValue){
+					filter.refinementValue=island;
 				}
 			});
 		}
@@ -126,6 +133,8 @@ function createSelectedRefinementsFromUrl(longUrl){
 					refinementNameBeautiful = 'socialPurposeCategoryTags';
 				} else if (refinementsInUrl[i]=='impact') {
 					refinementNameBeautiful = 'demographicImpact';
+				} else if (refinementsInUrl[i]=='island') {
+					refinementNameBeautiful = 'islandGroup';
 				}
 			    refinementFilter = {
 					'refinementName':refinementNameBeautiful,
@@ -142,7 +151,7 @@ function createSelectedRefinementsFromUrl(longUrl){
 //be shown or not based on the filters coming from the URL
 function filterOrganizations(organizations,filters){
 	var organizationsFiltered=organizations;
-	_(filters).forEach(function(filter) { 
+	_.forEach(filters,function(filter) { 
 		organizationsFiltered = _.forEach(organizationsFiltered, function(org) {
 			if (org.hidden===true){
 				return;
@@ -175,7 +184,10 @@ function createCanonicalUrl(selectedRefinements){
 	} 
 	if (_.find(selectedRefinements, { 'refinementName': 'demographicImpact' })!=undefined) {
 		canonical=canonical+'/impact/'+utils.convertToSlug(_.find(selectedRefinements, { 'refinementName': 'demographicImpact' }).refinementValue);
-	}	
+	}
+	if (_.find(selectedRefinements, { 'refinementName': 'islandGroup' })!=undefined) {
+		canonical=canonical+'/island/'+utils.convertToSlug(_.find(selectedRefinements, { 'refinementName': 'islandGroup' }).refinementValue);
+	}
 	return (secrets.externalUrl+'/explore'+canonical);
 }
 
@@ -231,7 +243,7 @@ function createTitle(selectedRefinements) {
 
  	var selectedRefinements = createSelectedRefinementsFromUrl(req.originalUrl);
 
-	Organization.find({active: true}).select('logoThumbnail name name_slug socialPurposeCategoryTags descriptionService primaryBusinessSector_1 demographicImpact').sort([['name', 'ascending']]).exec(function(error, organizations) {
+	Organization.find({active: true}).select('logoThumbnail name name_slug socialPurposeCategoryTags descriptionService primaryBusinessSector_1 demographicImpact islandGroup').sort([['name', 'ascending']]).exec(function(error, organizations) {
 	    if (!error && organizations!==null){
 	    	organizations = filterOrganizations(organizations,selectedRefinements);
 	        res.render('websiteViews/explore', {
@@ -240,6 +252,7 @@ function createTitle(selectedRefinements) {
 				socialPurposeRefinements:createRefinements(organizations,'socialPurposeCategoryTags'),
 				businessSectorRefinements:createRefinements(organizations,'primaryBusinessSector_1'),
 				demographicImpactRefinements:createRefinements(organizations,'demographicImpact'),
+				islandGroupRefinements:createRefinements(organizations,'islandGroup'),
 				_ : _,
 				selectedRefinements:selectedRefinements,
 				canonicalUrl:createCanonicalUrl(selectedRefinements)

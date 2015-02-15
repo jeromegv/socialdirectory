@@ -92,11 +92,13 @@ function generateAllVisualization(currentFilters){
 					}
 				});
 			} else {
-				index = _.findIndex( prev, {'name':current[field]});
-				if (index=== -1 ){
-					prev.push({'name': current[field], 'val': 1});
-				} else {
-					prev[index].val = prev[index].val+1;
+				if (current[field]!=''){
+					index = _.findIndex( prev, {'name':current[field]});
+					if (index=== -1 ){
+						prev.push({'name': current[field], 'val': 1});
+					} else {
+						prev[index].val = prev[index].val+1;
+					}
 				}
 			}
 			return prev;
@@ -111,6 +113,7 @@ function generateAllVisualization(currentFilters){
 		var activeRefinementBusiness = createRefinements(organizations,'primaryBusinessSector_1');
 		var activeRefinementSocial = createRefinements(organizations,'socialPurposeCategoryTags');
 		var activeRefinementDemographic = createRefinements(organizations,'demographicImpact');
+		var activeRefinementIsland = createRefinements(organizations,'islandGroup');
 
 		var items = [];
 		//update list of refinements in each section
@@ -134,12 +137,20 @@ function generateAllVisualization(currentFilters){
 			items.push('<li> <a href="javascript:void(0)" onclick="filterRefinement(\'demographicImpact\',\''+val.name+'\')" class="pull-left">'+val.name+'</a><span class="badge">'+val.val+'</span></li>');
 		});
 		$('#demographicImpact').find('ul').append(items);
+
+		$('#islandGroup').find('li').remove();
+		items = [];
+		$.each( activeRefinementIsland, function( key, val ) {
+			items.push('<li> <a href="javascript:void(0)" onclick="filterRefinement(\'islandGroup\',\''+val.name+'\')" class="pull-left">'+val.name+'</a><span class="badge">'+val.val+'</span></li>');
+		});
+		$('#islandGroup').find('ul').append(items);
 	}
 	//filter the organization object based on all the filters currently selected
 	function filterOrganizations(organizations,filters){
 		var organizationsFiltered=organizations;
-		_(filters).forEach(function(filter) { 
+		_.forEach(filters,function(filter) { 
 			organizationsFiltered = _.filter(organizationsFiltered, function(org) { 
+				console.log(filter.refinementName);
 				if (Array.isArray(org[filter.refinementName])){
 					var found=false;
 					_.forEach(org[filter.refinementName],function(orgRefValue) { 
@@ -186,7 +197,7 @@ function generateAllVisualization(currentFilters){
 	//build URL when selecting refinement
 	function getSEOUrl(filters){
 		var url='/explore';
-		_(filters).forEach(function(filter) { 
+		_.forEach(filters,function(filter) { 
 			var refinementNameBeautiful = filter.refinementName;
 			if (filter.refinementName==='primaryBusinessSector_1'){
 				refinementNameBeautiful = 'business';
@@ -194,6 +205,8 @@ function generateAllVisualization(currentFilters){
 				refinementNameBeautiful = 'social';
 			} else if (filter.refinementName==='demographicImpact') {
 				refinementNameBeautiful = 'impact';
+			} else if (filter.refinementName==='islandGroup') {
+				refinementNameBeautiful = 'island';
 			}
 			url = url+'/'+refinementNameBeautiful+'/'+convertToSlug(filter.refinementValue);
 		});

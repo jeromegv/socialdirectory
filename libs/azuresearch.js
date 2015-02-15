@@ -41,7 +41,8 @@ var initIndex = function() {
 				    {'name': 'logoThumbnail', 'type': 'Edm.String', 'filterable': false,'facetable': false,'searchable': false},
 				    {'name': 'locationAddress', 'type': 'Edm.String','filterable': false,'facetable': false}, 
 				    {'name': 'location', 'type': 'Edm.GeographyPoint'},
-				    {'name': 'phoneNumber', 'type': 'Edm.String','filterable': false,'facetable': false}, 
+				    {'name': 'islandGroup', 'type': 'Edm.String','analyzer':'en.lucene'},
+				    {'name': 'phoneNumber', 'type': 'Edm.String','filterable': false,'facetable': false},
 				    {'name': 'website', 'type': 'Edm.String','filterable': false,'facetable': false}, 
 				    {'name': 'store', 'type': 'Edm.String','filterable': false,'facetable': false}, 
 				    {'name': 'parentOrganization', 'type': 'Edm.String'}, 
@@ -103,6 +104,7 @@ var buildAzureOrganizationObject = function(organization){
 		name: organization.name,
 		name_slug: utils.convertToSlug(organization.name),
 		logo: organization.logo,
+		islandGroup: organization.islandGroup,
 		logoThumbnail:organization.logoThumbnail,
 		email: organization.email,
 		locationAddress: organization.Location.address,
@@ -120,6 +122,7 @@ var buildAzureOrganizationObject = function(organization){
 		dateCreated: moment.utc(parseInt(organization._id.toString().substr(0, 8),16)*1000).toISOString(),
 		lastUpdated: moment.utc(Date.now()).toISOString()
 	};
+	
 	//		
 	var additionalResourcesName = [];
 	organization.additionalResources.forEach(function(entry,index) {
@@ -148,10 +151,7 @@ var buildAzureOrganizationObject = function(organization){
 		organizationAzure.yearFounded=parseInt(organization.yearFounded);
 	}
 	if (organization.Location.longitude!==null && organization.Location.latitude!==null){
-		organizationAzure.location={ 
-		  'type': 'Point', 
-		  'coordinates': [parseFloat(organization.Location.longitude), parseFloat(organization.Location.latitude)]
-		};
+		organizationAzure.location=organization.loc;
 	}
 	return organizationAzure;
 };
@@ -297,12 +297,12 @@ var search = function(req,callback) {
 	}
 
     //define the fields we want as facet and how to present the refinement values
-	var facetFields = ['primaryBusinessSector_1,sort:count','primaryBusinessSector_2,sort:count','socialPurposeCategoryTags,sort:count','demographicImpact,sort:count'];
+	var facetFields = ['primaryBusinessSector_1,sort:count','primaryBusinessSector_2,sort:count','socialPurposeCategoryTags,sort:count','demographicImpact,sort:count','islandGroup,sort:count'];
 
 	var highlighFields=['descriptionService','descriptionCause','demographicImpact',
 	'primaryBusinessSector_1','primaryBusinessSector_2','socialPurposeCategoryTags',
 	'additionalResourcesNameList','name','parentOrganization','locationAddress',
-	'organizationalStructure,website,store,email'];
+	'organizationalStructure,islandGroup,website,store,email'];
 
 	var scoringProfile = 'normalSearchBoost';
 
@@ -475,7 +475,6 @@ var buildSelectedFilters = function(filterQueryString,currentUrl){
 					}
 					if (firstSelection['right']['type']=='eq'){
 						selectedFilters[firstSelection['right']['left']['name']]={value:firstSelection['right']['right']['value']};
-
 					}
 					firstSelection=firstSelection['right'];
 				}
@@ -495,7 +494,7 @@ function buildUrlFromFacet(facetName,facetValue,currentUrl){
 	//get the 'filter' part of the current url, if it exists
 	var filterQueryString = getParam('filter',currentUrl);
 
-	if (facetName=='primaryBusinessSector_1'){
+	if (facetName=='primaryBusinessSector_1' || facetName==='islandGroup'){
 		if (!filterQueryString){
 			link=insertParam('filter',facetName+" eq '"+facetValue+"'",currentUrl);
 		} else {

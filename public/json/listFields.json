@@ -2,6 +2,7 @@
     "name" : "Organization Name",
     "email": "Email",
     "locationAddress" : "Location",
+    "islandGroup": "Island Group",
     "location" : "Longitude/Latitude",
     "phoneNumber" : "Phone Number",
     "website":"Website",

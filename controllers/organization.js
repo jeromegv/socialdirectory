@@ -6,10 +6,13 @@ var request = require('request');
 var urlNode = require('url');
 var _ = require('lodash');
 var path = require('path');
+var util = require('util');
 //load the strings that will be used in the UI for various categories
 var businessSector = require('../public/json/primaryBusinessSector.json');
 var socialPurposeCategory = require('../public/json/socialPurposeCategory.json');
 var demographicImpact = require('../public/json/demographicImpact.json');
+var islandGroup = require('../public/json/islandGroup.json').features;
+
 //local dependencies
 var downloadImageAndUploadToS3 = require('../libs/downloadImageAndUploadToS3.js');
 var azureSearch = require('../libs/azuresearch.js');
@@ -91,6 +94,118 @@ function getSocialMediaName(parsedUrl){
     return socialMediaName;
 }
 
+function generateIslandCoordinates(data,islandName){
+  var geometry = _.pluck(_.filter(data,  
+    { 
+      properties: {
+        island_group : islandName 
+      }
+    }),'geometry');
+  var coordinates = [];
+
+  _.forEach(geometry, function(n, key) { 
+    if (n.type==='Polygon'){
+      coordinates.push(n.coordinates);
+    } else if (n.type==='MultiPolygon'){
+      coordinates = _.union(coordinates,n.coordinates);
+    }
+  });
+  return coordinates;
+}
+
+function getIslandGroup(slug,callback){
+    async.parallel([
+      function(callbackAsync){
+          var coordinates = generateIslandCoordinates(islandGroup,'Mindanao');
+
+          Organization.find({
+            "name_slug": slug,
+            "loc": {
+                "$geoWithin": {
+                    "$geometry": {
+                        "type": "MultiPolygon",
+                        "coordinates": coordinates
+                    }
+                }
+            }
+          }, function(err,foundGeozone) {
+              if (err){
+                return callbackAsync(err);
+              } else {
+                if (foundGeozone.length>0){
+                  return callbackAsync(null,'Mindanao');
+                } else {
+                  return callbackAsync(null);
+                }
+              }
+          });
+      },
+      function(callbackAsync){
+          var coordinates = generateIslandCoordinates(islandGroup,'Visayas');
+
+          Organization.find({
+            "name_slug": slug,
+            "loc": {
+                "$geoWithin": {
+                    "$geometry": {
+                        "type": "MultiPolygon",
+                        "coordinates": coordinates
+                    }
+                }
+            }
+          }, function(err,foundGeozone) {
+              if (err) {
+                return callbackAsync(err);
+              } else {
+                if (foundGeozone.length>0){
+                  return callbackAsync(null,'Visayas');
+                } else {
+                  return callbackAsync(null);
+                }
+              }
+          });
+      },
+      function(callbackAsync){
+          var coordinates = generateIslandCoordinates(islandGroup,'Luzon');
+
+          Organization.find({
+            "name_slug": slug,
+            "loc": {
+                "$geoWithin": {
+                    "$geometry": {
+                        "type": "MultiPolygon",
+                        "coordinates": coordinates
+                    }
+                }
+            }
+          }, function(err,foundGeozone) {
+              if (err) {
+                return callbackAsync(err);
+              } else {
+                if (foundGeozone.length>0){
+                  return callbackAsync(null,'Luzon');
+                } else {
+                  return callbackAsync(null);
+                }
+              }
+          });
+      }
+  ],
+  function(err, results){
+      if (err){
+        return callback(err);
+      } else {
+        var result;
+        _.forEach(results, function(n, key) { 
+          if (n){
+            result=n;
+          }
+        });
+        return callback(null,result);
+      }  
+  });
+}
+
 //when user is loggedin, we want to show privateNote with public api, otherwise, hide it
 function loggedInSelectQuery(req){
   if (req.isAuthenticated()|| (req.get('secretkey')==secrets.internalAPIKey)) {
@@ -116,7 +231,7 @@ function loggedInQuery(req){
 
 exports.getOrganization = function(req, res) {
   if (typeof(req.query.light)!='undefined' && req.query.light!=''){
-    Organization.find(loggedInQuery(req)).select('logoThumbnail name name_slug socialPurposeCategoryTags Location primaryBusinessSector_1 demographicImpact primaryBusinessSector_2').exec(function(err, organizations) {
+    Organization.find(loggedInQuery(req)).select('logoThumbnail name name_slug socialPurposeCategoryTags Location primaryBusinessSector_1 demographicImpact primaryBusinessSector_2 islandGroup').exec(function(err, organizations) {
       if (!err && organizations!==null){
         return res.jsonp(organizations);
       } else {
@@ -267,10 +382,10 @@ exports.postOrganization = function(req, res,next) {
     name_slug: utils.convertToSlug(req.body.name),
     email: req.body.email,
     Location: {
-          address: req.body.address
-        , latitude: req.body.latitude
-        , longitude: req.body.longitude
-        },
+      address: req.body.address,
+      latitude: req.body.latitude,
+      longitude: req.body.longitude
+    },
     phoneNumber: req.body.phoneNumber,
     website: utils.saveUrl(req.body.website),
     store: utils.saveUrl(req.body.store),
@@ -289,6 +404,12 @@ exports.postOrganization = function(req, res,next) {
     createdBy: req.user._id
   });
 
+  if (!_.isEmpty(req.body.longitude) && !_.isEmpty(req.body.latitude) ){
+    organization.loc = {
+      type: 'Point',
+      coordinates:[req.sanitize('longitude').toFloat(),req.sanitize('latitude').toFloat()]
+    };
+  }
   if (typeof(req.body.demographicImpact)!='undefined'){
     organization.demographicImpact = req.body.demographicImpact;
   } else {
@@ -340,12 +461,6 @@ exports.postOrganization = function(req, res,next) {
               console.log(err);
               callback(err);
             } else {
-              azureSearch.uploadRecord(organization,function(error){
-                if (error){
-                  console.log(error);
-                }
-              });
-
               //save logo url to S3
               var desiredFileName = utils.convertToSlug(organization.name) + '-' + path.basename(organization.logo);
               downloadImageAndUploadToS3.getAndSaveFile(organization.logo,desiredFileName,function (error,amazonUrl,amazonThumbnailUrl){
@@ -372,26 +487,55 @@ exports.postOrganization = function(req, res,next) {
         //get instagram username from url and then get the userid associated with it
         if (!organization) {
           console.log('No records were updated');
-          callback(new Error('No records were updated'));
+          return callback(new Error('No records were updated'));
         } else {
           utils.getInstagramId(organization.socialMedia,function(error,instagramId,index){
             if (error){
               console.log('instagram-node error');
               console.log(error);
-              callback(null);
+              return callback(null,organization);
             } else if (instagramId) {
               _.assign(organization.socialMedia[index], { 'id': instagramId });
               organization.save(function(err) {
                 if (err) {
                   console.log(err);
                 }
-                callback(null);
+                return callback(null,organization);
               });
             } else {
-              callback(null);
+              return callback(null,organization);
+            }
+          });
+        }
+    },function(organization,callback){
+        //get island group based on location already saved on the record
+        if (organization){
+          getIslandGroup(utils.convertToSlug(req.body.name),function(err, islandName) {
+            if (err) {
+              console.log(err);
+              return callback(null,organization);
+            }
+            if (islandName){
+              console.log('Island group is:',islandName);
+              organization.islandGroup = islandName;
+              organization.save(function(err) {
+                if (err) {
+                  console.log(err);
+                }
+                return callback(null,organization);
+              });
+            } else {
+              return callback(null,organization);
             }
           });
         }  
+    },function(organization,callback){
+      azureSearch.uploadRecord(organization,function(error){
+        if (error){
+          console.log(error);
+        }
+      });
+      return callback(null);
     }],function(err, results){
       if (err){
         return next(err);
@@ -447,10 +591,10 @@ exports.putOrganization = function(req, res,next) {
     name_slug: utils.convertToSlug(req.body.name),
     email: req.body.email,
     Location: {
-          address: req.body.address
-        , latitude: req.body.latitude
-        , longitude: req.body.longitude
-        },
+      address: req.body.address,
+      latitude: req.body.latitude,
+      longitude: req.body.longitude
+    },
     phoneNumber: req.body.phoneNumber,
     website: utils.saveUrl(req.body.website),
     store: utils.saveUrl(req.body.store),
@@ -467,7 +611,14 @@ exports.putOrganization = function(req, res,next) {
     active: req.sanitize('active').toBoolean(),
     isSocialEnterprise: req.sanitize('isSocialEnterprise').toBoolean(),
     lastUpdated: Date.now()
-  };    
+  };
+  if (!_.isEmpty(req.body.longitude) && !_.isEmpty(req.body.latitude) ){
+    organization.loc = {
+      type: 'Point',
+      coordinates:[req.sanitize('longitude').toFloat(),req.sanitize('latitude').toFloat()]
+    };
+  }
+
   if (typeof(req.body.demographicImpact)!='undefined'){
     organization.demographicImpact = req.body.demographicImpact;
   } else {
@@ -478,7 +629,7 @@ exports.putOrganization = function(req, res,next) {
   } else {
     organization.socialPurposeCategoryTags = [];
   }
-    if (typeof(req.body.primaryBusinessSector_2)!='undefined'){
+  if (typeof(req.body.primaryBusinessSector_2)!='undefined'){
     organization.primaryBusinessSector_2 = req.body.primaryBusinessSector_2;
   } else {
     organization.primaryBusinessSector_2 = [];
@@ -515,11 +666,6 @@ exports.putOrganization = function(req, res,next) {
           console.log('No records were updated');
           callback(new Error('No records were updated'));
         } else {
-          azureSearch.uploadRecord(resultOrg,function(error){
-            if (error){
-              console.log(error);
-            }
-          });
           //save logo url to S3
           //we only get the logo url and save on S3 if it's NOT already a relative url (so if http/https is missing) of a local bucket S3 amazon URL or if the thumbnail is missing
           if (/^(f|ht)tps?:\/\//i.test(resultOrg.logo)|| !resultOrg.logoThumbnail) {
@@ -547,27 +693,56 @@ exports.putOrganization = function(req, res,next) {
           
         }
       });
-    },function(result,callback){
-      //get instagram username from url and then get the userid associated with it
-        if (result){
-          utils.getInstagramId(result.socialMedia,function(error,instagramId,index){
+    },function(resultOrg,callback){
+        //get instagram username from url and then get the userid associated with it
+        if (resultOrg){
+          utils.getInstagramId(resultOrg.socialMedia,function(error,instagramId,index){
             if (error){
               console.log('instagram-node error');
               console.log(error);
-              callback(null);
+              return callback(null,resultOrg);
             } else if (instagramId) {
-              _.assign(result.socialMedia[index], { 'id': instagramId });
-              result.save(function(err) {
+              _.assign(resultOrg.socialMedia[index], { 'id': instagramId });
+              resultOrg.save(function(err) {
                 if (err) {
                   console.log(err);
                 }
-                callback(null);
+                return callback(null,resultOrg);
               });
             } else {
-              callback(null);
+              return callback(null,resultOrg);
             }
           });
         }  
+    },function(resultOrg,callback){
+        //get island group based on location already saved on the record
+        if (resultOrg){
+          getIslandGroup(utils.convertToSlug(req.body.name),function(err, islandName) {
+            if (err) {
+              console.log(err);
+              return callback(null,resultOrg);
+            }
+            if (islandName){
+              console.log('Island group is:',islandName);
+              resultOrg.islandGroup = islandName;
+              resultOrg.save(function(err) {
+                if (err) {
+                  console.log(err);
+                }
+                return callback(null,resultOrg);
+              });
+            } else {
+              return callback(null,resultOrg);
+            }
+          });
+        }  
+    },function(resultOrg,callback){
+      azureSearch.uploadRecord(resultOrg,function(error){
+        if (error){
+          console.log(error);
+        }
+      });
+      return callback(null);
     }],function(err, results){
       if (err){
         return next(err);

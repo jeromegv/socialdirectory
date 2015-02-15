@@ -49,6 +49,15 @@ block content
 									li 
 										a(href="javascript:void(0)",class="pull-left",onclick="filterRefinement('demographicImpact','#{refinement.name}')")=refinement.name
 										span.badge #{refinement.val}
+						div(id='islandGroup').panel.side_box
+							h5 
+								a(data-toggle="collapse",data-parent="#accordion",href='#collapse4',aria-expanded="false",aria-controls="collapse4") Island Group
+									i.fa.fa-caret-down
+							ul.collapse(id="collapse4")
+								for refinement,index in islandGroupRefinements
+									li 
+										a(href="javascript:void(0)",class="pull-left",onclick="filterRefinement('islandGroup','#{refinement.name}')")=refinement.name
+										span.badge #{refinement.val}
 		.col-lg-9.col-md-9.col-sm-8.col-xs-12
 			.map(id='mapall')
 			.product_c

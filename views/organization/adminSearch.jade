@@ -22,6 +22,8 @@ block content
               h5= fieldsName[facetname]
             else if (facetname =='demographicImpact' && facet.length>0)
               h5= fieldsName[facetname]
+            else if (facetname =='islandGroup' && facet.length>0)
+              h5= fieldsName[facetname]
           for refinement in facet
             if (refinement.count>0 && refinement.value!=='' && (facetname != 'primaryBusinessSector_2' || selectedFilters['primaryBusinessSector_1']!=undefined))
               .row

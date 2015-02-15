@@ -7,10 +7,19 @@ var organizationSchema = new mongoose.Schema({
   name_slug: { type: String, required: true, unique: true },
   email: { type: String, lowercase: true },
   Location: {
-        address: { type: String, default: '' },
-        latitude: { type: Number, default: ''  },
-        longitude: { type: Number, default: '' }
-      },
+    address: { type: String, default: '' },
+    latitude: { type: Number, default: ''  },
+    longitude: { type: Number, default: '' }
+  },
+  //coordinates is [longitude, latitude]
+  loc: {
+    type: { type: String },
+    coordinates: {
+      type: [Number],
+      index: '2dsphere'
+    }
+  },
+  islandGroup:{ type: String, default: '' },
   phoneNumber: { type: String, lowercase: true, default: ''},
   website: { type: String, default: '' },
   store: { type: String, default: '' },
