@@ -467,7 +467,7 @@ var buildSelectedFilters = function(filterQueryString,currentUrl){
 		if (filterQueryString){
 			var parsedFilter = parser.parse('$filter='+filterQueryString);
 			//if there was no error with the parser, save the refinements
-			if (parsedFilter.error!='undefined'){
+			if (parsedFilter.error===undefined){
 				var firstSelection = parsedFilter['$filter'];
 				while (firstSelection['type']!='eq'){
 					if (firstSelection['left']['type']=='eq'){
