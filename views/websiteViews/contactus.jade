@@ -14,9 +14,29 @@ block content
 				.row
 					.col-lg-12.col-md-12.col-sm-12.col-xs-12
 						.infor_c
-							h5 Information
+							h5 Calling all social brand advocates!
 							.infor_c_inn
-								p We're a crowd-sourced social directory and need your help to stay up to date. If you would like to contribute information about an organization, have a question or feedback, or just looking for ways to be involved - contact us!
+								p Want to bring social enterprises into the mainstream? Here's how you can help:
+								p 
+									strong Spread the word! 
+									| Social enterprises can't make an impact if people don't know about them! Like us on 
+									a(href="https://www.facebook.com/choosesocial.ph",target="_blank") Facebook
+									|, share our website, or share links to your favourite social enterprises. 
+								p
+									strong Help us grow our directory. 
+									| Is there a social enterprise missing from our directory or one whose information is out of date? Let us know. We'll do the research and handle all the legwork. All you gotta do is drop us a line. 
+								p 
+									strong Share your stories with us. 
+									| Have experience using a product, working or volunteering with a social enterprise? Have you been personally impacted by one? Link us to your blog or article, or contact us about becoming a content partner. 
+								p 
+									strong Want to be a partner or collaborator? 
+									| Send us a message and we're happy to discuss! 
+								p Anything we missed? We're always open to new ideas and want to hear from you! 
+
+					.col-lg-12.col-md-12.col-sm-12.col-xs-12
+						.infor_c
+							h5 Stay in touch
+							.infor_c_inn
 								address
 										span.fa.fa-envelope
 										strong  Email
@@ -32,12 +52,7 @@ block content
 										strong  Twitter
 										br
 										a(href="https://twitter.com/choosesocial",target="_blank") https://twitter.com/choosesocial
-				.row
-					.col-lg-12.col-md-12.col-sm-12.col-xs-12
-						.infor_c
-							h5 Stay Connected
-							.infor_c_inn
-								p Sign up for our newsletter and we'll send you only the best and most relevant info on social enterprise news, updates to our platform, and ways you can lead change in your life!
+								p Sign up for our newsletter and we'll send you only the best and most relevant info on social enterprise news, updates to our platform, and ways you can help bring social enterprises into the mainstream!
 								form(action="",method="post",id="mc-embedded-subscribe-form",name="mc-embedded-subscribe-form",class="validate",target="_blank",novalidate)
 									input(type="email",value="",name="EMAIL",class="txtboxemail",id="mce-EMAIL",placeholder="Enter your email",required)
 									div(style="position: absolute; left: -5000px;")
@@ -75,7 +90,6 @@ block content
 block javascript
 	script(type="text/javascript",src="/components/parsleyjs/dist/parsley.min.js")
 	script.
-		var refinementsAll = !{JSON.stringify(selectedRefinements)};
 		$(document).ready(function() {
 		    $('#contactus').parsley({
 			  successClass: 'success',

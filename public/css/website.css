@@ -677,7 +677,7 @@ input[type=checkbox] {
 	border-radius: 5PX;
 }
 #content .infor_c .infor_c_inn {
-	padding:15px 15px 5px 15px;
+	padding:0px 15px 5px 15px;
 }
 #content .infor_c .infor_c_inn h5 {
 	margin:0;
@@ -691,7 +691,6 @@ input[type=checkbox] {
 #content .infor_c .infor_c_inn p {
 	font-size:14px;
 	line-height:21px;
-	color:#898989;
 	margin:0 0 25px 0;
 	padding:0;
 	font-weight:normal;
@@ -704,9 +703,6 @@ input[type=checkbox] {
 	font-family: 'Lato', sans-serif; font-weight: 700;
 	color:#282727;
 }
-#content .infor_c .infor_c_inn p a {
-	color:#37bbec;
-}
 
 #content .frm {
 	padding:0 25px 30px 25px;
@@ -714,7 +710,7 @@ input[type=checkbox] {
 #content .frm .lbltxt {
 	font-size:14px;
 	line-height:16px;
-	padding:24px 0 13px 0;
+	padding:5px 0 13px 0;
 	font-family: 'Lato', sans-serif; font-weight: 700;
 	font-weight:normal;
 }
@@ -965,9 +961,6 @@ input[type=checkbox] {
 
 #content .tabing .tab-content .rew_frm {
 	padding-bottom:0;
-}
-#content .tabing .tab-content .rew_frm .first_row .lbltxt {
-	padding-top:18px;
 }
 #content .tabing .tab-content .rew_frm ul.start_list {
 	float:none;
