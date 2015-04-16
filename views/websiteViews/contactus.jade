@@ -54,7 +54,7 @@ block content
 										a(href="https://twitter.com/choosesocial",target="_blank") https://twitter.com/choosesocial
 								p Sign up for our newsletter and we'll send you only the best and most relevant info on social enterprise news, updates to our platform, and ways you can help bring social enterprises into the mainstream!
 								form(action="",method="post",id="mc-embedded-subscribe-form",name="mc-embedded-subscribe-form",class="validate",target="_blank",novalidate)
-									input(type="email",value="",name="EMAIL",class="txtboxemail",id="mce-EMAIL",placeholder="Enter your email",required)
+									input(type="email",value="",name="EMAIL",class="txtboxemail",id="mce-EMAIL",placeholder="Enter your email",required,title="Email")
 									div(style="position: absolute; left: -5000px;")
 										input(type="text",name="",tabindex="-1",value="")
 									button(type="submit",name="subscribe",id="mc-embedded-subscribe",class="btn btn-primary",role="button") Sign up!
@@ -71,18 +71,18 @@ block content
 											.form-group
 												.lbltxt 
 													label(class='control-label', for='name') Name:
-												input.form-control.txtbox(type='name', name='name', id='name', placeholder='Your Name',required)
+												input.form-control.txtbox(type='name', name='name', id='name', placeholder='Your Name',required,title='Name')
 										.col-lg-6.col-md-6.col-sm-6.col-xs-12
 											.form-group
 												.lbltxt 
 													label(class='control-label', for='email') Email:
-												input.form-control.txtbox(type='email', name='email', id='email', placeholder='Email',required)
+												input.form-control.txtbox(type='email', name='email', id='email', placeholder='Email',required,title='Email')
 									.row
 										.col-lg-12.col-md-12.col-sm-12.col-xs-12
 											.form-group
 												.lbltxt 
 													label(class='control-label', for='message') Message: 
-												textarea.form-control(type='text', name='message', rows='3', id='message', placeholder='Type your message here',required)
+												textarea.form-control(type='text', name='message', rows='3', id='message', placeholder='Type your message here',required,title='Message')
 									.row
 										.col-lg-12.col-md-12.col-sm-12.col-xs-12
 											.clearfix.frm_bot
