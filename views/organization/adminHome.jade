@@ -19,7 +19,7 @@ block content
             td
               a(href='/admin/organization/'+organization.name_slug)= organization.name
             td
-                a(href=organization.website,target="_blank")= organization.website 
+                a(href='/organization/'+organization.name_slug,target="_blank")= externalUrl+'/organization/'+organization.name_slug 
             td.hidden-xs= organization.primaryBusinessSector_1
               if(typeof(organization.primaryBusinessSector_2)!='undefined' && organization.primaryBusinessSector_2.length > 0)
                 |-->
