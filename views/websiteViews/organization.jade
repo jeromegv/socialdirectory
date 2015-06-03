@@ -14,7 +14,7 @@ block head
 		if (organization.videoSource=='youtube')
 			meta(property="og:video",content='https://www.youtube.com/watch?v='+organization.videoId)
 		else if (organization.videoSource=='vimeo')
-			meta(property="og:video",content='http://vimeo.com/'+organization.videoId)
+			meta(property="og:video",content='https://vimeo.com/'+organization.videoId)
 		else if (organization.videoSource=='custom')
 			meta(property="og:video",content=organization.videoId)
 		

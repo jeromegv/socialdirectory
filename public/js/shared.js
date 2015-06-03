@@ -6,8 +6,7 @@ function generateVisualization(latitude,longitude,slug){
         minZoom: 5
     });
     map.setView([ latitude, longitude], 10);
-    http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}.{format}?access_token=<your access token>
-    L.tileLayer('http://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}@2x.png?access_token=pk.eyJ1IjoiamVyb21lZ3YiLCJhIjoiVlpsZE12NCJ9.YQBB8yL3QI8NzKlOBR1wLg', {
+    L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}@2x.png?access_token=pk.eyJ1IjoiamVyb21lZ3YiLCJhIjoiVlpsZE12NCJ9.YQBB8yL3QI8NzKlOBR1wLg', {
 	    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>'
 	}).addTo(map);
 	L.Icon.Default.imagePath = '/components/leaflet/dist/images/';
@@ -49,7 +48,7 @@ function generateAllVisualization(currentFilters){
         minZoom: 4
     });
     map.setView([ 12.277405, 122.665700], 5);
-    L.tileLayer('http://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}@2x.png?access_token=pk.eyJ1IjoiamVyb21lZ3YiLCJhIjoiVlpsZE12NCJ9.YQBB8yL3QI8NzKlOBR1wLg', {
+    L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}@2x.png?access_token=pk.eyJ1IjoiamVyb21lZ3YiLCJhIjoiVlpsZE12NCJ9.YQBB8yL3QI8NzKlOBR1wLg', {
 	    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>'
 	}).addTo(map);
     L.Icon.Default.imagePath = '/components/leaflet/dist/images/';
