@@ -66,21 +66,24 @@ block content
 										a(href='/organization/'+entry.name_slug)
 											img(data-lazy=fullFileHost+entry.logoThumbnail,alt=entry.name,class="center-block")
 										.desc
-											p= entry.descriptionService.substring(0,110)
-						
+											- var trimmedDescription = entry.descriptionService.substr(0, 110);
+											- trimmedDescription = trimmedDescription.substr(0, Math.min(trimmedDescription.length, trimmedDescription.lastIndexOf(" ")))
+											p= trimmedDescription+'...'
 		.row
+			- var top3 = organizations.sort(function(a, b) {var first = parseInt(a['_id'].toString().substr(0, 8),16)*1000;var second = parseInt(b['_id'].toString().substr(0, 8),16)*1000;return (second-first);}).slice(0,3);
 			.col-lg-12.col-md-12.col-sm-12.col-xs-12
 				.twitter
+					h2 Updates
+						br
+						small Check out the most recent social enterprises added to ChooseSocial.PH!
 					.row
-						.col-lg-3.col-md-3.col-sm-4.col-xs-12
-							.desc
-								h4 Live updates from your social enterprises!
-								.desc_text
-									p We know keeping up can be tough. That's why we put together a Twitter list of top social enterprises in the Philippines from our website. Our list is always growing, so follow us and stay informed!
-						.col-lg-9.col-md-9.col-sm-8.col-xs-12
-							a(class="twitter-timeline", data-dnt="true", href="https://twitter.com/ChooseSocial/lists/social-enterprises-of-ph", data-widget-id="537084929281372160", data-chrome="nofooter") Tweets from the social enterprises we follow
-block javascript
-	script.
-		$(document).ready(function() {
-			!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
-		});
+						for entry in top3
+							.col-lg-3.col-md-4.col-sm-4.col-xs-12
+								.list-group
+									.list-group-item
+										a(href='/organization/'+entry.name_slug)
+											h5.text-center=entry.name
+											img.newest(src=fullFileHost+entry.logoThumbnail,alt=entry.name,class="img-responsive center-block")
+										- var trimmedString = entry.descriptionService.substr(0, 150);
+										- trimmedString = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(" ")))
+										p.list-group-item-text.newest= trimmedString+'...'

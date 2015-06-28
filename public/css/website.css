@@ -227,12 +227,18 @@ i.bigicon{
 	margin-bottom:40px;
 }
 
+img.newest {
+	width:75%;
+}
+p.newest{
+	font-size:13px;
+}
+
 /*----------------
  Twitter
 -----------------*/
 
 .product_c .twitter {
-	padding:30px 0 0 0;
 	border-top:1px solid #d7dbdb;
 	box-shadow:0 -1px 1px #fff;
 }

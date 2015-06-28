@@ -73,7 +73,9 @@ block content
 										a(href='/organization/'+organization.name_slug)
 											img(src=fullFileHost+organization.logoThumbnail,alt=organization.name,style="width:100%")
 										.desc
-											p= organization.descriptionService.substring(0,90)
+											- var trimmedDescription = organization.descriptionService.substr(0, 90);
+											- trimmedDescription = trimmedDescription.substr(0, Math.min(trimmedDescription.length, trimmedDescription.lastIndexOf(" ")))
+											p= trimmedDescription+'...'
 block javascript
 	script.
 		var refinementsAll = !{JSON.stringify(selectedRefinements)};
