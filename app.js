@@ -107,8 +107,7 @@ app.use(session({
   secret: secrets.sessionSecret,
   store: new MongoStore({
     mongooseConnection: mongoose.connection,
-    autoRemove: 'interval',
-    autoRemoveInterval: 86400
+    autoRemove: 'interval'
   }, function () {
     console.log('mongostore db connection open');
   })
