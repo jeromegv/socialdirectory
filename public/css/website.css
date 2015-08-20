@@ -389,6 +389,9 @@ p.newest{
 .social li.blog a:hover {
 	background-color: #FF7F00;
 }
+.social li.store a:hover {
+	background-color: #99CA3C;
+}
 .social li.facebook a:hover * {
 	color:#fff !important;
 }
@@ -398,6 +401,10 @@ p.newest{
 .social li.blog a:hover * {
 	color:#fff !important;
 }
+.social li.store a:hover * {
+	color:#fff !important;
+}
+
 
 /*----------------
   Typography
