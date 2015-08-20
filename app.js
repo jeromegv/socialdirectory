@@ -172,6 +172,7 @@ app.get('/aboutus',websiteController.getAboutUs);
 app.get('/contactus',websiteController.getContactUs);
 app.post('/contactus',websiteController.postContactUs);
 app.get(['/explore','/explore/*'],websiteController.getExplore);
+app.get(['/organization'],websiteController.getExplore);
 app.get('/organization/:slug',websiteController.getOrganization);
 
 /**
