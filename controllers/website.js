@@ -311,7 +311,7 @@ function createTitle(selectedRefinements) {
  		} else {
  			query={ active:true,primaryBusinessSector_1: organization[0].primaryBusinessSector_1 } ;
  		}
- 		Organization.find(query).select('logoThumbnail name name_slug').exec(function(err, similarOrganizations) {		    
+ 		Organization.find(query).select('logoThumbnail name name_slug store').exec(function(err, similarOrganizations) {		    
 	    	similarOrganizations = _.filter(similarOrganizations, function(org) { 
 	    		if (org.name_slug==organization[0].name_slug){
 	    			return 0;

@@ -79,17 +79,30 @@ block content
 											p!= contentParse(organization.descriptionCause)
 								.row
 									.col-lg-6.col-md-6.col-sm-6.col-xs-12
-										h5 What is its social cause?
-										for purpose,index in organization.socialPurposeCategoryTags 
-											=purpose
-											if (index!=organization.socialPurposeCategoryTags.length-1)
-												|,  
+										.rew_blk.clearfix
+											h5 What is its social cause?
+											for purpose,index in organization.socialPurposeCategoryTags 
+												=purpose
+												if (index!=organization.socialPurposeCategoryTags.length-1)
+													|,  
 									.col-lg-6.col-md-6.col-sm-6.col-xs-12
 										h5 Who does it impact?
 										for impact,index in organization.demographicImpact 
 											=impact 
 											if (index!=organization.demographicImpact.length-1)
 												|,  
+								if (organization.store && (organization.store.substring(0, 24)=='http://www.cambio.market' || organization.store.substring(0, 20)=='http://cambio.market'))
+									.row 
+										.col-lg-12.col-md-12.col-sm-12.col-xs-12
+											h5 Want to buy their products?
+											p 
+												=organization.name  
+												|  products are available in North America on  
+												a(href=organization.store) Cambio Market,  
+												| our   
+												a(href=organization.store) online marketplace for socially responsible products.
+											a(href=organization.store)
+												img(src="/images/logocambiomarket.png",alt="Cambio Market - Shop for Socially Responsible Products", height="70px")
 							.col-lg-6.col-md-6.col-sm-6.col-xs-12
 								if (organization.videoSource!='' && organization.videoSource!=null)
 									h5 Video
