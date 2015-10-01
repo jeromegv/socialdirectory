@@ -39,6 +39,20 @@ block content
 								h3 About the organization  
 								.desc_blk_inn
 									p(itemprop="description")!= contentParse(organization.descriptionService)
+						if (organization.store && (organization.store.substring(0, 24)=='http://www.cambio.market' || organization.store.substring(0, 20)=='http://cambio.market'))
+							.row 
+								.col-lg-12.col-md-12.col-sm-12.col-xs-12
+									h5 Want to buy their products?
+									.graytext
+										p 
+											=organization.name  
+											|  products are available in North America on  
+											a(href=organization.store) Cambio Market,  
+											| our   
+											a(href=organization.store,target="blank") online marketplace for socially responsible products.
+											br
+											a(href=organization.store)
+												img(src="/images/logocambiomarket.png",alt="Cambio Market - Shop for Socially Responsible Products",height="70px",target="blank")
 						.row
 							.col-sm-4.col-xs-12
 								h5 Business Category
@@ -91,18 +105,6 @@ block content
 											=impact 
 											if (index!=organization.demographicImpact.length-1)
 												|,  
-								if (organization.store && (organization.store.substring(0, 24)=='http://www.cambio.market' || organization.store.substring(0, 20)=='http://cambio.market'))
-									.row 
-										.col-lg-12.col-md-12.col-sm-12.col-xs-12
-											h5 Want to buy their products?
-											p 
-												=organization.name  
-												|  products are available in North America on  
-												a(href=organization.store) Cambio Market,  
-												| our   
-												a(href=organization.store) online marketplace for socially responsible products.
-											a(href=organization.store)
-												img(src="/images/logocambiomarket.png",alt="Cambio Market - Shop for Socially Responsible Products",height="70px")
 							.col-lg-6.col-md-6.col-sm-6.col-xs-12
 								if (organization.videoSource!='' && organization.videoSource!=null)
 									h5 Video
