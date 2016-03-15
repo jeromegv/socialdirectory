@@ -39,7 +39,7 @@ block content
 								h3 About the organization  
 								.desc_blk_inn
 									p(itemprop="description")!= contentParse(organization.descriptionService)
-						if (organization.store && (organization.store.substring(0, 24)=='http://www.cambio.market' || organization.store.substring(0, 20)=='http://cambio.market'))
+						if (organization.store && (organization.store.substring(0, 24)=='http://www.cambio.market' || organization.store.substring(0, 20)=='http://cambio.market' || organization.store.substring(0, 21)=='https://cambio.market' || organization.store.substring(0, 25)=='https://www.cambio.market'))
 							.row 
 								.col-lg-12.col-md-12.col-sm-12.col-xs-12
 									h5 Want to buy their products?
