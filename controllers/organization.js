@@ -484,30 +484,6 @@ exports.postOrganization = function(req, res,next) {
         }
       });
     },function(organization,callback){
-        //get instagram username from url and then get the userid associated with it
-        if (!organization) {
-          console.log('No records were updated');
-          return callback(new Error('No records were updated'));
-        } else {
-          utils.getInstagramId(organization.socialMedia,function(error,instagramId,index){
-            if (error){
-              console.log('instagram-node error');
-              console.log(error);
-              return callback(null,organization);
-            } else if (instagramId) {
-              _.assign(organization.socialMedia[index], { 'id': instagramId });
-              organization.save(function(err) {
-                if (err) {
-                  console.log(err);
-                }
-                return callback(null,organization);
-              });
-            } else {
-              return callback(null,organization);
-            }
-          });
-        }
-    },function(organization,callback){
         //get island group based on location already saved on the record
         if (organization){
           getIslandGroup(utils.convertToSlug(req.body.name),function(err, islandName) {
@@ -693,27 +669,6 @@ exports.putOrganization = function(req, res,next) {
           
         }
       });
-    },function(resultOrg,callback){
-        //get instagram username from url and then get the userid associated with it
-        if (resultOrg){
-          utils.getInstagramId(resultOrg.socialMedia,function(error,instagramId,index){
-            if (error){
-              console.log('instagram-node error');
-              console.log(error);
-              return callback(null,resultOrg);
-            } else if (instagramId) {
-              _.assign(resultOrg.socialMedia[index], { 'id': instagramId });
-              resultOrg.save(function(err) {
-                if (err) {
-                  console.log(err);
-                }
-                return callback(null,resultOrg);
-              });
-            } else {
-              return callback(null,resultOrg);
-            }
-          });
-        }  
     },function(resultOrg,callback){
         //get island group based on location already saved on the record
         if (resultOrg){

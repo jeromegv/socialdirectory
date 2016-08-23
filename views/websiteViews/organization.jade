@@ -205,17 +205,8 @@ block content
 														else
 															=media.socialMediaUrl
 								.col-lg-6.col-md-6.col-sm-6.col-xs-12
-									- var instagramCount = _.filter(organization.socialMedia, { 'socialMediaName': 'instagram' });
-									if (instagramCount.length>0)
-										.row
-											div(id="socialmediacontent")
-												h4.col-xs-12
-													=organization.name
-													|'s pictures on 
-													a(href=instagramCount[0].socialMediaUrl,target='_blank') Instagram
-											div(id="instafeed")
 									- var pinterestLink = _.filter(organization.socialMedia, { 'socialMediaName': 'pinterest' });
-									if (pinterestLink.length>0 && instagramCount.length<1)
+									if (pinterestLink.length>0)
 										.row
 											div(id="socialmediacontent")
 												h4.col-xs-12
@@ -240,17 +231,6 @@ block content
 												h5
 													a(href='/organization/'+similarOrg.name_slug)= similarOrg.name
 block javascript
-	if (instagramCount && instagramCount.length>0)
-		script.
-			var userFeed = new Instafeed({
-				get: 'user',
-				userId: #{instagramCount[0].id},
-				clientId: '8e6886644e684a299e5203ac9a0925fa',
-				sortBy: 'most-recent',
-				limit: 9,
-				template: '<div class="col-md-4 col-xs-6"><a href="{{link}}" target="_blank"><img src="{{image}}" alt="{{caption}}" class="img-responsive image-instagram"/></a></div>'
-			});
-			userFeed.run();
 	script.
 		$(document).ready(function() {
 			generateVisualization(#{organization.Location.latitude},#{organization.Location.longitude},"#{organization.name_slug}");
