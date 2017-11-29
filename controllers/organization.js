@@ -346,15 +346,15 @@ exports.postOrganization = function(req, res,next) {
   }
 
   if (req.body.website!=''){
-    req.assert('website','URL is not valid').isURL();
+    req.assert('website','Website URL is not valid').isURL();
   }
 
   if (req.body.store!=''){
-    req.assert('store','URL is not valid').isURL();
+    req.assert('store','Store URL is not valid').isURL();
   }
 
   if (req.body.logo!=''){
-    req.assert('logo','URL is not valid').isURL();
+    req.assert('logo','Logo URL is not valid').isURL();
   }
 
   if (req.body.yearFounded!=''){
@@ -534,11 +534,15 @@ exports.putOrganization = function(req, res,next) {
     }
 
     if (req.body.website!=''){
-      req.assert('website','URL is not valid').isURL();
+      req.assert('website','Website URL is not valid').isURL();
     }
 
     if (req.body.store!=''){
-      req.assert('store','URL is not valid').isURL();
+      req.assert('store','Store URL is not valid').isURL();
+    }
+
+    if (req.body.logo!=''){
+      req.assert('logo','Logo URL is not valid').isURL();
     }
 
     if (req.body.yearFounded!=''){
