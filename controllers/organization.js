@@ -541,7 +541,7 @@ exports.putOrganization = function(req, res,next) {
       req.assert('store','Store URL is not valid').isURL();
     }
 
-    if (req.body.logo!=''){
+    if (req.body.logo!='' && req.body.logo.indexOf('/logos/') === -1){
       req.assert('logo','Logo URL is not valid').isURL();
     }
 
